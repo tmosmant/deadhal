@@ -1,4 +1,4 @@
-package fr.upem.view;
+package fr.upem.deadhal.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -43,6 +43,22 @@ public class TouchView extends View {
 		super(context, attrs, defStyle);
 		mDrawable = drawable;
 		mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+	}
+
+	public float getmPosX() {
+		return mPosX;
+	}
+
+	public void setmPosX(float mPosX) {
+		this.mPosX = mPosX;
+	}
+
+	public float getmPosY() {
+		return mPosY;
+	}
+
+	public void setmPosY(float mPosY) {
+		this.mPosY = mPosY;
 	}
 
 	@Override

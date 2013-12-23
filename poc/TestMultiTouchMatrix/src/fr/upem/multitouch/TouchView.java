@@ -7,6 +7,7 @@ import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -32,6 +33,8 @@ public class TouchView extends View {
 	private float newRot = 0f;
 	private float[] lastEvent = null;
 
+	private GestureDetector gestureDetector;
+
 	public TouchView(Context context) {
 		this(context, null, 0);
 	}
@@ -48,8 +51,19 @@ public class TouchView extends View {
 			Drawable drawable) {
 		super(context, attrs, defStyle);
 		mDrawable = drawable;
-		
+		gestureDetector = new GestureDetector(context, new GestureListener());
 		invalidate();
+	}
+
+	private class GestureListener extends
+			GestureDetector.SimpleOnGestureListener {
+
+		@Override
+		public boolean onDoubleTap(MotionEvent e) {
+			matrix = new Matrix();
+			invalidate();
+			return true;
+		}
 	}
 
 	@Override
@@ -101,7 +115,7 @@ public class TouchView extends View {
 					matrix.postScale(scale, scale, mid.x, mid.y);
 				}
 
-				if (lastEvent != null && event.getPointerCount() == 3) {
+				if (lastEvent != null && event.getPointerCount() >= 2) {
 					newRot = rotation(event);
 					float r = newRot - d;
 					float[] values = new float[9];
@@ -111,7 +125,6 @@ public class TouchView extends View {
 					float sx = values[0];
 					float xc = (mDrawable.getMinimumWidth() / 2) * sx;
 					float yc = (mDrawable.getMinimumHeight() / 2) * sx;
-
 					matrix.postRotate(r, tx + xc, ty + yc);
 				}
 			}
@@ -120,7 +133,7 @@ public class TouchView extends View {
 
 		invalidate();
 
-		return true;
+		return gestureDetector.onTouchEvent(event);
 	}
 
 	/**
@@ -158,9 +171,9 @@ public class TouchView extends View {
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		Log.i("ondraw: ", "on");
-		
+
 		canvas.save();
-		canvas.setMatrix(matrix);
+		canvas.concat(matrix);
 		mDrawable.draw(canvas);
 		canvas.restore();
 	}

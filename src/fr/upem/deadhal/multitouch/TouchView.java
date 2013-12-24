@@ -170,4 +170,9 @@ public class TouchView extends View {
 		m_savedMatrix.reset();
 	}
 
+	@Override
+	public Matrix getMatrix() {
+		return m_matrix;
+	}
+
 }

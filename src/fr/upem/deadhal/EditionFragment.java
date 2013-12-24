@@ -1,6 +1,7 @@
 package fr.upem.deadhal;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class EditionFragment extends Fragment {
 		RelativeLayout relativeLayout = (RelativeLayout) rootView
 				.findViewById(R.id.edit_layout);
 
-		Level level = buildSampleLevel();
+		Level level = buildSampleLevel(rootView.getContext());
 		TextView levelTitleTextView = (TextView) rootView
 				.findViewById(R.id.levelTitleTextView);
 		levelTitleTextView.setText(level.getTitle());
@@ -37,7 +38,7 @@ public class EditionFragment extends Fragment {
 		TouchView touchView = new TouchView(rootView.getContext(), level);
 
 		GestureDetector gestureDetector = new GestureDetector(
-				rootView.getContext(), new GestureListener(touchView));
+				rootView.getContext(), new GestureListener(touchView, level));
 		touchView.build(gestureDetector);
 
 		relativeLayout.addView(touchView);
@@ -45,8 +46,8 @@ public class EditionFragment extends Fragment {
 		return rootView;
 	}
 
-	private Level buildSampleLevel() {
-		Level sample = new Level("Sample");
+	private Level buildSampleLevel(Context context) {
+		Level sample = new Level(context, "Copernic, 3rd level");
 		sample.addRoom(new Room("3B117", 0, 0, 120, 120));
 		sample.addRoom(new Room("3B113", 150, 0, 150 + 120, 120));
 

@@ -4,17 +4,17 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import fr.upem.deadhal.components.Level;
 
 public class TouchView extends View {
 
-	private Drawable m_drawable;
+	// private Drawable m_drawable;
 	private GestureDetector m_gestureDetector;
+	private Level m_level;
 
 	// these matrices will be used to move and zoom image
 	private Matrix m_matrix = new Matrix();
@@ -46,13 +46,14 @@ public class TouchView extends View {
 		super(context, attrs, defStyle);
 	}
 
-	public TouchView(Context context, Drawable drawable) {
+	public TouchView(Context context, Level level) {
 		super(context);
-		m_drawable = drawable;
+		m_level = level;
 	}
 
 	public void build(GestureDetector gestureDetector) {
 		this.m_gestureDetector = gestureDetector;
+
 		invalidate();
 	}
 
@@ -110,12 +111,10 @@ public class TouchView extends View {
 					float r = m_newRotation - m_distance;
 					float[] values = new float[9];
 					m_matrix.getValues(values);
-					float tx = values[2];
-					float ty = values[5];
-					float sx = values[0];
-					float xc = (m_drawable.getMinimumWidth() / 2) * sx;
-					float yc = (m_drawable.getMinimumHeight() / 2) * sx;
-					m_matrix.postRotate(r, tx + xc, ty + yc);
+
+					float xc = m_middle.x;
+					float yc = m_middle.y;
+					m_matrix.postRotate(r, xc, yc);
 				}
 			}
 			break;
@@ -160,11 +159,9 @@ public class TouchView extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		Log.i("ondraw: ", "on");
-
 		canvas.save();
 		canvas.concat(m_matrix);
-		m_drawable.draw(canvas);
+		m_level.draw(canvas);
 		canvas.restore();
 	}
 

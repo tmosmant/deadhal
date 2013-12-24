@@ -5,10 +5,10 @@ import android.view.MotionEvent;
 
 public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 	
-	private TouchView view;
+	private TouchView m_view;
 
 	public GestureListener(TouchView view) {
-		this.view = view;
+		this.m_view = view;
 	}
 	
 	@Override
@@ -18,8 +18,8 @@ public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
-		view.reset();
-		view.invalidate();
+		m_view.reset();
+		m_view.invalidate();
 		return true;
 	}
 }

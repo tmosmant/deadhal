@@ -13,27 +13,26 @@ import android.view.View;
 
 public class TouchView extends View {
 
-	private Drawable mDrawable;
+	private Drawable m_drawable;
+	private GestureDetector m_gestureDetector;
 
 	// these matrices will be used to move and zoom image
-	private Matrix matrix = new Matrix();
-	private Matrix savedMatrix = new Matrix();
+	private Matrix m_matrix = new Matrix();
+	private Matrix m_savedMatrix = new Matrix();
 
 	// we can be in one of these 3 states
-	private static final int NONE = 0;
-	private static final int DRAG = 1;
-	private static final int ZOOM = 2;
-	private int mode = NONE;
+	private static final int ms_none = 0;
+	private static final int ms_drag = 1;
+	private static final int ms_zoom = 2;
+	private int m_mode = ms_none;
 
 	// remember some things for zooming
-	private PointF start = new PointF();
-	private PointF mid = new PointF();
-	private float oldDist = 1f;
-	private float d = 0f;
-	private float newRot = 0f;
-	private float[] lastEvent = null;
-
-	private GestureDetector gestureDetector;
+	private PointF m_start = new PointF();
+	private PointF m_middle = new PointF();
+	private float m_oldDistance = 1f;
+	private float m_distance = 0f;
+	private float m_newRotation = 0f;
+	private float[] m_lastEvent = null;
 
 	public TouchView(Context context) {
 		super(context);
@@ -49,11 +48,11 @@ public class TouchView extends View {
 
 	public TouchView(Context context, Drawable drawable) {
 		super(context);
-		mDrawable = drawable;
+		m_drawable = drawable;
 	}
 
 	public void build(GestureDetector gestureDetector) {
-		this.gestureDetector = gestureDetector;
+		this.m_gestureDetector = gestureDetector;
 		invalidate();
 	}
 
@@ -62,61 +61,61 @@ public class TouchView extends View {
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
 		case MotionEvent.ACTION_DOWN:
-			savedMatrix.set(matrix);
-			start.set(event.getX(), event.getY());
-			mode = DRAG;
-			lastEvent = null;
+			m_savedMatrix.set(m_matrix);
+			m_start.set(event.getX(), event.getY());
+			m_mode = ms_drag;
+			m_lastEvent = null;
 			break;
 
 		case MotionEvent.ACTION_POINTER_DOWN:
-			oldDist = spacing(event);
-			if (oldDist > 10f) {
-				savedMatrix.set(matrix);
-				midPoint(mid, event);
-				mode = ZOOM;
+			m_oldDistance = spacing(event);
+			if (m_oldDistance > 10f) {
+				m_savedMatrix.set(m_matrix);
+				midPoint(m_middle, event);
+				m_mode = ms_zoom;
 			}
-			lastEvent = new float[4];
-			lastEvent[0] = event.getX(0);
-			lastEvent[1] = event.getX(1);
-			lastEvent[2] = event.getY(0);
-			lastEvent[3] = event.getY(1);
-			d = rotation(event);
+			m_lastEvent = new float[4];
+			m_lastEvent[0] = event.getX(0);
+			m_lastEvent[1] = event.getX(1);
+			m_lastEvent[2] = event.getY(0);
+			m_lastEvent[3] = event.getY(1);
+			m_distance = rotation(event);
 			break;
 
 		case MotionEvent.ACTION_UP:
 		case MotionEvent.ACTION_POINTER_UP:
-			mode = NONE;
-			lastEvent = null;
+			m_mode = ms_none;
+			m_lastEvent = null;
 			break;
 
 		case MotionEvent.ACTION_MOVE:
-			if (mode == DRAG) {
-				matrix.set(savedMatrix);
-				float dx = event.getX() - start.x;
-				float dy = event.getY() - start.y;
-				matrix.postTranslate(dx, dy);
+			if (m_mode == ms_drag) {
+				m_matrix.set(m_savedMatrix);
+				float dx = event.getX() - m_start.x;
+				float dy = event.getY() - m_start.y;
+				m_matrix.postTranslate(dx, dy);
 			}
 
-			else if (mode == ZOOM) {
+			else if (m_mode == ms_zoom) {
 				float newDist = spacing(event);
 
 				if (newDist > 10f) {
-					matrix.set(savedMatrix);
-					float scale = (newDist / oldDist);
-					matrix.postScale(scale, scale, mid.x, mid.y);
+					m_matrix.set(m_savedMatrix);
+					float scale = (newDist / m_oldDistance);
+					m_matrix.postScale(scale, scale, m_middle.x, m_middle.y);
 				}
 
-				if (lastEvent != null && event.getPointerCount() >= 2) {
-					newRot = rotation(event);
-					float r = newRot - d;
+				if (m_lastEvent != null && event.getPointerCount() >= 2) {
+					m_newRotation = rotation(event);
+					float r = m_newRotation - m_distance;
 					float[] values = new float[9];
-					matrix.getValues(values);
+					m_matrix.getValues(values);
 					float tx = values[2];
 					float ty = values[5];
 					float sx = values[0];
-					float xc = (mDrawable.getMinimumWidth() / 2) * sx;
-					float yc = (mDrawable.getMinimumHeight() / 2) * sx;
-					matrix.postRotate(r, tx + xc, ty + yc);
+					float xc = (m_drawable.getMinimumWidth() / 2) * sx;
+					float yc = (m_drawable.getMinimumHeight() / 2) * sx;
+					m_matrix.postRotate(r, tx + xc, ty + yc);
 				}
 			}
 			break;
@@ -124,7 +123,7 @@ public class TouchView extends View {
 
 		invalidate();
 
-		return gestureDetector.onTouchEvent(event);
+		return m_gestureDetector.onTouchEvent(event);
 	}
 
 	/**
@@ -164,14 +163,14 @@ public class TouchView extends View {
 		Log.i("ondraw: ", "on");
 
 		canvas.save();
-		canvas.concat(matrix);
-		mDrawable.draw(canvas);
+		canvas.concat(m_matrix);
+		m_drawable.draw(canvas);
 		canvas.restore();
 	}
 
 	public void reset() {
-		matrix.reset();
-		savedMatrix.reset();
+		m_matrix.reset();
+		m_savedMatrix.reset();
 	}
 
 }

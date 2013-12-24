@@ -28,15 +28,16 @@ public class EditionFragment extends Fragment {
 		drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
 				drawable.getIntrinsicHeight());
 
-		RelativeLayout rLayout = (RelativeLayout) rootView
+		RelativeLayout relativeLayout = (RelativeLayout) rootView
 				.findViewById(R.id.edit_layout);
 
 		TouchView touchView = new TouchView(rootView.getContext(), drawable);
+
 		GestureDetector gestureDetector = new GestureDetector(
 				rootView.getContext(), new GestureListener(touchView));
 		touchView.build(gestureDetector);
 
-		rLayout.addView(touchView);
+		relativeLayout.addView(touchView);
 
 		return rootView;
 	}

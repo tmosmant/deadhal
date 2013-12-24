@@ -59,8 +59,14 @@ public class TouchView extends View {
 			GestureDetector.SimpleOnGestureListener {
 
 		@Override
+		public boolean onDown(MotionEvent e) {
+			return true;
+		}
+
+		@Override
 		public boolean onDoubleTap(MotionEvent e) {
 			matrix = new Matrix();
+			savedMatrix = new Matrix();
 			invalidate();
 			return true;
 		}

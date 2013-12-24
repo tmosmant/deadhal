@@ -16,10 +16,13 @@ public class Room {
 	public Room(String title, int left, int top, int right, int bottom) {
 		this.title = title;
 		this.rect = new Rect(left, top, right, bottom);
-		background.setColor(Color.BLUE);
+		background.setColor(Color.CYAN);
 		background.setStyle(Paint.Style.FILL);
+		background.setAntiAlias(true);
 		borders.setColor(Color.BLACK);
 		borders.setStyle(Paint.Style.STROKE);
+		borders.setStrokeWidth(2);
+		borders.setAntiAlias(true);
 	}
 
 	public String getTitle() {

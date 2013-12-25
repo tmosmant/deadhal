@@ -4,14 +4,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.widget.Toast;
 
 public class Room {
 
 	private String title;
 	private Rect rect;
-
-	private boolean selected = false;
 
 	private final Paint background = new Paint();
 	private final Paint borders = new Paint();
@@ -44,17 +41,14 @@ public class Room {
 		return rect;
 	}
 
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
-
 	public void draw(Canvas canvas) {
 		canvas.drawRect(rect, background);
-		if (selected) {
-			canvas.drawRect(rect, selectedBorders);
-		} else {
-			canvas.drawRect(rect, borders);
-		}
+		canvas.drawRect(rect, borders);
+	}
+
+	public void drawSelected(Canvas canvas) {
+		canvas.drawRect(rect, background);
+		canvas.drawRect(rect, selectedBorders);
 	}
 
 }

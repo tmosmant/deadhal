@@ -7,7 +7,6 @@ import listeners.SelectionRoomListener;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
-import android.widget.Toast;
 
 public class Level extends View {
 

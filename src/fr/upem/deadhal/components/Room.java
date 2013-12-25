@@ -3,21 +3,21 @@ package fr.upem.deadhal.components;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.RectF;
 
 public class Room {
 
 	private String title;
-	private Rect rect;
+	private RectF rect;
 
 	private final Paint background = new Paint();
 	private final Paint borders = new Paint();
 
 	private final Paint selectedBorders = new Paint();
 
-	public Room(String title, int left, int top, int right, int bottom) {
+	public Room(String title, float left, float top, float right, float bottom) {
 		this.title = title;
-		this.rect = new Rect(left, top, right, bottom);
+		this.rect = new RectF(left, top, right, bottom);
 		background.setColor(Color.CYAN);
 		background.setStyle(Paint.Style.FILL);
 		background.setAntiAlias(true);
@@ -37,7 +37,7 @@ public class Room {
 		return title;
 	}
 
-	public Rect getRect() {
+	public RectF getRect() {
 		return rect;
 	}
 

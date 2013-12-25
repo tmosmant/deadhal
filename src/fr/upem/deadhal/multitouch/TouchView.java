@@ -6,7 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,24 +22,10 @@ public class TouchView extends View {
 	private GestureDetector m_gestureDetector;
 	private Level m_level;
 
-	private SelectionRoomListener m_selectionRoomListener = new SelectionRoomListener() {
-
-		@Override
-		public void onUnselectRoom(Room room) {
-			Toast.makeText(getContext(), room.getTitle() + " selected.",
-					Toast.LENGTH_SHORT);
-		}
-
-		@Override
-		public void onSelectRoom(Room room) {
-			Toast.makeText(getContext(), room.getTitle() + " selected.",
-					Toast.LENGTH_SHORT);
-		}
-	};
-
 	// these matrices will be used to move and zoom image
 	private Matrix m_matrix = new Matrix();
 	private Matrix m_savedMatrix = new Matrix();
+	private Matrix m_savedInverseMatrix = new Matrix();
 
 	// we can be in one of these 3 states
 	private static final int ms_none = 0;
@@ -52,6 +40,21 @@ public class TouchView extends View {
 	private float m_distance = 0f;
 	private float m_newRotation = 0f;
 	private float[] m_lastEvent = null;
+
+	private SelectionRoomListener m_selectionRoomListener = new SelectionRoomListener() {
+
+		@Override
+		public void onUnselectRoom(Room room) {
+			Toast.makeText(getContext(), room.getTitle() + " unselected.",
+					Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		public void onSelectRoom(Room room) {
+			Toast.makeText(getContext(), room.getTitle() + " selected.",
+					Toast.LENGTH_SHORT).show();
+		}
+	};
 
 	public TouchView(Context context) {
 		super(context);
@@ -96,9 +99,12 @@ public class TouchView extends View {
 		}
 	}
 
+	private int m_activePointerId;
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (m_level.getSelectedRoom() == null) {
+		Room selectedRoom = m_level.getSelectedRoom();
+		if (selectedRoom == null) {
 			switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
 			case MotionEvent.ACTION_DOWN:
@@ -161,10 +167,105 @@ public class TouchView extends View {
 			}
 
 			invalidate();
+		} else {
+
+			switch (event.getAction() & MotionEvent.ACTION_MASK) {
+			case MotionEvent.ACTION_DOWN: {
+				final int pointerIndex = MotionEventCompat
+						.getActionIndex(event);
+				final float x = MotionEventCompat.getX(event, pointerIndex);
+				final float y = MotionEventCompat.getY(event, pointerIndex);
+
+				m_matrix.invert(m_savedInverseMatrix);
+
+				float[] pts = { x, y };
+				m_matrix.mapPoints(pts);
+				
+				// Remember where we started (for dragging)
+				m_start.x = x;
+				m_start.y = y;
+
+				
+				// Save the ID of this pointer (for dragging)
+				m_activePointerId = MotionEventCompat.getPointerId(event, 0);
+				break;
+			}
+
+			case MotionEvent.ACTION_MOVE: {
+				// Find the index of the active pointer and fetch its position
+				final int pointerIndex = MotionEventCompat.findPointerIndex(
+						event, m_activePointerId);
+
+				final float x = MotionEventCompat.getX(event, pointerIndex);
+				final float y = MotionEventCompat.getY(event, pointerIndex);
+
+//				float[] pts = { x, y };
+//				m_savedInverseMatrix.mapPoints(pts);
+				
+				// Calculate the distance moved
+				final float dx = x - m_start.x;
+				final float dy = y - m_start.y;
+
+				float[] pts = { dx, dy };
+				m_matrix.mapPoints(pts);
+
+				Matrix inverse = new Matrix();
+				m_matrix.invert(inverse);
+				inverse.mapPoints(pts);
+
+				selectedRoom.getRect().left += pts[0];
+				selectedRoom.getRect().top += pts[1];
+				selectedRoom.getRect().right += pts[0];
+				selectedRoom.getRect().bottom += pts[1];
+
+				Log.v("CHILO", new String(dx + " " + dy + " => " + pts[0] + " "
+						+ pts[1]));
+
+				invalidate();
+
+				// Remember this touch position for the next move event
+				m_start.x = x;
+				m_start.y = y;
+
+				break;
+			}
+
+			case MotionEvent.ACTION_UP: {
+				m_activePointerId = -1;
+				break;
+			}
+
+			case MotionEvent.ACTION_CANCEL: {
+				m_activePointerId = -1;
+				break;
+			}
+
+			case MotionEvent.ACTION_POINTER_UP: {
+
+				final int pointerIndex = MotionEventCompat
+						.getActionIndex(event);
+				final int pointerId = MotionEventCompat.getPointerId(event,
+						pointerIndex);
+
+				if (pointerId == m_activePointerId) {
+					// This was our active pointer going up. Choose a new
+					// active pointer and adjust accordingly.
+					final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+					m_start.x = MotionEventCompat.getX(event, newPointerIndex);
+					m_start.y = MotionEventCompat.getY(event, newPointerIndex);
+					m_activePointerId = MotionEventCompat.getPointerId(event,
+							newPointerIndex);
+				}
+				break;
+			}
+
+			}
+
+			invalidate();
 		}
 		return m_gestureDetector.onTouchEvent(event);
 	}
-
+	
 	/**
 	 * Determine the space between the first two fingers
 	 */

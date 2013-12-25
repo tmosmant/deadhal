@@ -34,10 +34,9 @@ public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 		pts[1] = e.getY(0);
 
 		inverse.mapPoints(pts);
-
 		if (e.getPointerCount() == 1) {
 			Room selectedRoom = m_level.selectRoom(pts[0], pts[1]);
-			if (selectedRoom == null) {
+			if (selectedRoom == null && m_level.getSelectedRoom() == null) {
 				m_view.reset();
 				m_view.invalidate();
 			}

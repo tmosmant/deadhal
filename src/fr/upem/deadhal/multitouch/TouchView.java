@@ -1,5 +1,6 @@
 package fr.upem.deadhal.multitouch;
 
+import listeners.SelectionRoomListener;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -9,13 +10,30 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 import fr.upem.deadhal.components.Level;
+import fr.upem.deadhal.components.Room;
 
 public class TouchView extends View {
 
 	// private Drawable m_drawable;
 	private GestureDetector m_gestureDetector;
 	private Level m_level;
+
+	private SelectionRoomListener m_selectionRoomListener = new SelectionRoomListener() {
+
+		@Override
+		public void onUnselectRoom(Room room) {
+			Toast.makeText(getContext(), room.getTitle() + " selected.",
+					Toast.LENGTH_SHORT);
+		}
+
+		@Override
+		public void onSelectRoom(Room room) {
+			Toast.makeText(getContext(), room.getTitle() + " selected.",
+					Toast.LENGTH_SHORT);
+		}
+	};
 
 	// these matrices will be used to move and zoom image
 	private Matrix m_matrix = new Matrix();
@@ -55,6 +73,7 @@ public class TouchView extends View {
 	public void build(GestureDetector gestureDetector, Bundle savedInstanceState) {
 		m_gestureDetector = gestureDetector;
 		restoreMatrix(savedInstanceState);
+		m_level.addSelectionRoomListener(m_selectionRoomListener);
 		invalidate();
 	}
 
@@ -79,69 +98,70 @@ public class TouchView extends View {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		switch (event.getAction() & MotionEvent.ACTION_MASK) {
+		if (m_level.getSelectedRoom() == null) {
+			switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
-		case MotionEvent.ACTION_DOWN:
-			m_savedMatrix.set(m_matrix);
-			m_start.set(event.getX(), event.getY());
-			m_mode = ms_drag;
-			m_lastEvent = null;
-			break;
-
-		case MotionEvent.ACTION_POINTER_DOWN:
-			m_oldDistance = spacing(event);
-			if (m_oldDistance > 10f) {
+			case MotionEvent.ACTION_DOWN:
 				m_savedMatrix.set(m_matrix);
-				midPoint(m_middle, event);
-				m_mode = ms_zoom;
-			}
-			m_lastEvent = new float[4];
-			m_lastEvent[0] = event.getX(0);
-			m_lastEvent[1] = event.getX(1);
-			m_lastEvent[2] = event.getY(0);
-			m_lastEvent[3] = event.getY(1);
-			m_distance = rotation(event);
-			break;
+				m_start.set(event.getX(), event.getY());
+				m_mode = ms_drag;
+				m_lastEvent = null;
+				break;
 
-		case MotionEvent.ACTION_UP:
-		case MotionEvent.ACTION_POINTER_UP:
-			m_mode = ms_none;
-			m_lastEvent = null;
-			break;
+			case MotionEvent.ACTION_POINTER_DOWN:
+				m_oldDistance = spacing(event);
+				if (m_oldDistance > 10f) {
+					m_savedMatrix.set(m_matrix);
+					midPoint(m_middle, event);
+					m_mode = ms_zoom;
+				}
+				m_lastEvent = new float[4];
+				m_lastEvent[0] = event.getX(0);
+				m_lastEvent[1] = event.getX(1);
+				m_lastEvent[2] = event.getY(0);
+				m_lastEvent[3] = event.getY(1);
+				m_distance = rotation(event);
+				break;
 
-		case MotionEvent.ACTION_MOVE:
-			if (m_mode == ms_drag) {
-				m_matrix.set(m_savedMatrix);
-				float dx = event.getX() - m_start.x;
-				float dy = event.getY() - m_start.y;
-				m_matrix.postTranslate(dx, dy);
-			}
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_POINTER_UP:
+				m_mode = ms_none;
+				m_lastEvent = null;
+				break;
 
-			else if (m_mode == ms_zoom) {
-				float newDist = spacing(event);
-
-				if (newDist > 10f) {
+			case MotionEvent.ACTION_MOVE:
+				if (m_mode == ms_drag) {
 					m_matrix.set(m_savedMatrix);
-					float scale = (newDist / m_oldDistance);
-					m_matrix.postScale(scale, scale, m_middle.x, m_middle.y);
+					float dx = event.getX() - m_start.x;
+					float dy = event.getY() - m_start.y;
+					m_matrix.postTranslate(dx, dy);
 				}
 
-				if (m_lastEvent != null && event.getPointerCount() >= 2) {
-					m_newRotation = rotation(event);
-					float r = m_newRotation - m_distance;
-					float[] values = new float[9];
-					m_matrix.getValues(values);
+				else if (m_mode == ms_zoom) {
+					float newDist = spacing(event);
 
-					float xc = m_middle.x;
-					float yc = m_middle.y;
-					m_matrix.postRotate(r, xc, yc);
+					if (newDist > 10f) {
+						m_matrix.set(m_savedMatrix);
+						float scale = (newDist / m_oldDistance);
+						m_matrix.postScale(scale, scale, m_middle.x, m_middle.y);
+					}
+
+					if (m_lastEvent != null && event.getPointerCount() >= 2) {
+						m_newRotation = rotation(event);
+						float r = m_newRotation - m_distance;
+						float[] values = new float[9];
+						m_matrix.getValues(values);
+
+						float xc = m_middle.x;
+						float yc = m_middle.y;
+						m_matrix.postRotate(r, xc, yc);
+					}
 				}
+				break;
 			}
-			break;
+
+			invalidate();
 		}
-
-		invalidate();
-
 		return m_gestureDetector.onTouchEvent(event);
 	}
 

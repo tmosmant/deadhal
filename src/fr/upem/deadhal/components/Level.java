@@ -3,6 +3,7 @@ package fr.upem.deadhal.components;
 import java.util.LinkedList;
 import java.util.List;
 
+import listeners.SelectionRoomListener;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
@@ -12,7 +13,19 @@ public class Level extends View {
 
 	private String title;
 	private List<Room> rooms = new LinkedList<Room>();
-	private int selectedRoomId = -1;
+
+	private final int NONE = -1;
+
+	private int selectedRoomId = NONE;
+
+	public Room getSelectedRoom() {
+		if (selectedRoomId == NONE) {
+			return null;
+		}
+		return rooms.get(selectedRoomId);
+	}
+
+	private List<SelectionRoomListener> selectionRoomListeners = new LinkedList<SelectionRoomListener>();
 
 	public Level(Context context) {
 		super(context);
@@ -53,20 +66,28 @@ public class Level extends View {
 		}
 	}
 
+	public void addSelectionRoomListener(SelectionRoomListener listener) {
+		selectionRoomListeners.add(listener);
+	}
+
+	public void removeSelectionRoomListener(SelectionRoomListener listener) {
+		selectionRoomListeners.remove(listener);
+	}
+
 	public Room selectRoom(float x, float y) {
 		for (int i = 0; i < rooms.size(); i++) {
 			Room room = rooms.get(i);
 			if (room.getRect().contains((int) x, (int) y)) {
 				if (i == selectedRoomId) {
-					Toast.makeText(getContext(),
-							room.getTitle() + " unselected.",
-							Toast.LENGTH_SHORT).show();
+					for (SelectionRoomListener listener : selectionRoomListeners) {
+						listener.onUnselectRoom(room);
+					}
 					selectedRoomId = -1;
-				} else {
+				} else if (selectedRoomId == NONE) {
+					for (SelectionRoomListener listener : selectionRoomListeners) {
+						listener.onSelectRoom(room);
+					}
 					selectedRoomId = i;
-					Toast.makeText(getContext(),
-							room.getTitle() + " selected.", Toast.LENGTH_SHORT)
-							.show();
 				}
 				return room;
 			}

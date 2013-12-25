@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -51,10 +52,29 @@ public class TouchView extends View {
 		m_level = level;
 	}
 
-	public void build(GestureDetector gestureDetector) {
-		this.m_gestureDetector = gestureDetector;
-
+	public void build(GestureDetector gestureDetector, Bundle savedInstanceState) {
+		m_gestureDetector = gestureDetector;
+		restoreMatrix(savedInstanceState);
 		invalidate();
+	}
+
+	public void saveMatrix(Bundle savedInstanceState) {
+		float[] values = new float[9];
+		m_matrix.getValues(values);
+		savedInstanceState.putFloatArray("matrix", values);
+	}
+
+	private void restoreMatrix(Bundle savedInstanceState) {
+		float[] values = null;
+		m_matrix = new Matrix();
+		m_savedMatrix = new Matrix();
+		if (savedInstanceState != null) {
+			values = savedInstanceState.getFloatArray("matrix");
+			if (values != null) {
+				m_matrix.setValues(values);
+				m_savedMatrix.set(m_matrix);
+			}
+		}
 	}
 
 	@Override

@@ -28,6 +28,10 @@ public class MainActivity extends Activity {
 	private ListView m_drawerList;
 	private ActionBarDrawerToggle m_drawerToggle;
 
+	private Fragment m_editionFragment = new EditionFragment();
+	private Fragment m_openFragment = new OpenFragment();
+	private Fragment m_saveFragment = new SaveFragment();
+
 	// used to store app title
 	private CharSequence m_title;
 
@@ -42,6 +46,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
 
 		m_title = getTitle();
@@ -102,6 +107,7 @@ public class MainActivity extends Activity {
 			// on first time display view for first nav item
 			displayView(0);
 		}
+
 	}
 
 	/**
@@ -166,28 +172,27 @@ public class MainActivity extends Activity {
 	 * Diplaying fragment view for selected nav drawer list item
 	 * */
 	private void displayView(int position) {
-		// update the main content by replacing fragments
+
+		// update the main content by switching fragments
+		FragmentManager fragmentManager = getFragmentManager();
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
-			fragment = new EditionFragment();
+			fragment = m_editionFragment;
 			m_menu = R.menu.edit;
 			break;
 		case 1:
-			fragment = new OpenFragment();
+			fragment = m_openFragment;
 			m_menu = R.menu.open;
 			break;
 		case 2:
-			fragment = new SaveFragment();
+			fragment = m_saveFragment;
 			m_menu = R.menu.save;
 			break;
-
 		default:
 			break;
 		}
-
 		if (fragment != null) {
-			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
 					.replace(R.id.frame_container, fragment).commit();
 

@@ -16,8 +16,7 @@ import fr.upem.deadhal.multitouch.TouchView;
 
 public class EditionFragment extends Fragment {
 
-	public EditionFragment() {
-	}
+	private TouchView m_touchView = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,13 +34,13 @@ public class EditionFragment extends Fragment {
 				.findViewById(R.id.levelTitleTextView);
 		levelTitleTextView.setText(level.getTitle());
 
-		TouchView touchView = new TouchView(rootView.getContext(), level);
+		m_touchView = new TouchView(rootView.getContext(), level);
 
 		GestureDetector gestureDetector = new GestureDetector(
-				rootView.getContext(), new GestureListener(touchView, level));
-		touchView.build(gestureDetector);
+				rootView.getContext(), new GestureListener(m_touchView, level));
+		m_touchView.build(gestureDetector, savedInstanceState);
 
-		relativeLayout.addView(touchView);
+		relativeLayout.addView(m_touchView);
 
 		return rootView;
 	}
@@ -55,5 +54,11 @@ public class EditionFragment extends Fragment {
 		sample.addRoom(new Room("3B112", 150, 150, 150 + 120, 150 + 120));
 
 		return sample;
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		m_touchView.saveMatrix(outState);
+		super.onSaveInstanceState(outState);
 	}
 }

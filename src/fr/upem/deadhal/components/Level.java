@@ -81,7 +81,7 @@ public class Level extends View {
 					for (SelectionRoomListener listener : selectionRoomListeners) {
 						listener.onUnselectRoom(room);
 					}
-					selectedRoomId = -1;
+					selectedRoomId = NONE;
 				} else if (selectedRoomId == NONE) {
 					for (SelectionRoomListener listener : selectionRoomListeners) {
 						listener.onSelectRoom(room);
@@ -92,6 +92,10 @@ public class Level extends View {
 			}
 		}
 		return null;
+	}
+
+	public void unselectRoom() {
+		selectedRoomId = NONE;
 	}
 
 }

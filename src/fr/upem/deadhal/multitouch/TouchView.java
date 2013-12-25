@@ -6,9 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,6 +38,9 @@ public class TouchView extends View {
 	private float m_distance = 0f;
 	private float m_newRotation = 0f;
 	private float[] m_lastEvent = null;
+
+	// remember some things for editing
+	private PointF m_startE = new PointF();
 
 	private SelectionRoomListener m_selectionRoomListener = new SelectionRoomListener() {
 
@@ -99,22 +100,30 @@ public class TouchView extends View {
 		}
 	}
 
-	private int m_activePointerId;
-
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		Room selectedRoom = m_level.getSelectedRoom();
-		if (selectedRoom == null) {
-			switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
-			case MotionEvent.ACTION_DOWN:
+		m_gestureDetector.onTouchEvent(event);
+
+		Room selectedRoom = m_level.getSelectedRoom();
+		switch (event.getAction() & MotionEvent.ACTION_MASK) {
+
+		case MotionEvent.ACTION_DOWN:
+			m_mode = ms_drag;
+			if (selectedRoom == null) {
 				m_savedMatrix.set(m_matrix);
 				m_start.set(event.getX(), event.getY());
-				m_mode = ms_drag;
-				m_lastEvent = null;
-				break;
+			} else {
+				m_matrix.invert(m_savedInverseMatrix);
+				float[] pts = { event.getX(), event.getY() };
+				m_savedInverseMatrix.mapPoints(pts);
+				m_startE.set(pts[0], pts[1]);
+			}
+			m_lastEvent = null;
+			break;
 
-			case MotionEvent.ACTION_POINTER_DOWN:
+		case MotionEvent.ACTION_POINTER_DOWN:
+			if (selectedRoom == null) {
 				m_oldDistance = spacing(event);
 				if (m_oldDistance > 10f) {
 					m_savedMatrix.set(m_matrix);
@@ -127,23 +136,41 @@ public class TouchView extends View {
 				m_lastEvent[2] = event.getY(0);
 				m_lastEvent[3] = event.getY(1);
 				m_distance = rotation(event);
-				break;
+			}
+			break;
 
-			case MotionEvent.ACTION_UP:
-			case MotionEvent.ACTION_POINTER_UP:
-				m_mode = ms_none;
-				m_lastEvent = null;
-				break;
+		case MotionEvent.ACTION_UP:
+		case MotionEvent.ACTION_POINTER_UP:
+			m_mode = ms_none;
+			m_lastEvent = null;
+			break;
 
-			case MotionEvent.ACTION_MOVE:
-				if (m_mode == ms_drag) {
+		case MotionEvent.ACTION_MOVE:
+			if (m_mode == ms_drag) {
+				if (selectedRoom == null) {
 					m_matrix.set(m_savedMatrix);
 					float dx = event.getX() - m_start.x;
 					float dy = event.getY() - m_start.y;
 					m_matrix.postTranslate(dx, dy);
+				} else {
+					final float x = event.getX();
+					final float y = event.getY();
+					float[] pts = { x, y };
+					m_savedInverseMatrix.mapPoints(pts);
+					// Calculate the distance moved
+					final float dx = pts[0] - m_startE.x;
+					final float dy = pts[1] - m_startE.y;
+					selectedRoom.getRect().left += dx;
+					selectedRoom.getRect().top += dy;
+					selectedRoom.getRect().right += dx;
+					selectedRoom.getRect().bottom += dy;
+					// Remember this touch position for the next move event
+					m_startE.set(pts[0], pts[1]);
 				}
+			}
 
-				else if (m_mode == ms_zoom) {
+			else if (m_mode == ms_zoom) {
+				if (selectedRoom == null) {
 					float newDist = spacing(event);
 
 					if (newDist > 10f) {
@@ -163,109 +190,80 @@ public class TouchView extends View {
 						m_matrix.postRotate(r, xc, yc);
 					}
 				}
-				break;
 			}
-
-			invalidate();
-		} else {
-
-			switch (event.getAction() & MotionEvent.ACTION_MASK) {
-			case MotionEvent.ACTION_DOWN: {
-				final int pointerIndex = MotionEventCompat
-						.getActionIndex(event);
-				final float x = MotionEventCompat.getX(event, pointerIndex);
-				final float y = MotionEventCompat.getY(event, pointerIndex);
-
-				m_matrix.invert(m_savedInverseMatrix);
-
-				float[] pts = { x, y };
-				m_matrix.mapPoints(pts);
-				
-				// Remember where we started (for dragging)
-				m_start.x = x;
-				m_start.y = y;
-
-				
-				// Save the ID of this pointer (for dragging)
-				m_activePointerId = MotionEventCompat.getPointerId(event, 0);
-				break;
-			}
-
-			case MotionEvent.ACTION_MOVE: {
-				// Find the index of the active pointer and fetch its position
-				final int pointerIndex = MotionEventCompat.findPointerIndex(
-						event, m_activePointerId);
-
-				final float x = MotionEventCompat.getX(event, pointerIndex);
-				final float y = MotionEventCompat.getY(event, pointerIndex);
-
-//				float[] pts = { x, y };
-//				m_savedInverseMatrix.mapPoints(pts);
-				
-				// Calculate the distance moved
-				final float dx = x - m_start.x;
-				final float dy = y - m_start.y;
-
-				float[] pts = { dx, dy };
-				m_matrix.mapPoints(pts);
-
-				Matrix inverse = new Matrix();
-				m_matrix.invert(inverse);
-				inverse.mapPoints(pts);
-
-				selectedRoom.getRect().left += pts[0];
-				selectedRoom.getRect().top += pts[1];
-				selectedRoom.getRect().right += pts[0];
-				selectedRoom.getRect().bottom += pts[1];
-
-				Log.v("CHILO", new String(dx + " " + dy + " => " + pts[0] + " "
-						+ pts[1]));
-
-				invalidate();
-
-				// Remember this touch position for the next move event
-				m_start.x = x;
-				m_start.y = y;
-
-				break;
-			}
-
-			case MotionEvent.ACTION_UP: {
-				m_activePointerId = -1;
-				break;
-			}
-
-			case MotionEvent.ACTION_CANCEL: {
-				m_activePointerId = -1;
-				break;
-			}
-
-			case MotionEvent.ACTION_POINTER_UP: {
-
-				final int pointerIndex = MotionEventCompat
-						.getActionIndex(event);
-				final int pointerId = MotionEventCompat.getPointerId(event,
-						pointerIndex);
-
-				if (pointerId == m_activePointerId) {
-					// This was our active pointer going up. Choose a new
-					// active pointer and adjust accordingly.
-					final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-					m_start.x = MotionEventCompat.getX(event, newPointerIndex);
-					m_start.y = MotionEventCompat.getY(event, newPointerIndex);
-					m_activePointerId = MotionEventCompat.getPointerId(event,
-							newPointerIndex);
-				}
-				break;
-			}
-
-			}
-
-			invalidate();
+			break;
 		}
-		return m_gestureDetector.onTouchEvent(event);
+
+		invalidate();
+
+		// switch (event.getAction() & MotionEvent.ACTION_MASK) {
+		//
+		// case MotionEvent.ACTION_MOVE: {
+		// // Find the index of the active pointer and fetch its position
+		// final int pointerIndex = MotionEventCompat.findPointerIndex(event,
+		// m_activePointerId);
+		//
+		// final float x = MotionEventCompat.getX(event, pointerIndex);
+		// final float y = MotionEventCompat.getY(event, pointerIndex);
+		//
+		// float[] pts = { x, y };
+		// m_savedInverseMatrix.mapPoints(pts);
+		//
+		// // Calculate the distance moved
+		// final float dx = pts[0] - m_startE.x;
+		// final float dy = pts[1] - m_startE.y;
+		//
+		// // float[] pts = { dx, dy };
+		//
+		// selectedRoom.getRect().left += dx;
+		// selectedRoom.getRect().top += dy;
+		// selectedRoom.getRect().right += dx;
+		// selectedRoom.getRect().bottom += dy;
+		//
+		// invalidate();
+		//
+		// // Remember this touch position for the next move event
+		// m_startE.x = pts[0];
+		// m_startE.y = pts[1];
+		//
+		// break;
+		// }
+		//
+		// case MotionEvent.ACTION_UP: {
+		// m_activePointerId = -1;
+		// m_mode = ms_none;
+		// m_lastEvent = null;
+		// break;
+		// }
+		//
+		// case MotionEvent.ACTION_CANCEL: {
+		// m_activePointerId = -1;
+		// m_mode = ms_none;
+		// m_lastEvent = null;
+		// break;
+		// }
+		//
+		// case MotionEvent.ACTION_POINTER_UP: {
+		//
+		// final int pointerIndex = MotionEventCompat.getActionIndex(event);
+		// final int pointerId = MotionEventCompat.getPointerId(event,
+		// pointerIndex);
+		//
+		// if (pointerId == m_activePointerId) {
+		// // This was our active pointer going up. Choose a new
+		// // active pointer and adjust accordingly.
+		// final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+		// m_startE.x = MotionEventCompat.getX(event, newPointerIndex);
+		// m_startE.y = MotionEventCompat.getY(event, newPointerIndex);
+		// m_activePointerId = MotionEventCompat.getPointerId(event,
+		// newPointerIndex);
+		// }
+		// break;
+		// }
+
+		return true;
 	}
-	
+
 	/**
 	 * Determine the space between the first two fingers
 	 */

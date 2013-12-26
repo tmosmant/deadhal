@@ -57,11 +57,12 @@ public class Level extends View {
 	public void draw(Canvas canvas) {
 		for (int i = 0; i < rooms.size(); i++) {
 			Room room = rooms.get(i);
-			if (i == selectedRoomId) {
-				room.drawSelected(canvas);
-			} else {
+			if (i != selectedRoomId) {
 				room.draw(canvas);
 			}
+		}
+		if (selectedRoomId != NONE) {
+			rooms.get(selectedRoomId).drawSelected(canvas);
 		}
 	}
 

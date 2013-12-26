@@ -1,4 +1,4 @@
-package fr.upem.deadhal;
+package fr.upem.deadhal.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.multitouch.GestureListener;

@@ -1,4 +1,4 @@
-package listeners;
+package fr.upem.deadhal.components.listeners;
 
 import fr.upem.deadhal.components.Room;
 

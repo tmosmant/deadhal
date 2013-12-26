@@ -3,7 +3,7 @@ package fr.upem.deadhal.components;
 import java.util.LinkedList;
 import java.util.List;
 
-import listeners.SelectionRoomListener;
+import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;

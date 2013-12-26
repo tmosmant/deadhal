@@ -21,6 +21,9 @@ import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Toast;
 import fr.upem.deadhal.adapter.NavDrawerListAdapter;
+import fr.upem.deadhal.fragments.EditionFragment;
+import fr.upem.deadhal.fragments.OpenFragment;
+import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.model.NavDrawerItem;
 
 public class MainActivity extends Activity {

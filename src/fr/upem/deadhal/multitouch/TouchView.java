@@ -1,6 +1,5 @@
 package fr.upem.deadhal.multitouch;
 
-import listeners.SelectionRoomListener;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 
 public class TouchView extends View {
 

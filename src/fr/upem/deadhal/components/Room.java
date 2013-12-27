@@ -12,10 +12,12 @@ public class Room {
 	private RectF rect;
 
 	private final Paint background = new Paint();
-	private final Paint borders = new Paint();
+	// private final Paint borders = new Paint();
 
-	private final Paint selectedBorders = new Paint();
-	
+	// private final Paint selectedBorders = new Paint();
+
+	private final Paint selectedBackground = new Paint();
+
 	private final Paint points = new Paint();
 
 	public Room(String title, float left, float top, float right, float bottom) {
@@ -25,19 +27,26 @@ public class Room {
 		background.setStyle(Paint.Style.FILL);
 		background.setAntiAlias(true);
 
-		borders.setColor(Colors.BLACK);
-		borders.setStyle(Paint.Style.STROKE);
-		borders.setStrokeWidth(5);
-		borders.setAntiAlias(true);
+		// borders.setColor(Colors.BLACK);
+		// borders.setStyle(Paint.Style.STROKE);
+		// borders.setStrokeWidth(10);
+		// borders.setAntiAlias(true);
 
-		selectedBorders.setColor(Colors.GREY);
-		selectedBorders.setStyle(Paint.Style.STROKE);
-		selectedBorders.setStrokeWidth(5);
-		selectedBorders.setAntiAlias(true);
+		// selectedBorders.setColor(Colors.GREY);
+		// selectedBorders.setStyle(Paint.Style.STROKE);
+		// selectedBorders.setStrokeWidth(5);
+		// selectedBorders.setAntiAlias(true);
+		// selectedBorders.setAlpha(125);
 
+		selectedBackground.setColor(Colors.BLUE);
+		selectedBackground.setStyle(Paint.Style.FILL);
+		selectedBackground.setAntiAlias(true);
+		selectedBackground.setAlpha(200);
+		
 		points.setColor(Colors.GREY);
 		points.setStyle(Paint.Style.FILL);
 		points.setAntiAlias(true);
+		points.setAlpha(125);
 	}
 
 	public String getTitle() {
@@ -49,21 +58,22 @@ public class Room {
 	}
 
 	public void draw(Canvas canvas) {
+		// canvas.drawRect(rect, borders);
 		canvas.drawRect(rect, background);
-		canvas.drawRect(rect, borders);
 	}
 
 	public void drawSelected(Canvas canvas) {
-		canvas.drawRect(rect, background);
-		canvas.drawRect(rect, selectedBorders);
-		
 		drawPoints(canvas);
+
+		// canvas.drawRect(rect, selectedBorders);
+		canvas.drawRect(rect, selectedBackground);
+
 	}
 
 	private void drawPoints(Canvas canvas) {
 		PointF p = new PointF();
-		float radius = 10;
-		
+		float radius = 12;
+
 		p.set(rect.left, rect.top);
 		canvas.drawCircle(p.x, p.y, radius, points);
 		p.set(rect.right, rect.top);

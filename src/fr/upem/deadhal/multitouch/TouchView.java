@@ -297,6 +297,7 @@ public class TouchView extends View {
 				break;
 		}
 
+		bringToFront();
 		invalidate();
 
 		return true;

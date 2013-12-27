@@ -21,12 +21,16 @@ import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Toast;
 import fr.upem.deadhal.adapter.NavDrawerListAdapter;
+import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.fragments.EditionFragment;
 import fr.upem.deadhal.fragments.OpenFragment;
 import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.model.NavDrawerItem;
 
 public class MainActivity extends Activity {
+	
+	private Level m_level;
+	
 	private DrawerLayout m_drawerLayout;
 	private ListView m_drawerList;
 	private ActionBarDrawerToggle m_drawerToggle;
@@ -51,6 +55,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+		
+		m_level = new Level("Copernic, 3rd level");
 
 		m_title = getTitle();
 
@@ -196,6 +202,9 @@ public class MainActivity extends Activity {
 			break;
 		}
 		if (fragment != null) {
+			Bundle bundle = new Bundle();
+			bundle.putParcelable("level", m_level);
+			fragment.setArguments(bundle);
 			fragmentManager.beginTransaction()
 					.replace(R.id.frame_container, fragment).commit();
 

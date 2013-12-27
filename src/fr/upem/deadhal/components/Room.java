@@ -4,9 +4,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.os.Parcel;
+import android.os.Parcelable;
 import fr.upem.deadhal.utils.Colors;
 
-public class Room {
+public class Room implements Parcelable {
 
 	private String title;
 	private RectF rect;
@@ -42,11 +44,20 @@ public class Room {
 		selectedBackground.setStyle(Paint.Style.FILL);
 		selectedBackground.setAntiAlias(true);
 		selectedBackground.setAlpha(200);
-		
+
 		points.setColor(Colors.GREY);
 		points.setStyle(Paint.Style.FILL);
 		points.setAntiAlias(true);
 		points.setAlpha(125);
+	}
+
+	public Room(Parcel source) {
+		this.title = source.readString();
+		float left = source.readFloat();
+		float right = source.readFloat();
+		float top = source.readFloat();
+		float bottom = source.readFloat();
+		this.rect = new RectF(left, top, right, bottom);
 	}
 
 	public String getTitle() {
@@ -83,5 +94,31 @@ public class Room {
 		p.set(rect.right, rect.bottom);
 		canvas.drawCircle(p.x, p.y, radius, points);
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(title);
+		dest.writeFloat(rect.left);
+		dest.writeFloat(rect.right);
+		dest.writeFloat(rect.top);
+		dest.writeFloat(rect.bottom);
+	}
+
+	public static final Parcelable.Creator<Room> CREATOR = new Parcelable.Creator<Room>() {
+		@Override
+		public Room createFromParcel(Parcel source) {
+			return new Room(source);
+		}
+
+		@Override
+		public Room[] newArray(int size) {
+			return new Room[size];
+		}
+	};
 
 }

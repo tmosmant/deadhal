@@ -3,12 +3,12 @@ package fr.upem.deadhal.components;
 import java.util.LinkedList;
 import java.util.List;
 
-import fr.upem.deadhal.components.listeners.SelectionRoomListener;
-import android.content.Context;
 import android.graphics.Canvas;
-import android.view.View;
+import android.os.Parcel;
+import android.os.Parcelable;
+import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 
-public class Level extends View {
+public class Level implements Parcelable {
 
 	private String title;
 	private List<Room> rooms = new LinkedList<Room>();
@@ -26,13 +26,13 @@ public class Level extends View {
 
 	private List<SelectionRoomListener> selectionRoomListeners = new LinkedList<SelectionRoomListener>();
 
-	public Level(Context context) {
-		super(context);
-	}
-
-	public Level(Context context, String title) {
-		super(context);
+	public Level(String title) {
 		this.title = title;
+	}
+	
+	public Level(Parcel source) {
+		this.title = source.readString();
+		source.readList(rooms, (Object.class.getClassLoader()));
 	}
 
 	public boolean addRoom(Room room) {
@@ -98,5 +98,28 @@ public class Level extends View {
 	public void unselectRoom() {
 		selectedRoomId = NONE;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(title);
+		dest.writeList(rooms);
+	}
+
+	public static final Parcelable.Creator<Level> CREATOR = new Parcelable.Creator<Level>() {
+		@Override
+		public Level createFromParcel(Parcel source) {
+			return new Level(source);
+		}
+
+		@Override
+		public Level[] newArray(int size) {
+			return new Level[size];
+		}
+	};
 
 }

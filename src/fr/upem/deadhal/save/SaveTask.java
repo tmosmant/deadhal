@@ -76,12 +76,6 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 	}
 
 	@Override
-	protected void onProgressUpdate(Integer... values) {
-		// TODO Auto-generated method stub
-		super.onProgressUpdate(values);
-	}
-
-	@Override
 	protected void onPostExecute(Integer result) {
 		if (result == 1) {
 			Toast.makeText(activity, "Sauvegarde effectuée", Toast.LENGTH_SHORT)

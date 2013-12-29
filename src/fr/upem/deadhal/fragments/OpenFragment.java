@@ -1,17 +1,29 @@
 package fr.upem.deadhal.fragments;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import fr.upem.deadhal.R;
 
 public class OpenFragment extends Fragment {
-//	private String[] mFileList;
-//	private File mPath = new File(Enviroment.getExternalStorageDirectory() + "//yourdir//");
-//	private String mChosenFile;
-//	private static final String FTYPE = ".xml";
+	
+	private File m_selectedFile = null;
+	
+	private File m_directory = new File(
+			Environment.getExternalStorageDirectory() + File.separator
+					+ "deadhal");
 
 	public OpenFragment() {
 	}
@@ -23,29 +35,37 @@ public class OpenFragment extends Fragment {
 				false);
 
 		getActivity().setTitle(R.string.open);
+
+		File files[] = m_directory.listFiles();
+		List<String> list = new ArrayList<String>();
+		for (int i = 0; i < files.length; i++) {
+			list.add(files[i].getName());
+		}
+		Collections.sort(list);
+
+		ListView listView = (ListView) rootView.findViewById(R.id.listFile);
+		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_list_item_1, list);
+		listView.setAdapter(arrayAdapter);
+		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		listView.setSelector(android.R.color.holo_blue_dark);
+		listView.setOnItemClickListener(openOnItemClickListener());
+
 		return rootView;
 	}
 	
-//	private void loadFileList() {
-//	File m_path = 
-//	
-//    try {
-//        mPath.mkdirs();
-//    }
-//    catch(SecurityException e) {
-//        Log.e(TAG, "unable to write on the sd card " + e.toString());
-//    }
-//    if(mPath.exists()) {
-//        FilenameFilter filter = new FilenameFilter() {
-//            public boolean accept(File dir, String filename) {
-//                File sel = new File(dir, filename);
-//                return filename.contains(FTYPE) || sel.isDirectory();
-//            }
-//        };
-//        mFileList = mPath.list(filter);
-//    }
-//    else {
-//        mFileList= new String[0];
-//    }
-//}
+	private OnItemClickListener openOnItemClickListener() {
+		return new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				String m_fileName = (String) parent.getItemAtPosition(position);
+				m_selectedFile = new File(m_directory.getAbsolutePath()
+						+ File.separator + m_fileName);
+			}
+			
+		};
+	}
+
 }

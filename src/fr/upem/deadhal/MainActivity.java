@@ -26,14 +26,13 @@ import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Toast;
 import fr.upem.deadhal.adapter.NavDrawerListAdapter;
 import fr.upem.deadhal.components.Level;
-import fr.upem.deadhal.components.OnDataPass;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.fragments.EditionFragment;
 import fr.upem.deadhal.fragments.OpenFragment;
 import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.model.NavDrawerItem;
 
-public class MainActivity extends Activity implements OnDataPass {
+public class MainActivity extends Activity implements OpenFragment.OnDataPass {
 
 	private Level m_level;
 
@@ -188,11 +187,6 @@ public class MainActivity extends Activity implements OnDataPass {
 	 * Diplaying fragment view for selected nav drawer list item
 	 * */
 	private void displayView(int position) {
-		Map<UUID, Room> rooms = m_level.getRooms();
-		for (Entry<UUID, Room> entry : rooms.entrySet()) {
-			Room room = entry.getValue();
-			Log.e("room", room.toString());
-		}
 		// update the main content by switching fragments
 		FragmentManager fragmentManager = getFragmentManager();
 		Fragment fragment = null;
@@ -339,7 +333,6 @@ public class MainActivity extends Activity implements OnDataPass {
 
 	@Override
 	public void onDataPass(Level level) {
-		Log.e("room", "ondatapassé");
 		m_level = level;
 	}
 }

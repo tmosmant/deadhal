@@ -19,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
-import fr.upem.deadhal.components.OnDataPass;
 import fr.upem.deadhal.open.OpenTask;
 
 public class OpenFragment extends Fragment {
@@ -35,6 +34,10 @@ public class OpenFragment extends Fragment {
 	private OnDataPass m_callback;
 
 	public OpenFragment() {
+	}
+
+	public interface OnDataPass {
+		public void onDataPass(Level level);
 	}
 
 	@Override

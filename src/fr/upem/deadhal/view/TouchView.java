@@ -1,25 +1,25 @@
-package fr.upem.deadhal.multitouch;
+package fr.upem.deadhal.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
+import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
 public class TouchView extends View {
 
 	// private Drawable m_drawable;
 	private GestureDetector m_gestureDetector;
-	private Level m_level;
+	private LevelDrawable m_drawable;
 
 	// these matrices will be used to move and zoom image
 	private Matrix m_matrix = new Matrix();
@@ -27,14 +27,7 @@ public class TouchView extends View {
 	private Matrix m_savedInverseMatrix = new Matrix();
 
 	// we can be in one of these 3 states
-	private static final int ms_none = 0;
-	private static final int ms_drag = 1;
-	private static final int ms_zoom = 2;
-	private static final int ms_resizeLeftTop = 3;
-	private static final int ms_resizeRightTop = 4;
-	private static final int ms_resizeLeftBottom = 5;
-	private static final int ms_resizeRightBottom = 6;
-	private int m_mode = ms_none;
+	private TouchEvent m_mode = TouchEvent.NONE;
 
 	// remember some things for zooming
 	private PointF m_start = new PointF();
@@ -43,9 +36,6 @@ public class TouchView extends View {
 	private float m_distance = 0f;
 	private float m_newRotation = 0f;
 	private float[] m_lastEvent = null;
-
-	// remember some things for editing
-	private PointF m_startE = new PointF();
 
 	private SelectionRoomListener m_selectionRoomListener = new SelectionRoomListener() {
 
@@ -74,15 +64,15 @@ public class TouchView extends View {
 		super(context, attrs, defStyle);
 	}
 
-	public TouchView(Context context, Level level) {
+	public TouchView(Context context, LevelDrawable drawable) {
 		super(context);
-		m_level = level;
+		m_drawable = drawable;
 	}
 
 	public void build(GestureDetector gestureDetector, Bundle savedInstanceState) {
 		m_gestureDetector = gestureDetector;
 		restoreMatrix(savedInstanceState);
-		m_level.addSelectionRoomListener(m_selectionRoomListener);
+		m_drawable.addSelectionRoomListener(m_selectionRoomListener);
 		invalidate();
 	}
 
@@ -110,60 +100,34 @@ public class TouchView extends View {
 
 		m_gestureDetector.onTouchEvent(event);
 
-		Room selectedRoom = m_level.getSelectedRoom();
+		boolean isRoomSelected = m_drawable.isRoomSelected();
+
+		// Room selectedRoom = m_drawable.getSelectedRoom();
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
 			case MotionEvent.ACTION_DOWN :
-				m_mode = ms_drag;
-				if (selectedRoom == null) {
-					m_savedMatrix.set(m_matrix);
-					m_start.set(event.getX(), event.getY());
-				} else {
+				m_mode = TouchEvent.DRAG;
+				if (isRoomSelected == true) {
 					m_matrix.invert(m_savedInverseMatrix);
 					float[] pts = {event.getX(), event.getY()};
 					m_savedInverseMatrix.mapPoints(pts);
-					m_startE.set(pts[0], pts[1]);
-
-					RectF leftTop = new RectF(selectedRoom.getRect().left - 20,
-							selectedRoom.getRect().top - 20,
-							selectedRoom.getRect().left + 20,
-							selectedRoom.getRect().top + 20);
-					RectF rightTop = new RectF(
-							selectedRoom.getRect().right - 20,
-							selectedRoom.getRect().top - 20,
-							selectedRoom.getRect().right + 20,
-							selectedRoom.getRect().top + 20);
-					RectF leftBottom = new RectF(
-							selectedRoom.getRect().left - 20,
-							selectedRoom.getRect().bottom - 20,
-							selectedRoom.getRect().left + 20,
-							selectedRoom.getRect().bottom + 20);
-					RectF rightBottom = new RectF(
-							selectedRoom.getRect().right - 20,
-							selectedRoom.getRect().bottom - 20,
-							selectedRoom.getRect().right + 20,
-							selectedRoom.getRect().bottom + 20);
-					if (leftTop.contains(pts[0], pts[1])) {
-						m_mode = ms_resizeLeftTop;
-					} else if (rightTop.contains(pts[0], pts[1])) {
-						m_mode = ms_resizeRightTop;
-					} else if (leftBottom.contains(pts[0], pts[1])) {
-						m_mode = ms_resizeLeftBottom;
-					} else if (rightBottom.contains(pts[0], pts[1])) {
-						m_mode = ms_resizeRightBottom;
-					}
-
+					m_start.set(pts[0], pts[1]);
+					m_mode = m_drawable.getProcess(pts[0], pts[1]);
+					Log.v("Debug", m_mode.toString());
+				} else {
+					m_savedMatrix.set(m_matrix);
+					m_start.set(event.getX(), event.getY());
 				}
 				m_lastEvent = null;
 				break;
 
 			case MotionEvent.ACTION_POINTER_DOWN :
-				if (selectedRoom == null) {
+				if (isRoomSelected == false) {
 					m_oldDistance = spacing(event);
 					if (m_oldDistance > 10f) {
 						m_savedMatrix.set(m_matrix);
 						midPoint(m_middle, event);
-						m_mode = ms_zoom;
+						m_mode = TouchEvent.ZOOM;
 					}
 					m_lastEvent = new float[4];
 					m_lastEvent[0] = event.getX(0);
@@ -176,13 +140,13 @@ public class TouchView extends View {
 
 			case MotionEvent.ACTION_UP :
 			case MotionEvent.ACTION_POINTER_UP :
-				m_mode = ms_none;
+				m_mode = TouchEvent.NONE;
 				m_lastEvent = null;
 				break;
 
 			case MotionEvent.ACTION_MOVE :
-				if (m_mode == ms_drag) {
-					if (selectedRoom == null) {
+				if (m_mode == TouchEvent.DRAG) {
+					if (isRoomSelected == false) {
 						m_matrix.set(m_savedMatrix);
 						float dx = event.getX() - m_start.x;
 						float dy = event.getY() - m_start.y;
@@ -195,19 +159,16 @@ public class TouchView extends View {
 						m_savedInverseMatrix.mapPoints(pts);
 
 						// Calculate the distance moved
-						final float dx = pts[0] - m_startE.x;
-						final float dy = pts[1] - m_startE.y;
+						final float dx = pts[0] - m_start.x;
+						final float dy = pts[1] - m_start.y;
 
-						selectedRoom.getRect().left += dx;
-						selectedRoom.getRect().top += dy;
-						selectedRoom.getRect().right += dx;
-						selectedRoom.getRect().bottom += dy;
+						m_drawable.translateSelectedRoom(dx, dy);
 
 						// Remember this touch position for the next move
 						// event
-						m_startE.set(pts[0], pts[1]);
+						m_start.set(pts[0], pts[1]);
 					}
-				} else if (m_mode == ms_resizeLeftTop) {
+				} else if (m_mode == TouchEvent.RESIZE_ROOM) {
 					final float x = event.getX();
 					final float y = event.getY();
 
@@ -215,64 +176,16 @@ public class TouchView extends View {
 					m_savedInverseMatrix.mapPoints(pts);
 
 					// Calculate the distance moved
-					final float dx = pts[0] - m_startE.x;
-					final float dy = pts[1] - m_startE.y;
+					final float dx = pts[0] - m_start.x;
+					final float dy = pts[1] - m_start.y;
 
-					selectedRoom.getRect().left += dx;
-					selectedRoom.getRect().top += dy;
+					m_drawable.resizeSelectedRoom(dx, dy);
 
-					m_startE.set(pts[0], pts[1]);
+					m_start.set(pts[0], pts[1]);
 				}
 
-				else if (m_mode == ms_resizeRightTop) {
-					final float x = event.getX();
-					final float y = event.getY();
-
-					float[] pts = {x, y};
-					m_savedInverseMatrix.mapPoints(pts);
-
-					// Calculate the distance moved
-					final float dx = pts[0] - m_startE.x;
-					final float dy = pts[1] - m_startE.y;
-
-					selectedRoom.getRect().right += dx;
-					selectedRoom.getRect().top += dy;
-
-					m_startE.set(pts[0], pts[1]);
-				}
-
-				else if (m_mode == ms_resizeLeftBottom) {
-					final float x = event.getX();
-					final float y = event.getY();
-
-					float[] pts = {x, y};
-					m_savedInverseMatrix.mapPoints(pts);
-
-					// Calculate the distance moved
-					final float dx = pts[0] - m_startE.x;
-					final float dy = pts[1] - m_startE.y;
-
-					selectedRoom.getRect().left += dx;
-					selectedRoom.getRect().bottom += dy;
-
-					m_startE.set(pts[0], pts[1]);
-				} else if (m_mode == ms_resizeRightBottom) {
-					final float x = event.getX();
-					final float y = event.getY();
-
-					float[] pts = {x, y};
-					m_savedInverseMatrix.mapPoints(pts);
-
-					// Calculate the distance moved
-					final float dx = pts[0] - m_startE.x;
-					final float dy = pts[1] - m_startE.y;
-
-					selectedRoom.getRect().right += dx;
-					selectedRoom.getRect().bottom += dy;
-
-					m_startE.set(pts[0], pts[1]);
-				} else if (m_mode == ms_zoom) {
-					if (selectedRoom == null) {
+				else if (m_mode == TouchEvent.ZOOM) {
+					if (isRoomSelected == false) {
 						float newDist = spacing(event);
 
 						if (newDist > 10f) {
@@ -339,7 +252,7 @@ public class TouchView extends View {
 		super.onDraw(canvas);
 		canvas.save();
 		canvas.concat(m_matrix);
-		m_level.draw(canvas);
+		m_drawable.draw(canvas);
 		canvas.restore();
 	}
 

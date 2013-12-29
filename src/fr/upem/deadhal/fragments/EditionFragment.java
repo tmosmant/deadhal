@@ -1,6 +1,9 @@
 package fr.upem.deadhal.fragments;
 
+import java.util.UUID;
+
 import android.app.Fragment;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -11,8 +14,9 @@ import android.widget.TextView;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
-import fr.upem.deadhal.multitouch.GestureListener;
-import fr.upem.deadhal.multitouch.TouchView;
+import fr.upem.deadhal.graphics.drawable.LevelDrawable;
+import fr.upem.deadhal.view.GestureListener;
+import fr.upem.deadhal.view.TouchView;
 
 public class EditionFragment extends Fragment {
 
@@ -30,22 +34,19 @@ public class EditionFragment extends Fragment {
 		RelativeLayout relativeLayout = (RelativeLayout) rootView
 				.findViewById(R.id.edit_layout);
 
-		// Level level = buildSampleLevel(rootView.getContext());
-		m_level = getArguments().getParcelable("level");
-		buildSampleLevel();
+		// m_level = getArguments().getParcelable("level");
+		m_level = buildSampleLevel();
 		TextView levelTitleTextView = (TextView) rootView
 				.findViewById(R.id.levelTitleTextView);
-		// levelTitleTextView.setText(level.getTitle());
 		levelTitleTextView.setText(m_level.getTitle());
 
-		// m_touchView = new TouchView(rootView.getContext(), level);
-		m_touchView = new TouchView(rootView.getContext(), m_level);
+		LevelDrawable levelDrawable = new LevelDrawable(m_level);
 
-		// GestureDetector gestureDetector = new GestureDetector(
-		// rootView.getContext(), new GestureListener(m_touchView, level));
+		m_touchView = new TouchView(rootView.getContext(), levelDrawable);
+
 		GestureDetector gestureDetector = new GestureDetector(
-				rootView.getContext(),
-				new GestureListener(m_touchView, m_level));
+				rootView.getContext(), new GestureListener(m_touchView,
+						levelDrawable));
 		m_touchView.build(gestureDetector, savedInstanceState);
 
 		relativeLayout.addView(m_touchView);
@@ -53,23 +54,20 @@ public class EditionFragment extends Fragment {
 		return rootView;
 	}
 
-	private void buildSampleLevel() {
-		m_level.addRoom(new Room("3B117", 0, 0, 120, 120));
-		m_level.addRoom(new Room("3B113", 150, 0, 150 + 120, 120));
-		m_level.addRoom(new Room("3B116", 0, 150, 120, 150 + 120));
-		m_level.addRoom(new Room("3B112", 150, 150, 150 + 120, 150 + 120));
-	}
+	private Level buildSampleLevel() {
+		Level sample = new Level("Copernic, 3rd level");
+		sample.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0,
+				120, 120)));
+		sample.addRoom(new Room(UUID.randomUUID(), "3B113", new RectF(150, 0,
+				150 + 120, 120)));
 
-	// private Level buildSampleLevel() {
-	// Level sample = new Level("Copernic, 3rd level");
-	// sample.addRoom(new Room("3B117", 0, 0, 120, 120));
-	// sample.addRoom(new Room("3B113", 150, 0, 150 + 120, 120));
-	//
-	// sample.addRoom(new Room("3B116", 0, 150, 120, 150 + 120));
-	// sample.addRoom(new Room("3B112", 150, 150, 150 + 120, 150 + 120));
-	//
-	// return sample;
-	// }
+		sample.addRoom(new Room(UUID.randomUUID(), "3B116", new RectF(0, 150,
+				120, 150 + 120)));
+		sample.addRoom(new Room(UUID.randomUUID(), "3B112", new RectF(150, 150,
+				150 + 120, 150 + 120)));
+
+		return sample;
+	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {

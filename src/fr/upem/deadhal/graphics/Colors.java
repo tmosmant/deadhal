@@ -1,4 +1,4 @@
-package fr.upem.deadhal.utils;
+package fr.upem.deadhal.graphics;
 
 import android.graphics.Color;
 

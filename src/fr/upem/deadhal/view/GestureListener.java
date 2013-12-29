@@ -1,19 +1,18 @@
-package fr.upem.deadhal.multitouch;
+package fr.upem.deadhal.view;
 
 import android.graphics.Matrix;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import fr.upem.deadhal.components.Level;
-import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
 public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
 	private TouchView m_view;
-	private Level m_level;
+	private LevelDrawable m_levelDrawable;
 
-	public GestureListener(TouchView view, Level level) {
+	public GestureListener(TouchView view, LevelDrawable levelDrawable) {
 		m_view = view;
-		m_level = level;
+		m_levelDrawable = levelDrawable;
 	}
 
 	@Override
@@ -35,8 +34,9 @@ public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
 		inverse.mapPoints(pts);
 		if (e.getPointerCount() == 1) {
-			Room selectedRoom = m_level.selectRoom(pts[0], pts[1]);
-			if (selectedRoom == null && m_level.getSelectedRoom() == null) {
+			boolean isSelectedRoom = m_levelDrawable.selectRoom(pts[0], pts[1]);
+			if (isSelectedRoom == false
+					&& m_levelDrawable.isRoomSelected() == false) {
 				m_view.reset();
 				m_view.invalidate();
 			}

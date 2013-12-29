@@ -2,6 +2,7 @@ package fr.upem.deadhal.save;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -45,18 +46,21 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 		Level m_level = params[0];
 		Map<UUID, Room> rooms = m_level.getRooms();
 
+		File m_file = null;
+		FileOutputStream outputStream = null;
+		OutputStreamWriter outputStreamWriter = null;
 		try {
-			File m_file = new File(m_directory.getAbsolutePath()
-					+ File.separator + m_fileName + FTYPE);
+			m_file = new File(m_directory.getAbsolutePath() + File.separator
+					+ m_fileName + FTYPE);
 			m_file.createNewFile();
 
-			FileOutputStream outputStream = new FileOutputStream(m_file);
-			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
-					outputStream);
+			outputStream = new FileOutputStream(m_file);
+			outputStreamWriter = new OutputStreamWriter(outputStream);
 
 			outputStreamWriter
 					.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-			outputStreamWriter.append("<level name=\"" + m_level.getTitle() + "\">");
+			outputStreamWriter.append("<level name=\"" + m_level.getTitle()
+					+ "\">");
 			for (Entry<UUID, Room> entry : rooms.entrySet()) {
 				Room room = entry.getValue();
 				RectF rect = room.getRect();
@@ -66,12 +70,29 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 						+ rect.top + "\" bottom=\"" + rect.bottom + "\" />");
 			}
 			outputStreamWriter.append("</level>");
-
-			outputStreamWriter.close();
-			outputStream.close();
 		} catch (Exception e) {
 			m_error = e.getMessage();
+			return -1;
+		} finally {
+			if (outputStreamWriter != null) {
+				try {
+					outputStreamWriter.close();
+				} catch (IOException e) {
+					m_error = e.getMessage();
+					return -1;
+				}
+			}
+			
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+					m_error = e.getMessage();
+					return -1;
+				}
+			}
 		}
+		
 		return 1;
 	}
 

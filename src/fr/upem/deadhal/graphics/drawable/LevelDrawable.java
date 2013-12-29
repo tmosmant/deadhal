@@ -1,6 +1,7 @@
 package fr.upem.deadhal.graphics.drawable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -45,8 +46,20 @@ public class LevelDrawable extends Drawable {
 			}
 		}
 		if (m_selectedRoomId != null) {
-			Room room = m_level.getRooms().get(m_selectedRoomId);
-			drawRoomSelected(canvas, room);
+
+			Room selectedRoom = m_level.getRooms().get(m_selectedRoomId);
+
+			for (Room room : m_level.getRooms().values()) {
+				if (!room.getId().equals(m_selectedRoomId)) {
+					if (RectF
+							.intersects(room.getRect(), selectedRoom.getRect())) {
+						drawRoomSelectedError(canvas, selectedRoom);
+						return;
+					}
+				}
+			}
+
+			drawRoomSelected(canvas, selectedRoom);
 		}
 	}
 
@@ -85,6 +98,17 @@ public class LevelDrawable extends Drawable {
 		canvas.drawRect(rectB, Paints.ROOM_SELECTED_BORDER);
 	}
 
+	private void drawRoomSelectedError(Canvas canvas, Room room) {
+		float borderSize = (float) 1.5;
+
+		RectF rect = room.getRect();
+		RectF rectB = new RectF(rect.left + borderSize, rect.top + borderSize,
+				rect.right - borderSize, rect.bottom - borderSize);
+		drawPoints(rect, canvas);
+		canvas.drawRect(rect, Paints.ROOM_SELECTED_BACKGROUND_ERROR);
+		canvas.drawRect(rectB, Paints.ROOM_SELECTED_BORDER);
+	}
+
 	private void drawPoints(RectF rect, Canvas canvas) {
 		PointF p = new PointF();
 		float radius = 12;
@@ -105,20 +129,27 @@ public class LevelDrawable extends Drawable {
 
 	public boolean selectRoom(float x, float y) {
 		Collection<Room> rooms = m_level.getRooms().values();
-		for (Room room : rooms) {
-			if (room.getRect().contains(x, y)) {
-				if (room.getId().equals(m_selectedRoomId)) {
-					for (SelectionRoomListener listener : selectionRoomListeners) {
-						listener.onUnselectRoom(room);
+		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
+		Collections.reverse(reverseRooms);
+		for (Room room : reverseRooms) {
+			if (m_selectedRoomId != null) {
+				if (room.getRect().contains(x, y)) {
+					if (room.getId().equals(m_selectedRoomId)) {
+						for (SelectionRoomListener listener : selectionRoomListeners) {
+							listener.onUnselectRoom(room);
+						}
+						m_selectedRoomId = null;
+						return true;
 					}
-					m_selectedRoomId = null;
-				} else if (m_selectedRoomId == null) {
+				}
+			} else {
+				if (room.getRect().contains(x, y)) {
 					for (SelectionRoomListener listener : selectionRoomListeners) {
 						listener.onSelectRoom(room);
 					}
 					m_selectedRoomId = room.getId();
+					return true;
 				}
-				return true;
 			}
 		}
 		return false;

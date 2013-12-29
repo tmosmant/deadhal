@@ -5,6 +5,7 @@ import java.util.UUID;
 import android.app.Fragment;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;

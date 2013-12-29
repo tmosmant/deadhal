@@ -7,6 +7,7 @@ public class Paints {
 	public final static Paint ROOM_BACKGROUND = new Paint();
 	public final static Paint ROOM_BORDER = new Paint();
 	public final static Paint ROOM_SELECTED_BACKGROUND = new Paint();
+	public final static Paint ROOM_SELECTED_BACKGROUND_ERROR = new Paint();
 	public final static Paint ROOM_SELECTED_BORDER = new Paint();
 	public final static Paint ROOM_SELECTED_POINT = new Paint();
 
@@ -30,6 +31,11 @@ public class Paints {
 		ROOM_SELECTED_BACKGROUND.setStyle(Paint.Style.FILL);
 		ROOM_SELECTED_BACKGROUND.setAntiAlias(true);
 		ROOM_SELECTED_BACKGROUND.setAlpha(255);
+
+		ROOM_SELECTED_BACKGROUND_ERROR.setColor(Colors.RED);
+		ROOM_SELECTED_BACKGROUND_ERROR.setStyle(Paint.Style.FILL);
+		ROOM_SELECTED_BACKGROUND_ERROR.setAntiAlias(true);
+		ROOM_SELECTED_BACKGROUND_ERROR.setAlpha(255);
 
 		ROOM_SELECTED_POINT.setColor(Colors.GREY);
 		ROOM_SELECTED_POINT.setStyle(Paint.Style.FILL);

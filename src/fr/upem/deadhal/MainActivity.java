@@ -28,9 +28,9 @@ import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.model.NavDrawerItem;
 
 public class MainActivity extends Activity {
-	
+
 	private Level m_level;
-	
+
 	private DrawerLayout m_drawerLayout;
 	private ListView m_drawerList;
 	private ActionBarDrawerToggle m_drawerToggle;
@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
-		
+
 		m_level = new Level("Copernic, 3rd level");
 
 		m_title = getTitle();
@@ -122,8 +122,9 @@ public class MainActivity extends Activity {
 	/**
 	 * Slide menu item click listener
 	 * */
-	private class SlideMenuClickListener implements
-			ListView.OnItemClickListener {
+	private class SlideMenuClickListener
+			implements
+				ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
@@ -146,8 +147,8 @@ public class MainActivity extends Activity {
 		}
 		// Handle action bar actions click
 		switch (item.getItemId()) {
-		default:
-			return super.onOptionsItemSelected(item);
+			default :
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -159,19 +160,19 @@ public class MainActivity extends Activity {
 		// if nav drawer is opened, hide the action items
 		boolean drawerOpen = m_drawerLayout.isDrawerOpen(m_drawerList);
 		switch (m_menu) {
-		case R.menu.edit:
-			menu.findItem(R.id.action_new).setVisible(!drawerOpen);
-			menu.findItem(R.id.action_remove).setVisible(!drawerOpen);
-			menu.findItem(R.id.action_undo).setVisible(!drawerOpen);
-			break;
-		case R.menu.open:
-			menu.findItem(R.id.action_share).setVisible(!drawerOpen);
-			menu.findItem(R.id.action_accept).setVisible(!drawerOpen);
-			break;
-		case R.menu.save:
-			break;
-		default:
-			break;
+			case R.menu.edit :
+				menu.findItem(R.id.action_new).setVisible(!drawerOpen);
+				menu.findItem(R.id.action_remove).setVisible(!drawerOpen);
+				menu.findItem(R.id.action_undo).setVisible(!drawerOpen);
+				break;
+			case R.menu.open :
+				menu.findItem(R.id.action_share).setVisible(!drawerOpen);
+				menu.findItem(R.id.action_accept).setVisible(!drawerOpen);
+				break;
+			case R.menu.save :
+				break;
+			default :
+				break;
 		}
 
 		return super.onPrepareOptionsMenu(menu);
@@ -185,34 +186,53 @@ public class MainActivity extends Activity {
 		// update the main content by switching fragments
 		FragmentManager fragmentManager = getFragmentManager();
 		Fragment fragment = null;
+
+		boolean justClose = false;
+
 		switch (position) {
-		case 0:
-			fragment = m_editionFragment;
-			m_menu = R.menu.edit;
-			break;
-		case 1:
-			fragment = m_openFragment;
-			m_menu = R.menu.open;
-			break;
-		case 2:
-			fragment = m_saveFragment;
-			m_menu = R.menu.save;
-			break;
-		default:
-			break;
+			case 0 :
+				if (m_editionFragment.equals(fragment)) {
+					justClose = true;
+					break;
+				}
+				fragment = m_editionFragment;
+				m_menu = R.menu.edit;
+				break;
+			case 1 :
+				if (m_openFragment.equals(fragment)) {
+					justClose = true;
+					break;
+				}
+				fragment = m_openFragment;
+				m_menu = R.menu.open;
+				break;
+			case 2 :
+				if (m_saveFragment.equals(fragment)) {
+					justClose = true;
+					break;
+				}
+				fragment = m_saveFragment;
+				m_menu = R.menu.save;
+				break;
+			default :
+				break;
 		}
 		if (fragment != null) {
-			Bundle bundle = new Bundle();
-			bundle.putParcelable("level", m_level);
-			fragment.setArguments(bundle);
-			fragmentManager.beginTransaction()
-					.replace(R.id.frame_container, fragment).commit();
+			if (justClose) {
+				m_drawerLayout.closeDrawer(m_drawerList);
+			} else {
+				Bundle bundle = new Bundle();
+				bundle.putParcelable("level", m_level);
+				fragment.setArguments(bundle);
+				fragmentManager.beginTransaction()
+						.replace(R.id.frame_container, fragment).commit();
 
-			// update selected item and title, then close the drawer
-			m_drawerList.setItemChecked(position, true);
-			m_drawerList.setSelection(position);
-			// setTitle(navMenuTitles[position]);
-			m_drawerLayout.closeDrawer(m_drawerList);
+				// update selected item and title, then close the drawer
+				m_drawerList.setItemChecked(position, true);
+				m_drawerList.setSelection(position);
+				// setTitle(navMenuTitles[position]);
+				m_drawerLayout.closeDrawer(m_drawerList);
+			}
 		} else {
 			// error in creating fragment
 			Log.e("MainActivity", "Error in creating fragment");

@@ -6,7 +6,6 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -113,7 +112,6 @@ public class TouchView extends View {
 					m_savedInverseMatrix.mapPoints(pts);
 					m_start.set(pts[0], pts[1]);
 					m_mode = m_drawable.getProcess(pts[0], pts[1]);
-					Log.v("Debug", m_mode.toString());
 				} else {
 					m_savedMatrix.set(m_matrix);
 					m_start.set(event.getX(), event.getY());

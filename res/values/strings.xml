@@ -15,7 +15,7 @@
     <string name="action_share">Share</string>
     <string name="action_delete">Delete</string>
     <string name="action_accept">Accept</string>
-    
+
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item>Edit</item>
@@ -34,6 +34,6 @@
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="ok">OK</string>
-    <string name="hint">Nom du fichier</string>
+    <string name="hint">File name</string>
 
 </resources>

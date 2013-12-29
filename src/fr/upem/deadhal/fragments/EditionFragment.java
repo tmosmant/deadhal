@@ -1,9 +1,6 @@
 package fr.upem.deadhal.fragments;
 
-import java.util.UUID;
-
 import android.app.Fragment;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -13,7 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
-import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 import fr.upem.deadhal.view.GestureListener;
 import fr.upem.deadhal.view.TouchView;
@@ -35,7 +31,7 @@ public class EditionFragment extends Fragment {
 				.findViewById(R.id.edit_layout);
 
 		m_level = getArguments().getParcelable("level");
-		buildSampleLevel();
+
 		// m_level = buildSampleLevel();
 		TextView levelTitleTextView = (TextView) rootView
 				.findViewById(R.id.levelTitleTextView);
@@ -55,36 +51,10 @@ public class EditionFragment extends Fragment {
 		return rootView;
 	}
 
-//	private Level buildSampleLevel() {
-//		Level sample = new Level("Copernic, 3rd level");
-//		sample.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0,
-//				120, 120)));
-//		sample.addRoom(new Room(UUID.randomUUID(), "3B113", new RectF(150, 0,
-//				150 + 120, 120)));
-//
-//		sample.addRoom(new Room(UUID.randomUUID(), "3B116", new RectF(0, 150,
-//				120, 150 + 120)));
-//		sample.addRoom(new Room(UUID.randomUUID(), "3B112", new RectF(150, 150,
-//				150 + 120, 150 + 120)));
-//
-//		return sample;
-//	}
-
-	private void buildSampleLevel() {
-		m_level.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0,
-				120, 120)));
-		m_level.addRoom(new Room(UUID.randomUUID(), "3B113", new RectF(150, 0,
-				150 + 120, 120)));
-
-		m_level.addRoom(new Room(UUID.randomUUID(), "3B116", new RectF(0, 150,
-				120, 150 + 120)));
-		m_level.addRoom(new Room(UUID.randomUUID(), "3B112", new RectF(150,
-				150, 150 + 120, 150 + 120)));
-	}
-
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		m_touchView.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}
+
 }

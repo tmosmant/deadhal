@@ -248,6 +248,9 @@ public class TouchView extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+		
+		
+		
 		canvas.save();
 		canvas.concat(m_matrix);
 		m_drawable.draw(canvas);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<level name="copernic levle 3">
+<level name="copernic level 3">
 
     <room id="657531f3-b69b-49a1-b2d7-2719877a2c24" name="3B117" left="0" right="0" top="120" bottom="120" />
     <room id="04b3f648-7eaf-4d6d-a735-6e1d250b2d55" name="3B113" left="150" right="0" top="270" bottom="120" />

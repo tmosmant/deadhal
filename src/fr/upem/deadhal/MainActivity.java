@@ -1,12 +1,16 @@
 package fr.upem.deadhal;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -22,12 +26,14 @@ import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Toast;
 import fr.upem.deadhal.adapter.NavDrawerListAdapter;
 import fr.upem.deadhal.components.Level;
+import fr.upem.deadhal.components.OnDataPass;
+import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.fragments.EditionFragment;
 import fr.upem.deadhal.fragments.OpenFragment;
 import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.model.NavDrawerItem;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnDataPass {
 
 	private Level m_level;
 
@@ -57,6 +63,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		m_level = new Level("Copernic, 3rd level");
+		buildSampleLevel();
 
 		m_title = getTitle();
 
@@ -181,7 +188,11 @@ public class MainActivity extends Activity {
 	 * Diplaying fragment view for selected nav drawer list item
 	 * */
 	private void displayView(int position) {
-
+		Map<UUID, Room> rooms = m_level.getRooms();
+		for (Entry<UUID, Room> entry : rooms.entrySet()) {
+			Room room = entry.getValue();
+			Log.e("room", room.toString());
+		}
 		// update the main content by switching fragments
 		FragmentManager fragmentManager = getFragmentManager();
 		Fragment fragment = null;
@@ -224,6 +235,7 @@ public class MainActivity extends Activity {
 					Bundle bundle = new Bundle();
 					bundle.putParcelable("level", m_level);
 					fragment.setArguments(bundle);
+
 					fragmentManager.beginTransaction()
 							.replace(R.id.frame_container, fragment).commit();
 
@@ -311,5 +323,23 @@ public class MainActivity extends Activity {
 		super.onRestoreInstanceState(savedInstanceState);
 		m_menu = savedInstanceState.getInt("menu");
 		invalidateOptionsMenu();
+	}
+
+	private void buildSampleLevel() {
+		m_level.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0,
+				120, 120)));
+		m_level.addRoom(new Room(UUID.randomUUID(), "3B113", new RectF(150, 0,
+				150 + 120, 120)));
+
+		m_level.addRoom(new Room(UUID.randomUUID(), "3B116", new RectF(0, 150,
+				120, 150 + 120)));
+		m_level.addRoom(new Room(UUID.randomUUID(), "3B112", new RectF(150,
+				150, 150 + 120, 150 + 120)));
+	}
+
+	@Override
+	public void onDataPass(Level level) {
+		Log.e("room", "ondatapassé");
+		m_level = level;
 	}
 }

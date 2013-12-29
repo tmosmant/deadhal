@@ -4,7 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,6 +18,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import fr.upem.deadhal.R;
+import fr.upem.deadhal.components.Level;
+import fr.upem.deadhal.components.OnDataPass;
 import fr.upem.deadhal.open.OpenTask;
 
 public class OpenFragment extends Fragment {
@@ -26,7 +30,25 @@ public class OpenFragment extends Fragment {
 			Environment.getExternalStorageDirectory() + File.separator
 					+ "deadhal");
 
+	private Level m_level;
+
+	private OnDataPass m_callback;
+
 	public OpenFragment() {
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		// This makes sure that the container activity has implemented
+		// the callback interface. If not, it throws an exception
+		try {
+			m_callback = (OnDataPass) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnDataPass");
+		}
 	}
 
 	@Override
@@ -65,10 +87,19 @@ public class OpenFragment extends Fragment {
 					int position, long id) {
 				String m_fileName = (String) parent.getItemAtPosition(position);
 				m_selectedFile = new File(m_directory.getAbsolutePath()
-						+ File.separator + m_fileName);		
-				
+						+ File.separator + m_fileName);
+
 				OpenTask openTask = new OpenTask();
 				openTask.execute(m_selectedFile);
+
+				try {
+					m_level = openTask.get();
+					m_callback.onDataPass(m_level);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}
 			}
 
 		};

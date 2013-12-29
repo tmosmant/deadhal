@@ -6,21 +6,27 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.UUID;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.graphics.RectF;
 import android.os.AsyncTask;
+import fr.upem.deadhal.components.Level;
+import fr.upem.deadhal.components.Room;
 
-public class OpenTask extends AsyncTask<File, Integer, Integer> {
+public class OpenTask extends AsyncTask<File, Integer, Level> {
+
+	private Level m_level = new Level();
 
 	@Override
-	protected Integer doInBackground(File... params) {
+	protected Level doInBackground(File... params) {
 		File m_file = params[0];
 		String m_content = getContent(m_file);
 
 		if (m_content == null) {
-			return -1;
+			return null;
 		}
 
 		try {
@@ -28,8 +34,8 @@ public class OpenTask extends AsyncTask<File, Integer, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return 1;
+		
+		return m_level;
 	}
 
 	private String getContent(File file) {
@@ -78,21 +84,38 @@ public class OpenTask extends AsyncTask<File, Integer, Integer> {
 		factory.setNamespaceAware(true);
 		XmlPullParser xpp = factory.newPullParser();
 		xpp.setInput(new StringReader(content));
-		
+
 		int eventType = xpp.getEventType();
 		while (eventType != XmlPullParser.END_DOCUMENT) {
-			if (eventType == XmlPullParser.START_DOCUMENT) {
-				System.out.println("Start document");
-			} else if (eventType == XmlPullParser.START_TAG) {
-				System.out.println("Start tag " + xpp.getName());
-			} else if (eventType == XmlPullParser.END_TAG) {
-				System.out.println("End tag " + xpp.getName());
-			} else if (eventType == XmlPullParser.TEXT) {
-				System.out.println("Text " + xpp.getText());
+			if (eventType == XmlPullParser.START_TAG) {
+				if (xpp.getName().equals("level")) {
+					levelTag(xpp);
+				}
+
+				else if (xpp.getName().equals("room")) {
+					roomTag(xpp);
+				}
 			}
 			eventType = xpp.next();
 		}
-		System.out.println("End document");
+	}
+
+	private void levelTag(XmlPullParser xpp) {
+		String title = xpp.getAttributeValue(0);
+		m_level.setTitle(title);
+	}
+
+	private void roomTag(XmlPullParser xpp) {
+		UUID id = UUID.fromString(xpp.getAttributeValue(0));
+		String title = xpp.getAttributeValue(1);
+		float left = Float.valueOf(xpp.getAttributeValue(2));
+		float right = Float.valueOf(xpp.getAttributeValue(3));
+		float top = Float.valueOf(xpp.getAttributeValue(4));
+		float bottom = Float.valueOf(xpp.getAttributeValue(5));
+		RectF rect = new RectF(left, top, right, bottom);
+
+		Room room = new Room(id, title, rect);
+		m_level.addRoom(room);
 	}
 
 }

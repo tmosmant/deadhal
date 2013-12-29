@@ -12,6 +12,9 @@ public class Level implements Parcelable {
 	private String title;
 	private Map<UUID, Room> rooms = new HashMap<UUID, Room>();
 
+	public Level() {
+	}
+
 	public Level(String title) {
 		this.title = title;
 	}
@@ -36,6 +39,10 @@ public class Level implements Parcelable {
 
 	public String getTitle() {
 		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Map<UUID, Room> getRooms() {

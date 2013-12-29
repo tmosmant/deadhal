@@ -93,7 +93,6 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 		StringWriter writer = new StringWriter();
 		xmlSerializer.setOutput(writer);
 
-		// Start Document
 		xmlSerializer.startDocument("UTF-8", null);
 		xmlSerializer.setFeature(
 				"http://xmlpull.org/v1/doc/features.html#indent-output", true);

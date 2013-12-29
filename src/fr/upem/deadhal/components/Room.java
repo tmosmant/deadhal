@@ -71,4 +71,9 @@ public class Room implements Parcelable {
 		}
 	};
 
+	@Override
+	public String toString() {
+		return "Room [id=" + id + ", title=" + title + ", rect=" + rect + "]";
+	}
+
 }

@@ -154,6 +154,7 @@ public class LevelDrawable extends Drawable {
 		}
 		return false;
 	}
+
 	public TouchEvent getProcess(float x, float y) {
 		Room room = m_level.getRooms().get(m_selectedRoomId);
 		TouchEvent mode = TouchEvent.DRAG;
@@ -202,8 +203,9 @@ public class LevelDrawable extends Drawable {
 		if (m_resizeType == ResizeType.RESIZE_ROOM_LEFT_TOP) {
 			room.getRect().left += dx;
 			room.getRect().top += dy;
-		} else if (m_resizeType == ResizeType.RESIZE_ROOM_RIGHT_TOP) {
+		}
 
+		else if (m_resizeType == ResizeType.RESIZE_ROOM_RIGHT_TOP) {
 			room.getRect().right += dx;
 			room.getRect().top += dy;
 		}

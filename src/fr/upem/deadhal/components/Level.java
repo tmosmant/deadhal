@@ -21,6 +21,7 @@ public class Level implements Parcelable {
 		source.readMap(rooms, HashMap.class.getClass().getClassLoader());
 		// source.readList(rooms, (Object.class.getClassLoader()));
 	}
+
 	public boolean addRoom(Room room) {
 
 		for (Room r : rooms.values()) {

@@ -17,19 +17,19 @@ public class Paints {
 
 		ROOM_BORDER.setColor(Colors.BLACK);
 		ROOM_BORDER.setStyle(Paint.Style.STROKE);
-		ROOM_BORDER.setStrokeWidth(10);
+		ROOM_BORDER.setStrokeWidth(3);
 		ROOM_BORDER.setAntiAlias(true);
 
 		ROOM_SELECTED_BORDER.setColor(Colors.GREY);
 		ROOM_SELECTED_BORDER.setStyle(Paint.Style.STROKE);
-		ROOM_SELECTED_BORDER.setStrokeWidth(5);
+		ROOM_SELECTED_BORDER.setStrokeWidth(3);
 		ROOM_SELECTED_BORDER.setAntiAlias(true);
-		ROOM_SELECTED_BORDER.setAlpha(125);
+		ROOM_SELECTED_BORDER.setAlpha(255);
 
 		ROOM_SELECTED_BACKGROUND.setColor(Colors.BLUE);
 		ROOM_SELECTED_BACKGROUND.setStyle(Paint.Style.FILL);
 		ROOM_SELECTED_BACKGROUND.setAntiAlias(true);
-		ROOM_SELECTED_BACKGROUND.setAlpha(200);
+		ROOM_SELECTED_BACKGROUND.setAlpha(255);
 
 		ROOM_SELECTED_POINT.setColor(Colors.GREY);
 		ROOM_SELECTED_POINT.setStyle(Paint.Style.FILL);

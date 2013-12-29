@@ -40,11 +40,13 @@ public class LevelDrawable extends Drawable {
 	@Override
 	public void draw(Canvas canvas) {
 		for (Room room : m_level.getRooms().values()) {
-			if (room.getId().equals(m_selectedRoomId)) {
-				drawRoomSelected(canvas, room);
-			} else {
+			if (!room.getId().equals(m_selectedRoomId)) {
 				drawRoom(canvas, room);
 			}
+		}
+		if (m_selectedRoomId != null) {
+			Room room = m_level.getRooms().get(m_selectedRoomId);
+			drawRoomSelected(canvas, room);
 		}
 	}
 
@@ -64,14 +66,23 @@ public class LevelDrawable extends Drawable {
 	}
 
 	private void drawRoom(Canvas canvas, Room room) {
+		float borderSize = (float) 1.5;
 		RectF rect = room.getRect();
+		RectF rectB = new RectF(rect.left + borderSize, rect.top + borderSize,
+				rect.right - borderSize, rect.bottom - borderSize);
 		canvas.drawRect(rect, Paints.ROOM_BACKGROUND);
+		canvas.drawRect(rectB, Paints.ROOM_BORDER);
 	}
 
 	private void drawRoomSelected(Canvas canvas, Room room) {
+		float borderSize = (float) 1.5;
+
 		RectF rect = room.getRect();
+		RectF rectB = new RectF(rect.left + borderSize, rect.top + borderSize,
+				rect.right - borderSize, rect.bottom - borderSize);
 		drawPoints(rect, canvas);
-		canvas.drawRect(rect, Paints.ROOM_BACKGROUND);
+		canvas.drawRect(rect, Paints.ROOM_SELECTED_BACKGROUND);
+		canvas.drawRect(rectB, Paints.ROOM_SELECTED_BORDER);
 	}
 
 	private void drawPoints(RectF rect, Canvas canvas) {

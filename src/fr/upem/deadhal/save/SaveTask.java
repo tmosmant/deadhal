@@ -4,14 +4,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+
+import org.xmlpull.v1.XmlSerializer;
 
 import android.app.Activity;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Xml;
 import android.widget.Toast;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
@@ -44,7 +48,6 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 	@Override
 	protected Integer doInBackground(Level... params) {
 		Level m_level = params[0];
-		Map<UUID, Room> rooms = m_level.getRooms();
 
 		File m_file = null;
 		FileOutputStream outputStream = null;
@@ -56,20 +59,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 
 			outputStream = new FileOutputStream(m_file);
 			outputStreamWriter = new OutputStreamWriter(outputStream);
-
-			outputStreamWriter
-					.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-			outputStreamWriter.append("<level name=\"" + m_level.getTitle()
-					+ "\">");
-			for (Entry<UUID, Room> entry : rooms.entrySet()) {
-				Room room = entry.getValue();
-				RectF rect = room.getRect();
-				outputStreamWriter.append("<room id=\"" + room.getId()
-						+ "\" name=\"" + room.getTitle() + "\" left=\""
-						+ rect.left + " right=\"" + rect.right + "\" top=\""
-						+ rect.top + "\" bottom=\"" + rect.bottom + "\" />");
-			}
-			outputStreamWriter.append("</level>");
+			outputStreamWriter.append(CreateXMLString(m_level));
 		} catch (Exception e) {
 			m_error = e.getMessage();
 			return -1;
@@ -82,7 +72,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 					return -1;
 				}
 			}
-			
+
 			if (outputStream != null) {
 				try {
 					outputStream.close();
@@ -92,8 +82,41 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 				}
 			}
 		}
-		
+
 		return 1;
+	}
+
+	public static String CreateXMLString(Level level)
+			throws IllegalArgumentException, IllegalStateException, IOException {
+		Map<UUID, Room> rooms = level.getRooms();
+		XmlSerializer xmlSerializer = Xml.newSerializer();
+		StringWriter writer = new StringWriter();
+		xmlSerializer.setOutput(writer);
+
+		// Start Document
+		xmlSerializer.startDocument("UTF-8", null);
+		xmlSerializer.setFeature(
+				"http://xmlpull.org/v1/doc/features.html#indent-output", true);
+
+		xmlSerializer.startTag("", "level");
+		xmlSerializer.attribute("", "name", level.getTitle());
+		for (Entry<UUID, Room> entry : rooms.entrySet()) {
+			Room room = entry.getValue();
+			RectF rect = room.getRect();
+			
+			xmlSerializer.startTag("", "room");
+			xmlSerializer.attribute("", "id", room.getId().toString());
+			xmlSerializer.attribute("", "name", room.getTitle());
+			xmlSerializer.attribute("", "left", String.valueOf(rect.left));
+			xmlSerializer.attribute("", "right", String.valueOf(rect.right));
+			xmlSerializer.attribute("", "top", String.valueOf(rect.top));
+			xmlSerializer.attribute("", "bottom", String.valueOf(rect.bottom));
+			xmlSerializer.endTag("", "room");
+		}
+		xmlSerializer.endTag("", "level");
+		xmlSerializer.endDocument();
+
+		return writer.toString();
 	}
 
 	@Override

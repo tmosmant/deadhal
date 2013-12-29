@@ -1,10 +1,6 @@
 package fr.upem.deadhal.fragments;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +8,6 @@ import java.util.List;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +16,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import fr.upem.deadhal.R;
+import fr.upem.deadhal.open.OpenTask;
 
 public class OpenFragment extends Fragment {
 
@@ -69,41 +65,10 @@ public class OpenFragment extends Fragment {
 					int position, long id) {
 				String m_fileName = (String) parent.getItemAtPosition(position);
 				m_selectedFile = new File(m_directory.getAbsolutePath()
-						+ File.separator + m_fileName);
-
-				FileInputStream inputStream = null;
-				InputStreamReader inputStreamReader = null;
-				try {
-					inputStream = new FileInputStream(m_selectedFile);
-					inputStreamReader = new InputStreamReader(inputStream);
-
-					int c;
-					String s = "";
-					while ((c = inputStreamReader.read()) != -1) {
-						s += c;
-					}
-					Log.i("file", s);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					if (inputStreamReader != null) {
-						try {
-							inputStreamReader.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-
-					if (inputStream != null) {
-						try {
-							inputStream.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
+						+ File.separator + m_fileName);		
+				
+				OpenTask openTask = new OpenTask();
+				openTask.execute(m_selectedFile);
 			}
 
 		};

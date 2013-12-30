@@ -1,6 +1,7 @@
 package fr.upem.deadhal.graphics;
 
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 
 public class Paints {
 
@@ -10,6 +11,8 @@ public class Paints {
 	public final static Paint ROOM_SELECTED_BACKGROUND_ERROR = new Paint();
 	public final static Paint ROOM_SELECTED_BORDER = new Paint();
 	public final static Paint ROOM_SELECTED_POINT = new Paint();
+	
+	public final static Paint ROOM_TITLE = new Paint();
 
 	static {
 		ROOM_BACKGROUND.setColor(Colors.BLUE);
@@ -41,6 +44,12 @@ public class Paints {
 		ROOM_SELECTED_POINT.setStyle(Paint.Style.FILL);
 		ROOM_SELECTED_POINT.setAntiAlias(true);
 		ROOM_SELECTED_POINT.setAlpha(125);
+		
+		ROOM_TITLE.setColor(Colors.BLACK);
+		ROOM_TITLE.setTextSize(20);
+		ROOM_TITLE.setTextAlign(Align.CENTER);
+		ROOM_TITLE.setAntiAlias(true);
+		ROOM_TITLE.setAlpha(255);
 	}
 
 	private Paints() {

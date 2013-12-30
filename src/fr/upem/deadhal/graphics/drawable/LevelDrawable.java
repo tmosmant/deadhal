@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -78,6 +79,19 @@ public class LevelDrawable extends Drawable {
 		return m_alpha;
 	}
 
+	private void drawTitle(Canvas canvas, Room room) {
+		String title = room.getTitle();
+		RectF rect = room.getRect();
+		if (rect.height() >= 20) {
+			Paint paint = new Paint(Paints.ROOM_TITLE);
+			float width = rect.width();
+			int numOfChars = paint.breakText(title, true, width, null);
+			int start = (title.length() - numOfChars) / 2;
+			canvas.drawText(title, start, start + numOfChars, rect.centerX(),
+					rect.centerY() + 7, paint);
+		}
+	}
+
 	private void drawRoom(Canvas canvas, Room room) {
 		float borderSize = (float) 1.5;
 		RectF rect = room.getRect();
@@ -85,6 +99,7 @@ public class LevelDrawable extends Drawable {
 				rect.right - borderSize, rect.bottom - borderSize);
 		canvas.drawRect(rect, Paints.ROOM_BACKGROUND);
 		canvas.drawRect(rectB, Paints.ROOM_BORDER);
+		drawTitle(canvas, room);
 	}
 
 	private void drawRoomSelected(Canvas canvas, Room room) {
@@ -96,6 +111,7 @@ public class LevelDrawable extends Drawable {
 		drawPoints(rect, canvas);
 		canvas.drawRect(rect, Paints.ROOM_SELECTED_BACKGROUND);
 		canvas.drawRect(rectB, Paints.ROOM_SELECTED_BORDER);
+		drawTitle(canvas, room);
 	}
 
 	private void drawRoomSelectedError(Canvas canvas, Room room) {
@@ -107,6 +123,7 @@ public class LevelDrawable extends Drawable {
 		drawPoints(rect, canvas);
 		canvas.drawRect(rect, Paints.ROOM_SELECTED_BACKGROUND_ERROR);
 		canvas.drawRect(rectB, Paints.ROOM_SELECTED_BORDER);
+		drawTitle(canvas, room);
 	}
 
 	private void drawPoints(RectF rect, Canvas canvas) {
@@ -200,17 +217,17 @@ public class LevelDrawable extends Drawable {
 
 	public void resizeSelectedRoom(float dx, float dy) {
 		Room room = m_level.getRooms().get(m_selectedRoomId);
+		// if ((room.getRect().width() + dx >= 40 || room.getRect().width() - dx
+		// >= 40)
+		// && (room.getRect().height() + dy >= 40 || room.getRect()
+		// .height() - dy >= 40)) {
 		if (m_resizeType == ResizeType.RESIZE_ROOM_LEFT_TOP) {
 			room.getRect().left += dx;
 			room.getRect().top += dy;
-		}
-
-		else if (m_resizeType == ResizeType.RESIZE_ROOM_RIGHT_TOP) {
+		} else if (m_resizeType == ResizeType.RESIZE_ROOM_RIGHT_TOP) {
 			room.getRect().right += dx;
 			room.getRect().top += dy;
-		}
-
-		else if (m_resizeType == ResizeType.RESIZE_ROOM_LEFT_BOTTOM) {
+		} else if (m_resizeType == ResizeType.RESIZE_ROOM_LEFT_BOTTOM) {
 			room.getRect().left += dx;
 			room.getRect().bottom += dy;
 
@@ -218,5 +235,6 @@ public class LevelDrawable extends Drawable {
 			room.getRect().right += dx;
 			room.getRect().bottom += dy;
 		}
+		// }
 	}
 }

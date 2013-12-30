@@ -57,6 +57,9 @@ public class OpenFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		if (savedInstanceState != null) {
+			m_fileName = savedInstanceState.getString("file");
+		}
 	}
 
 	@Override
@@ -166,6 +169,12 @@ public class OpenFragment extends Fragment {
 						});
 		dialog = builder.create();
 		dialog.show();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString("file", m_fileName);
 	}
 
 }

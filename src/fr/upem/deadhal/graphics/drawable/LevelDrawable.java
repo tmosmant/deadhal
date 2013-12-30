@@ -85,10 +85,14 @@ public class LevelDrawable extends Drawable {
 		if (rect.height() >= 20) {
 			Paint paint = new Paint(Paints.ROOM_TITLE);
 			float width = rect.width();
-			int numOfChars = paint.breakText(title, true, width, null);
-			int start = (title.length() - numOfChars) / 2;
-			canvas.drawText(title, start, start + numOfChars, rect.centerX(),
-					rect.centerY() + 7, paint);
+			int numOfChars = paint.breakText(title + "...", true, width, null);
+			if (numOfChars <= 3) {
+				title = "...";
+			} else if (numOfChars < title.length() + 3) {
+				title = title.subSequence(0, numOfChars - 3).toString();
+				title += "...";
+			}
+			canvas.drawText(title, rect.centerX(), rect.centerY() + 7, paint);
 		}
 	}
 

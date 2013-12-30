@@ -134,13 +134,13 @@ public class LevelDrawable extends Drawable {
 		PointF p = new PointF();
 		float radius = 12;
 
-		p.set(rect.left, rect.top);
+		p.set(rect.left, rect.centerY());
 		canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
-		p.set(rect.right, rect.top);
+		p.set(rect.centerX(), rect.top);
 		canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
-		p.set(rect.left, rect.bottom);
+		p.set(rect.right, rect.centerY());
 		canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
-		p.set(rect.right, rect.bottom);
+		p.set(rect.centerX(), rect.bottom);
 		canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
 	}
 
@@ -182,31 +182,54 @@ public class LevelDrawable extends Drawable {
 
 		int radius = 20;
 
-		RectF m_leftTop = new RectF(room.getRect().left - radius,
+		RectF leftTop = new RectF(room.getRect().left - radius,
 				room.getRect().top - radius, room.getRect().left + radius,
 				room.getRect().top + radius);
-		RectF m_rightTop = new RectF(room.getRect().right - radius,
+		RectF rightTop = new RectF(room.getRect().right - radius,
 				room.getRect().top - radius, room.getRect().right + radius,
 				room.getRect().top + radius);
-		RectF m_leftBottom = new RectF(room.getRect().left - radius,
+		RectF leftBottom = new RectF(room.getRect().left - radius,
 				room.getRect().bottom - radius, room.getRect().left + radius,
 				room.getRect().bottom + radius);
-		RectF m_rightBottom = new RectF(room.getRect().right - radius,
+		RectF rightBottom = new RectF(room.getRect().right - radius,
 				room.getRect().bottom - radius, room.getRect().right + radius,
 				room.getRect().bottom + radius);
 
-		if (m_leftTop.contains(x, y)) {
+		RectF left = new RectF(room.getRect().left - radius,
+				room.getRect().top, room.getRect().left + radius,
+				room.getRect().bottom);
+		RectF top = new RectF(room.getRect().left, room.getRect().top - radius,
+				room.getRect().right, room.getRect().top + radius);
+		RectF right = new RectF(room.getRect().right - radius,
+				room.getRect().top, room.getRect().right + radius,
+				room.getRect().bottom);
+		RectF bottom = new RectF(room.getRect().left, room.getRect().bottom
+				- radius, room.getRect().right, room.getRect().bottom + radius);
+
+		if (leftTop.contains(x, y)) {
 			mode = TouchEvent.RESIZE_ROOM;
 			m_resizeType = ResizeType.RESIZE_ROOM_LEFT_TOP;
-		} else if (m_rightTop.contains(x, y)) {
+		} else if (rightTop.contains(x, y)) {
 			mode = TouchEvent.RESIZE_ROOM;
 			m_resizeType = ResizeType.RESIZE_ROOM_RIGHT_TOP;
-		} else if (m_leftBottom.contains(x, y)) {
+		} else if (leftBottom.contains(x, y)) {
 			mode = TouchEvent.RESIZE_ROOM;
 			m_resizeType = ResizeType.RESIZE_ROOM_LEFT_BOTTOM;
-		} else if (m_rightBottom.contains(x, y)) {
+		} else if (rightBottom.contains(x, y)) {
 			mode = TouchEvent.RESIZE_ROOM;
 			m_resizeType = ResizeType.RESIZE_ROOM_RIGHT_BOTTOM;
+		} else if (left.contains(x, y)) {
+			mode = TouchEvent.RESIZE_ROOM;
+			m_resizeType = ResizeType.RESIZE_ROOM_LEFT;
+		} else if (top.contains(x, y)) {
+			mode = TouchEvent.RESIZE_ROOM;
+			m_resizeType = ResizeType.RESIZE_ROOM_TOP;
+		} else if (right.contains(x, y)) {
+			mode = TouchEvent.RESIZE_ROOM;
+			m_resizeType = ResizeType.RESIZE_ROOM_RIGHT;
+		} else if (bottom.contains(x, y)) {
+			mode = TouchEvent.RESIZE_ROOM;
+			m_resizeType = ResizeType.RESIZE_ROOM_BOTTOM;
 		}
 		return mode;
 	}
@@ -221,24 +244,35 @@ public class LevelDrawable extends Drawable {
 
 	public void resizeSelectedRoom(float dx, float dy) {
 		Room room = m_level.getRooms().get(m_selectedRoomId);
-		// if ((room.getRect().width() + dx >= 40 || room.getRect().width() - dx
-		// >= 40)
-		// && (room.getRect().height() + dy >= 40 || room.getRect()
-		// .height() - dy >= 40)) {
-		if (m_resizeType == ResizeType.RESIZE_ROOM_LEFT_TOP) {
+		switch (m_resizeType) {
+		case RESIZE_ROOM_LEFT_TOP:
 			room.getRect().left += dx;
 			room.getRect().top += dy;
-		} else if (m_resizeType == ResizeType.RESIZE_ROOM_RIGHT_TOP) {
+			break;
+		case RESIZE_ROOM_RIGHT_TOP:
 			room.getRect().right += dx;
 			room.getRect().top += dy;
-		} else if (m_resizeType == ResizeType.RESIZE_ROOM_LEFT_BOTTOM) {
+			break;
+		case RESIZE_ROOM_LEFT_BOTTOM:
 			room.getRect().left += dx;
 			room.getRect().bottom += dy;
-
-		} else if (m_resizeType == ResizeType.RESIZE_ROOM_RIGHT_BOTTOM) {
+			break;
+		case RESIZE_ROOM_RIGHT_BOTTOM:
 			room.getRect().right += dx;
 			room.getRect().bottom += dy;
+			break;
+		case RESIZE_ROOM_LEFT:
+			room.getRect().left += dx;
+			break;
+		case RESIZE_ROOM_TOP:
+			room.getRect().top += dy;
+			break;
+		case RESIZE_ROOM_RIGHT:
+			room.getRect().right += dx;
+			break;
+		case RESIZE_ROOM_BOTTOM:
+			room.getRect().bottom += dy;
+			break;
 		}
-		// }
 	}
 }

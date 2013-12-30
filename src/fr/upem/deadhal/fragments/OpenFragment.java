@@ -35,25 +35,6 @@ public class OpenFragment extends Fragment {
 	public OpenFragment() {
 	}
 
-	/* Checks if external storage is available to at least read */
-	public boolean isExternalStorageReadable() {
-		String state = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(state)
-				|| Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			return true;
-		}
-		return false;
-	}
-
-	public File getDeadHalDir() {
-		File file = new File(Environment.getExternalStorageDirectory()
-				+ File.separator + "deadhal");
-		if (!file.mkdirs()) {
-			Log.e("dir", "Directory not created");
-		}
-		return file;
-	}
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);

@@ -2,7 +2,6 @@
 
     <item
         android:id="@+id/action_new"
-        android:actionProviderClass="android.support.v7.widget.ShareActionProvider"
         android:icon="@drawable/ic_action_new"
         android:onClick="showAddPopup"
         android:showAsAction="ifRoom"

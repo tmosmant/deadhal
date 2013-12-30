@@ -2,7 +2,6 @@
 
     <item
         android:id="@+id/action_share"
-        android:actionProviderClass="android.support.v7.widget.ShareActionProvider"
         android:icon="@drawable/ic_action_share"
         android:onClick="toastNotYetImplemented"
         android:showAsAction="ifRoom"

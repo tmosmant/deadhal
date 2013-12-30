@@ -10,7 +10,6 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,9 @@ public class OpenFragment extends Fragment {
 
 	private Level m_level;
 	private String m_fileName = null;
+	private ArrayAdapter<String> m_arrayAdapter = null;
 	private List<String> m_list = new ArrayList<String>();
+	private ListView m_listView = null;
 
 	public OpenFragment() {
 	}
@@ -57,8 +58,12 @@ public class OpenFragment extends Fragment {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		boolean isActive = m_fileName != null;
+		menu.findItem(R.id.action_share).setVisible(isActive);
+		menu.findItem(R.id.action_accept).setVisible(isActive);
+		menu.findItem(R.id.action_remove).setVisible(isActive);
 	}
 
 	@Override
@@ -78,18 +83,18 @@ public class OpenFragment extends Fragment {
 
 		else {
 			m_list = Storage.getFilesList();
-			ListView listView = (ListView) rootView.findViewById(R.id.listFile);
-			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-					getActivity(),
+			m_listView = (ListView) rootView.findViewById(R.id.listFile);
+			m_arrayAdapter = new ArrayAdapter<String>(getActivity(),
 					android.R.layout.simple_list_item_activated_1, m_list);
-			listView.setAdapter(arrayAdapter);
-			listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-			listView.setOnItemClickListener(new OnItemClickListener() {
+			m_listView.setAdapter(m_arrayAdapter);
+			m_listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+			m_listView.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					m_fileName = (String) parent.getItemAtPosition(position);
+					getActivity().invalidateOptionsMenu();
 				}
 
 			});
@@ -102,14 +107,19 @@ public class OpenFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_accept:
-			if (m_fileName == null) {
-				Toast.makeText(getActivity(),
-						"Veuillez sélectionner un fichier.", Toast.LENGTH_SHORT)
-						.show();
-				return false;
+			return open();
+		case R.id.action_remove:
+			if (delete()) {
+				m_callback.nbFilePass();
+				m_listView.clearChoices();
+				m_arrayAdapter.remove(m_fileName);
+				m_fileName = null;
+				getActivity().invalidateOptionsMenu();
+				Toast.makeText(getActivity(), "Fichier supprimé",
+						Toast.LENGTH_SHORT).show();
+				return true;
 			}
-			open();
-			return true;
+			return false;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -133,6 +143,14 @@ public class OpenFragment extends Fragment {
 			e.printStackTrace();
 		}
 		return true;
+	}
+
+	private boolean delete() {
+		File m_file = Storage.openFile(m_fileName);
+		if (m_file == null) {
+			return false;
+		}
+		return m_file.delete();
 	}
 
 }

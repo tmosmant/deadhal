@@ -7,6 +7,11 @@
         android:showAsAction="ifRoom"
         android:title="@string/action_share"/>
     <item
+        android:id="@+id/action_remove"
+        android:icon="@drawable/ic_action_remove"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_remove"/>
+    <item
         android:id="@+id/action_accept"
         android:icon="@drawable/ic_action_accept"
         android:showAsAction="ifRoom"

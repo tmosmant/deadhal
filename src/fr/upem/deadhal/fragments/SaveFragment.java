@@ -68,7 +68,7 @@ public class SaveFragment extends Fragment {
 							"Veuillez entrer un nom de fichier",
 							Toast.LENGTH_SHORT).show();
 				} else {
-					m_callback.incNbFilePass();
+					m_callback.nbFilePass();
 					Level m_level = getArguments().getParcelable("level");
 					try {
 						File m_file = Storage.createFile(m_fileName);

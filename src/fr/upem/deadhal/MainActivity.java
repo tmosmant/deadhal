@@ -35,7 +35,7 @@ import fr.upem.deadhal.utils.Storage;
 public class MainActivity extends Activity implements OnDataPass {
 
 	private Level m_level;
-	
+
 	private DrawerLayout m_drawerLayout;
 	private ListView m_drawerList;
 	private ActionBarDrawerToggle m_drawerToggle;
@@ -175,6 +175,7 @@ public class MainActivity extends Activity implements OnDataPass {
 		case R.menu.open:
 			menu.findItem(R.id.action_share).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_accept).setVisible(!drawerOpen);
+			menu.findItem(R.id.action_remove).setVisible(!drawerOpen);
 			break;
 		case R.menu.save:
 			break;
@@ -334,9 +335,8 @@ public class MainActivity extends Activity implements OnDataPass {
 	}
 
 	@Override
-	public void incNbFilePass() {
-		m_navDrawerItems.get(1).setCount(String
-						.valueOf(Storage.getNbFiles()));
+	public void nbFilePass() {
+		m_navDrawerItems.get(1).setCount(String.valueOf(Storage.getNbFiles()));
 		m_adapter.notifyDataSetChanged();
 	}
 

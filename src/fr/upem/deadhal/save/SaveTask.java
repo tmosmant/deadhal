@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 import android.util.Xml;
 import android.widget.Toast;
 import fr.upem.deadhal.components.Level;
@@ -25,9 +26,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 	private Activity activity;
 
 	private String m_fileName;
-	private File m_directory = new File(
-			Environment.getExternalStorageDirectory() + File.separator
-					+ "deadhal");
+	private File m_directory = null;
 	private static final String FTYPE = ".xml";
 
 	private String m_error;
@@ -39,10 +38,31 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 
 	@Override
 	protected void onPreExecute() {
-		if (!m_directory.exists()) {
-			m_directory.mkdirs();
-		}
 		super.onPreExecute();
+
+		if (!isExternalStorageWritable()) {
+			cancel(true);
+		}
+
+		m_directory = getDeadHalDir();
+	}
+
+	/* Checks if external storage is available for read and write */
+	public boolean isExternalStorageWritable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			return true;
+		}
+		return false;
+	}
+
+	public File getDeadHalDir() {
+		File file = new File(Environment.getExternalStorageDirectory()
+				+ File.separator + "deadhal");
+		if (!file.mkdirs()) {
+			Log.e("dir", "Directory not created");
+		}
+		return file;
 	}
 
 	@Override
@@ -102,7 +122,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 		for (Entry<UUID, Room> entry : rooms.entrySet()) {
 			Room room = entry.getValue();
 			RectF rect = room.getRect();
-			
+
 			xmlSerializer.startTag("", "room");
 			xmlSerializer.attribute("", "id", room.getId().toString());
 			xmlSerializer.attribute("", "name", room.getTitle());

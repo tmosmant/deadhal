@@ -62,7 +62,7 @@ public class OpenFragment extends Fragment {
 
 		getActivity().setTitle(R.string.open);
 
-		if (m_directory.exists() && m_directory.isDirectory()) {
+		if (m_directory.isDirectory()) {
 			File files[] = m_directory.listFiles();
 			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < files.length; i++) {
@@ -72,10 +72,10 @@ public class OpenFragment extends Fragment {
 
 			ListView listView = (ListView) rootView.findViewById(R.id.listFile);
 			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-					getActivity(), android.R.layout.simple_list_item_1, list);
+					getActivity(),
+					android.R.layout.simple_list_item_activated_1, list);
 			listView.setAdapter(arrayAdapter);
 			listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-			listView.setSelector(android.R.color.holo_blue_dark);
 			listView.setOnItemClickListener(openOnItemClickListener());
 		}
 

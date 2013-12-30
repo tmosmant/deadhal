@@ -1,8 +1,6 @@
 package fr.upem.deadhal;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
 
 import android.app.Activity;

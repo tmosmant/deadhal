@@ -2,7 +2,6 @@ package fr.upem.deadhal.fragments;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -10,6 +9,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,27 +17,41 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.open.OpenTask;
+import fr.upem.deadhal.utils.OnDataPass;
+import fr.upem.deadhal.utils.Storage;
 
 public class OpenFragment extends Fragment {
-
-	private File m_selectedFile = null;
-
-	private File m_directory = new File(
-			Environment.getExternalStorageDirectory() + File.separator
-					+ "deadhal");
 
 	private Level m_level;
 
 	private OnDataPass m_callback;
 
+	private List<String> m_list = new ArrayList<String>();
+
 	public OpenFragment() {
 	}
 
-	public interface OnDataPass {
-		public void onDataPass(Level level);
+	/* Checks if external storage is available to at least read */
+	public boolean isExternalStorageReadable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)
+				|| Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			return true;
+		}
+		return false;
+	}
+
+	public File getDeadHalDir() {
+		File file = new File(Environment.getExternalStorageDirectory()
+				+ File.separator + "deadhal");
+		if (!file.mkdirs()) {
+			Log.e("dir", "Directory not created");
+		}
+		return file;
 	}
 
 	@Override
@@ -57,23 +71,24 @@ public class OpenFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
 		View rootView = inflater.inflate(R.layout.fragment_open, container,
 				false);
 
 		getActivity().setTitle(R.string.open);
 
-		if (m_directory.isDirectory()) {
-			File files[] = m_directory.listFiles();
-			List<String> list = new ArrayList<String>();
-			for (int i = 0; i < files.length; i++) {
-				list.add(files[i].getName());
-			}
-			Collections.sort(list);
+		if (!Storage.isExternalStorageReadable()) {
+			Toast.makeText(getActivity(),
+					"Erreur: impossible d'accéder a la mémoire externe",
+					Toast.LENGTH_SHORT).show();
+		}
 
+		else {
+			m_list = Storage.getFilesList();
 			ListView listView = (ListView) rootView.findViewById(R.id.listFile);
 			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
 					getActivity(),
-					android.R.layout.simple_list_item_activated_1, list);
+					android.R.layout.simple_list_item_activated_1, m_list);
 			listView.setAdapter(arrayAdapter);
 			listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 			listView.setOnItemClickListener(openOnItemClickListener());
@@ -88,21 +103,21 @@ public class OpenFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				String m_fileName = (String) parent.getItemAtPosition(position);
-				m_selectedFile = new File(m_directory.getAbsolutePath()
-						+ File.separator + m_fileName);
+				String fileName = (String) parent.getItemAtPosition(position);
+				File m_file = Storage.openFile(fileName);
 
 				OpenTask openTask = new OpenTask();
-				openTask.execute(m_selectedFile);
+				openTask.execute(m_file);
 
 				try {
 					m_level = openTask.get();
-					m_callback.onDataPass(m_level);
+					m_callback.onLevelPass(m_level);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				} catch (ExecutionException e) {
 					e.printStackTrace();
 				}
+
 			}
 
 		};

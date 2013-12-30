@@ -14,8 +14,6 @@ import org.xmlpull.v1.XmlSerializer;
 import android.app.Activity;
 import android.graphics.RectF;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.util.Log;
 import android.util.Xml;
 import android.widget.Toast;
 import fr.upem.deadhal.components.Level;
@@ -25,58 +23,21 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 
 	private Activity activity;
 
-	private String m_fileName;
-	private File m_directory = null;
-	private static final String FTYPE = ".xml";
-
 	private String m_error;
+	private File m_file = null;
 
-	public SaveTask(Activity activity, String fileName) {
+	public SaveTask(Activity activity, File file) {
 		this.activity = activity;
-		m_fileName = fileName;
-	}
-
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-
-		if (!isExternalStorageWritable()) {
-			cancel(true);
-		}
-
-		m_directory = getDeadHalDir();
-	}
-
-	/* Checks if external storage is available for read and write */
-	public boolean isExternalStorageWritable() {
-		String state = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(state)) {
-			return true;
-		}
-		return false;
-	}
-
-	public File getDeadHalDir() {
-		File file = new File(Environment.getExternalStorageDirectory()
-				+ File.separator + "deadhal");
-		if (!file.mkdirs()) {
-			Log.e("dir", "Directory not created");
-		}
-		return file;
+		m_file = file;
 	}
 
 	@Override
 	protected Integer doInBackground(Level... params) {
 		Level m_level = params[0];
 
-		File m_file = null;
 		FileOutputStream outputStream = null;
 		OutputStreamWriter outputStreamWriter = null;
 		try {
-			m_file = new File(m_directory.getAbsolutePath() + File.separator
-					+ m_fileName + FTYPE);
-			m_file.createNewFile();
-
 			outputStream = new FileOutputStream(m_file);
 			outputStreamWriter = new OutputStreamWriter(outputStream);
 			outputStreamWriter.append(CreateXMLString(m_level));

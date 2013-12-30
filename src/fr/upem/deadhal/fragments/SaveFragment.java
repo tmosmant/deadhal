@@ -1,5 +1,9 @@
 package fr.upem.deadhal.fragments;
 
+import java.io.File;
+import java.io.IOException;
+
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,10 +16,28 @@ import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.save.SaveTask;
+import fr.upem.deadhal.utils.OnDataPass;
+import fr.upem.deadhal.utils.Storage;
 
 public class SaveFragment extends Fragment {
 
+	private OnDataPass m_callback;
+	
 	public SaveFragment() {
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		// This makes sure that the container activity has implemented
+		// the callback interface. If not, it throws an exception
+		try {
+			m_callback = (OnDataPass) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnDataPass");
+		}
 	}
 
 	@Override
@@ -46,9 +68,15 @@ public class SaveFragment extends Fragment {
 							"Veuillez entrer un nom de fichier",
 							Toast.LENGTH_SHORT).show();
 				} else {
+					m_callback.incNbFilePass();
 					Level m_level = getArguments().getParcelable("level");
-					SaveTask saveTask = new SaveTask(getActivity(), m_fileName);
-					saveTask.execute(m_level);
+					try {
+						File m_file = Storage.createFile(m_fileName);
+						SaveTask saveTask = new SaveTask(getActivity(), m_file);
+						saveTask.execute(m_level);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		};

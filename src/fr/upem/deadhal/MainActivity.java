@@ -29,11 +29,13 @@ import fr.upem.deadhal.fragments.EditionFragment;
 import fr.upem.deadhal.fragments.OpenFragment;
 import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.model.NavDrawerItem;
+import fr.upem.deadhal.utils.OnDataPass;
+import fr.upem.deadhal.utils.Storage;
 
-public class MainActivity extends Activity implements OpenFragment.OnDataPass {
+public class MainActivity extends Activity implements OnDataPass {
 
 	private Level m_level;
-
+	
 	private DrawerLayout m_drawerLayout;
 	private ListView m_drawerList;
 	private ActionBarDrawerToggle m_drawerToggle;
@@ -83,7 +85,9 @@ public class MainActivity extends Activity implements OpenFragment.OnDataPass {
 				m_navMenuIcons.getResourceId(0, -1)));
 		// Open, Will add a counter here
 		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[1],
-				m_navMenuIcons.getResourceId(1, -1), true, "5"));
+				m_navMenuIcons.getResourceId(1, -1), true, String
+						.valueOf(Storage.getNbFiles())));
+
 		// Save
 		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[2],
 				m_navMenuIcons.getResourceId(2, -1)));
@@ -330,7 +334,14 @@ public class MainActivity extends Activity implements OpenFragment.OnDataPass {
 	}
 
 	@Override
-	public void onDataPass(Level level) {
+	public void incNbFilePass() {
+		m_navDrawerItems.get(1).setCount(String
+						.valueOf(Storage.getNbFiles()));
+		m_adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onLevelPass(Level level) {
 		m_level = level;
 	}
 }

@@ -342,6 +342,8 @@ public class MainActivity extends Activity implements OnDataPass {
 
 	@Override
 	public void onLevelPass(Level level) {
+		m_menu = 0;
 		m_level = level;
+		displayView(m_menu);
 	}
 }

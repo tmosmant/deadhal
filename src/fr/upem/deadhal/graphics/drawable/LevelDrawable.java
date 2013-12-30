@@ -134,14 +134,35 @@ public class LevelDrawable extends Drawable {
 		PointF p = new PointF();
 		float radius = 12;
 
-		p.set(rect.left, rect.centerY());
-		canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
-		p.set(rect.centerX(), rect.top);
-		canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
-		p.set(rect.right, rect.centerY());
-		canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
-		p.set(rect.centerX(), rect.bottom);
-		canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
+		if (m_resizeType == null
+				|| m_resizeType == ResizeType.RESIZE_ROOM_LEFT_TOP
+				|| m_resizeType == ResizeType.RESIZE_ROOM_LEFT
+				|| m_resizeType == ResizeType.RESIZE_ROOM_LEFT_BOTTOM) {
+			p.set(rect.left, rect.centerY());
+			canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
+		}
+
+		if (m_resizeType == null
+				|| m_resizeType == ResizeType.RESIZE_ROOM_LEFT_TOP
+				|| m_resizeType == ResizeType.RESIZE_ROOM_TOP
+				|| m_resizeType == ResizeType.RESIZE_ROOM_RIGHT_TOP) {
+			p.set(rect.centerX(), rect.top);
+			canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
+		}
+		if (m_resizeType == null
+				|| m_resizeType == ResizeType.RESIZE_ROOM_RIGHT_TOP
+				|| m_resizeType == ResizeType.RESIZE_ROOM_RIGHT
+				|| m_resizeType == ResizeType.RESIZE_ROOM_RIGHT_BOTTOM) {
+			p.set(rect.right, rect.centerY());
+			canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
+		}
+		if (m_resizeType == null
+				|| m_resizeType == ResizeType.RESIZE_ROOM_RIGHT_BOTTOM
+				|| m_resizeType == ResizeType.RESIZE_ROOM_BOTTOM
+				|| m_resizeType == ResizeType.RESIZE_ROOM_LEFT_BOTTOM) {
+			p.set(rect.centerX(), rect.bottom);
+			canvas.drawCircle(p.x, p.y, radius, Paints.ROOM_SELECTED_POINT);
+		}
 	}
 
 	public boolean isRoomSelected() {
@@ -174,6 +195,10 @@ public class LevelDrawable extends Drawable {
 			}
 		}
 		return false;
+	}
+
+	public void endProcess() {
+		m_resizeType = null;
 	}
 
 	public TouchEvent getProcess(float x, float y) {

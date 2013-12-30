@@ -80,8 +80,9 @@ public class SaveFragment extends Fragment {
 	private void save() {
 		final Level m_level = getArguments().getParcelable("level");
 		try {
-			final File m_file = Storage.createFile(m_fileName);
+			final File m_file = Storage.openFile(m_fileName + ".xml");
 			if (!m_file.exists()) {
+				m_file.createNewFile();
 				SaveTask saveTask = new SaveTask(getActivity(), m_file);
 				saveTask.execute(m_level);
 			} else {
@@ -93,6 +94,11 @@ public class SaveFragment extends Fragment {
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int id) {
+										try {
+											m_file.createNewFile();
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
 										SaveTask saveTask = new SaveTask(getActivity(), m_file);
 										saveTask.execute(m_level);
 									}

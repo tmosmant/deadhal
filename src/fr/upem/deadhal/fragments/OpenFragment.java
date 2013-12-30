@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -109,17 +111,8 @@ public class OpenFragment extends Fragment {
 		case R.id.action_accept:
 			return open();
 		case R.id.action_remove:
-			if (delete()) {
-				m_callback.nbFilePass();
-				m_listView.clearChoices();
-				m_arrayAdapter.remove(m_fileName);
-				m_fileName = null;
-				getActivity().invalidateOptionsMenu();
-				Toast.makeText(getActivity(), "Fichier supprimé",
-						Toast.LENGTH_SHORT).show();
-				return true;
-			}
-			return false;
+			delete();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -145,12 +138,34 @@ public class OpenFragment extends Fragment {
 		return true;
 	}
 
-	private boolean delete() {
-		File m_file = Storage.openFile(m_fileName);
-		if (m_file == null) {
-			return false;
-		}
-		return m_file.delete();
+	private void delete() {
+		AlertDialog dialog = null;
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage("Supprimer ?")
+				.setPositiveButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								File m_file = Storage.openFile(m_fileName);
+								if (m_file.delete()) {
+									m_callback.nbFilePass();
+									m_listView.clearChoices();
+									m_arrayAdapter.remove(m_fileName);
+									m_fileName = null;
+									getActivity().invalidateOptionsMenu();
+									Toast.makeText(getActivity(),
+											"Fichier supprimé",
+											Toast.LENGTH_SHORT).show();
+								}
+							}
+						})
+				.setNegativeButton(android.R.string.cancel,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.dismiss();
+							}
+						});
+		dialog = builder.create();
+		dialog.show();
 	}
 
 }

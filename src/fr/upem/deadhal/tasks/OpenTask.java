@@ -1,4 +1,4 @@
-package fr.upem.deadhal.open;
+package fr.upem.deadhal.tasks;
 
 import java.io.File;
 import java.io.FileInputStream;

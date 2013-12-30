@@ -22,16 +22,11 @@ public class Level implements Parcelable {
 	public Level(Parcel source) {
 		this.title = source.readString();
 		source.readMap(rooms, HashMap.class.getClass().getClassLoader());
-		// source.readList(rooms, (Object.class.getClassLoader()));
 	}
 
 	public boolean addRoom(Room room) {
-
-		for (Room r : rooms.values()) {
-			if (r.getRect().intersect(room.getRect())) {
-				return false;
-			}
-		}
+		// TODO improve this
+		
 		rooms.put(room.getId(), room);
 
 		return true;
@@ -58,7 +53,6 @@ public class Level implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(title);
 		dest.writeMap(rooms);
-		// dest.writeList(rooms);
 	}
 
 	public static final Parcelable.Creator<Level> CREATOR = new Parcelable.Creator<Level>() {

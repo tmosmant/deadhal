@@ -20,7 +20,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
-import fr.upem.deadhal.open.OpenTask;
+import fr.upem.deadhal.tasks.OpenTask;
 import fr.upem.deadhal.utils.OnDataPass;
 import fr.upem.deadhal.utils.Storage;
 

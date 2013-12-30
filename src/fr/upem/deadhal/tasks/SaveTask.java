@@ -1,4 +1,4 @@
-package fr.upem.deadhal.save;
+package fr.upem.deadhal.tasks;
 
 import java.io.File;
 import java.io.FileOutputStream;

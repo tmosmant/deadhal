@@ -87,7 +87,7 @@ public class LevelDrawable extends Drawable {
 			float width = rect.width();
 			int numOfChars = paint.breakText(title + "...", true, width, null);
 			if (numOfChars <= 3) {
-				title = "...";
+				title = "";
 			} else if (numOfChars < title.length() + 3) {
 				title = title.subSequence(0, numOfChars - 3).toString();
 				title += "...";

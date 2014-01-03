@@ -35,5 +35,7 @@
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="ok">OK</string>
     <string name="hint">File name</string>
+    <string name="save_warning">Ecraser ?</string>
+    <string name="remove_warning">Effacer ?</string>
 
 </resources>

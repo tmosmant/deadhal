@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +29,7 @@ import fr.upem.deadhal.utils.Storage;
 public class OpenFragment extends Fragment {
 
 	private OnDataPass m_callback;
+	public static final int DIALOG_FRAGMENT = 1;
 
 	private Level m_level;
 	private String m_fileName = null;
@@ -114,7 +115,7 @@ public class OpenFragment extends Fragment {
 		case R.id.action_accept:
 			return open();
 		case R.id.action_remove:
-			delete();
+			showDialog();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -141,37 +142,39 @@ public class OpenFragment extends Fragment {
 		return true;
 	}
 
-	private void delete() {
-		AlertDialog dialog = null;
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setMessage("Supprimer ?")
-				.setPositiveButton(android.R.string.ok, new OkOnClickListener())
-				.setNegativeButton(android.R.string.cancel,
-						new CancelOnClickListener());
-		dialog = builder.create();
-		dialog.show();
+	private void showDialog() {
+		int title = R.string.action_remove;
+		int message = R.string.remove_warning;
+		
+		DialogFragment dialogFragment = MyDialogFragment.newInstance(title, message);
+		dialogFragment.setTargetFragment(this, DIALOG_FRAGMENT);
+		dialogFragment.show(getFragmentManager().beginTransaction(), "dialog");
 	}
 
-	private final class OkOnClickListener implements
-			DialogInterface.OnClickListener {
-		public void onClick(DialogInterface dialog, int which) {
-			File m_file = Storage.openFile(m_fileName);
-			if (m_file.delete()) {
-				m_callback.nbFilePass();
-				m_listView.clearChoices();
-				m_arrayAdapter.remove(m_fileName);
-				m_fileName = null;
-				getActivity().invalidateOptionsMenu();
-				Toast.makeText(getActivity(), "Fichier supprimé",
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case DIALOG_FRAGMENT:
+			if (resultCode == Activity.RESULT_OK) {
+				delete();
+			} else if (resultCode == Activity.RESULT_CANCELED) {
+				Toast.makeText(getActivity(), "Supression annulée",
 						Toast.LENGTH_SHORT).show();
 			}
+			break;
 		}
 	}
 
-	private final class CancelOnClickListener implements
-			DialogInterface.OnClickListener {
-		public void onClick(DialogInterface dialog, int which) {
-			dialog.dismiss();
+	private void delete() {
+		File m_file = Storage.openFile(m_fileName);
+		if (m_file.delete()) {
+			m_callback.nbFilePass();
+			m_listView.clearChoices();
+			m_arrayAdapter.remove(m_fileName);
+			m_fileName = null;
+			getActivity().invalidateOptionsMenu();
+			Toast.makeText(getActivity(), "Fichier supprimé",
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 

@@ -145,30 +145,34 @@ public class OpenFragment extends Fragment {
 		AlertDialog dialog = null;
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setMessage("Supprimer ?")
-				.setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								File m_file = Storage.openFile(m_fileName);
-								if (m_file.delete()) {
-									m_callback.nbFilePass();
-									m_listView.clearChoices();
-									m_arrayAdapter.remove(m_fileName);
-									m_fileName = null;
-									getActivity().invalidateOptionsMenu();
-									Toast.makeText(getActivity(),
-											"Fichier supprimé",
-											Toast.LENGTH_SHORT).show();
-								}
-							}
-						})
+				.setPositiveButton(android.R.string.ok, new OkOnClickListener())
 				.setNegativeButton(android.R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.dismiss();
-							}
-						});
+						new CancelOnClickListener());
 		dialog = builder.create();
 		dialog.show();
+	}
+
+	private final class OkOnClickListener implements
+			DialogInterface.OnClickListener {
+		public void onClick(DialogInterface dialog, int which) {
+			File m_file = Storage.openFile(m_fileName);
+			if (m_file.delete()) {
+				m_callback.nbFilePass();
+				m_listView.clearChoices();
+				m_arrayAdapter.remove(m_fileName);
+				m_fileName = null;
+				getActivity().invalidateOptionsMenu();
+				Toast.makeText(getActivity(), "Fichier supprimé",
+						Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+
+	private final class CancelOnClickListener implements
+			DialogInterface.OnClickListener {
+		public void onClick(DialogInterface dialog, int which) {
+			dialog.dismiss();
+		}
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package fr.upem.deadhal.fragments;
 
 import java.io.File;
-import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -78,45 +77,43 @@ public class SaveFragment extends Fragment {
 	}
 
 	private void save() {
-		final Level m_level = getArguments().getParcelable("level");
-		try {
-			final File m_file = Storage.openFile(m_fileName + ".xml");
-			if (!m_file.exists()) {
-				m_file.createNewFile();
-				SaveTask saveTask = new SaveTask(getActivity(), m_file);
-				saveTask.execute(m_level);
-			} else {
-				AlertDialog dialog = null;
-				AlertDialog.Builder builder = new AlertDialog.Builder(
-						getActivity());
-				builder.setMessage("Ecraser ?")
-						.setPositiveButton(R.string.ok,
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-										try {
-											m_file.createNewFile();
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-										SaveTask saveTask = new SaveTask(getActivity(), m_file);
-										saveTask.execute(m_level);
-									}
-								})
-						.setNegativeButton(android.R.string.cancel,
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-										dialog.dismiss();
-									}
-								});
-				dialog = builder.create();
-				dialog.show();
-			}
-			m_callback.nbFilePass();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (Storage.fileExists(m_fileName)) {
+			AlertDialog dialog = null;
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setMessage("Ecraser ?")
+					.setPositiveButton(android.R.string.ok,
+							new OkOnClickListener())
+					.setNegativeButton(android.R.string.cancel,
+							new CancelOnClickListener());
+			dialog = builder.create();
+			dialog.show();
+		} else {
+			launchSaving();
 		}
 	}
 
+	private final class OkOnClickListener implements
+			DialogInterface.OnClickListener {
+		public void onClick(DialogInterface dialog, int which) {
+			launchSaving();
+		}
+	}
+
+	private final class CancelOnClickListener implements
+			DialogInterface.OnClickListener {
+		public void onClick(DialogInterface dialog, int which) {
+			dialog.dismiss();
+			Toast.makeText(getActivity(), "Sauvegarde annulé",
+					Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private void launchSaving() {
+		Level m_level = getArguments().getParcelable("level");
+		File m_file = Storage.createFile(m_fileName);
+		SaveTask saveTask = new SaveTask(getActivity(), m_file);
+		saveTask.execute(m_level);
+		m_callback.nbFilePass();
+	}
+	
 }

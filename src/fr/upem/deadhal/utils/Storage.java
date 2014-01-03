@@ -68,6 +68,11 @@ public class Storage {
 		return list;
 	}
 
+	public static boolean fileExists(String name) {
+		return new File(getDeadHalDir().getAbsolutePath() + File.separator
+				+ name + ".xml").exists();
+	}
+
 	/* Return a file */
 	public static File openFile(String name) {
 		return new File(getDeadHalDir().getAbsolutePath() + File.separator
@@ -75,17 +80,21 @@ public class Storage {
 	}
 
 	/* Return a new file */
-	public static File createFile(String name) throws IOException {
+	public static File createFile(String name) {
 		File file = new File(getDeadHalDir().getAbsolutePath() + File.separator
 				+ name + ".xml");
-		file.createNewFile();
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return file;
 	}
 
 	/* Return the deadhal directory (create it if doesn't exists) */
 	private static File getDeadHalDir() {
 		File directory = new File(Environment.getExternalStorageDirectory()
-				+ File.separator + "deadhal");
+				+ File.separator + "Deadhal");
 		if (!directory.exists()) {
 			if (!directory.mkdirs()) {
 				Log.e("dir", "Directory not created");

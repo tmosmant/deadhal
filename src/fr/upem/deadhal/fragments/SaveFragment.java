@@ -5,14 +5,19 @@ import java.io.File;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
@@ -22,6 +27,7 @@ import fr.upem.deadhal.utils.Storage;
 
 public class SaveFragment extends Fragment {
 
+	private TextView m_textView;
 	private OnDataPass m_callback;
 	private String m_fileName = null;
 	public static final int DIALOG_FRAGMENT = 1;
@@ -51,10 +57,36 @@ public class SaveFragment extends Fragment {
 
 		getActivity().setTitle(R.string.save);
 
+		m_textView = (TextView) rootView.findViewById(R.id.entryFileName);
+		m_textView.setOnEditorActionListener(editorActionListener());
+
 		Button button = (Button) rootView.findViewById(R.id.buttonSave);
 		button.setOnClickListener(saveOnClickListener(rootView));
 
 		return rootView;
+	}
+
+	private OnEditorActionListener editorActionListener() {
+		return new OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					hideKeyboard();
+					m_fileName = v.getText().toString();
+					if (entryIsValid()) {
+						if (Storage.fileExists(m_fileName)) {
+							showDialog();
+						} else {
+							save();
+						}
+					}
+					return true;
+				}
+				return false;
+			}
+		};
 	}
 
 	private OnClickListener saveOnClickListener(final View rootView) {
@@ -66,11 +98,8 @@ public class SaveFragment extends Fragment {
 						.findViewById(R.id.entryFileName);
 				m_fileName = textView.getText().toString();
 
-				if (m_fileName.isEmpty()) {
-					Toast.makeText(getActivity(),
-							"Veuillez entrer un nom de fichier",
-							Toast.LENGTH_SHORT).show();
-				} else {
+				if (entryIsValid()) {
+					hideKeyboard();
 					if (Storage.fileExists(m_fileName)) {
 						showDialog();
 					} else {
@@ -81,11 +110,27 @@ public class SaveFragment extends Fragment {
 		};
 	}
 
+	private void hideKeyboard() {
+		InputMethodManager imm = (InputMethodManager) getActivity()
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(m_textView.getWindowToken(), 0);
+	}
+
+	private boolean entryIsValid() {
+		if (m_fileName.isEmpty()) {
+			Toast.makeText(getActivity(), "Veuillez entrer un nom de fichier",
+					Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
+	}
+
 	private void showDialog() {
 		int title = R.string.save;
 		int message = R.string.save_warning;
-		
-		DialogFragment dialogFragment = MyDialogFragment.newInstance(title, message);
+
+		DialogFragment dialogFragment = MyDialogFragment.newInstance(title,
+				message);
 		dialogFragment.setTargetFragment(this, DIALOG_FRAGMENT);
 		dialogFragment.show(getFragmentManager().beginTransaction(), "dialog");
 	}
@@ -95,6 +140,7 @@ public class SaveFragment extends Fragment {
 		switch (requestCode) {
 		case DIALOG_FRAGMENT:
 			if (resultCode == Activity.RESULT_OK) {
+				m_fileName = m_textView.getText().toString();
 				save();
 			} else if (resultCode == Activity.RESULT_CANCELED) {
 				Toast.makeText(getActivity(), "Sauvegarde annulée",

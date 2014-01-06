@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
+import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
 public class TouchView extends View {
@@ -35,6 +36,8 @@ public class TouchView extends View {
 	private float m_distance = 0f;
 	private float m_newRotation = 0f;
 	private float[] m_lastEvent = null;
+
+	private boolean m_antiAlias = true;
 
 	private SelectionRoomListener m_selectionRoomListener = new SelectionRoomListener() {
 
@@ -72,6 +75,10 @@ public class TouchView extends View {
 		m_gestureDetector = gestureDetector;
 		restoreMatrix(savedInstanceState);
 		m_levelDrawable.addSelectionRoomListener(m_selectionRoomListener);
+
+		if (android.os.Build.VERSION.SDK_INT >= 11) {
+			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
 		invalidate();
 	}
 
@@ -191,6 +198,20 @@ public class TouchView extends View {
 						m_matrix.set(m_savedMatrix);
 						float scale = (newDist / m_oldDistance);
 						m_matrix.postScale(scale, scale, m_middle.x, m_middle.y);
+
+						float[] f = new float[9];
+						m_matrix.getValues(f);
+
+						float scaleX = f[Matrix.MSCALE_X];
+						float scaleY = f[Matrix.MSCALE_Y];
+
+						if (scaleX >= 40 && scaleY >= 40 && m_antiAlias) {
+							Paints.setAntiAlias(false);
+							m_antiAlias = false;
+						} else if (!m_antiAlias) {
+							Paints.setAntiAlias(true);
+							m_antiAlias = true;
+						}
 					}
 
 					if (m_lastEvent != null && event.getPointerCount() >= 2) {

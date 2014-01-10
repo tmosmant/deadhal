@@ -7,10 +7,10 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-public class MyDialogFragment extends DialogFragment {
-	public static MyDialogFragment newInstance(int title, int message) {
+public class CustomDialogFragment extends DialogFragment {
+	public static CustomDialogFragment newInstance(int title, int message) {
 
-		MyDialogFragment dialogFragment = new MyDialogFragment();
+		CustomDialogFragment dialogFragment = new CustomDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt("title", title);
 		bundle.putInt("message", message);

@@ -146,7 +146,7 @@ public class OpenFragment extends Fragment {
 		int title = R.string.action_remove;
 		int message = R.string.remove_warning;
 		
-		DialogFragment dialogFragment = MyDialogFragment.newInstance(title, message);
+		DialogFragment dialogFragment = CustomDialogFragment.newInstance(title, message);
 		dialogFragment.setTargetFragment(this, DIALOG_FRAGMENT);
 		dialogFragment.show(getFragmentManager().beginTransaction(), "dialog");
 	}

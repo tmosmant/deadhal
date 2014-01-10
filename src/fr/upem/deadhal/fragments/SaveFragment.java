@@ -129,7 +129,7 @@ public class SaveFragment extends Fragment {
 		int title = R.string.save;
 		int message = R.string.save_warning;
 
-		DialogFragment dialogFragment = MyDialogFragment.newInstance(title,
+		DialogFragment dialogFragment = CustomDialogFragment.newInstance(title,
 				message);
 		dialogFragment.setTargetFragment(this, DIALOG_FRAGMENT);
 		dialogFragment.show(getFragmentManager().beginTransaction(), "dialog");

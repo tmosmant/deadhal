@@ -20,6 +20,7 @@ import fr.upem.deadhal.view.TouchEvent;
 
 public class LevelDrawable extends Drawable {
 
+	private final static int MIN_MARGIN = 100;
 	private Level m_level;
 	private int m_alpha = 255;
 	private UUID m_selectedRoomId = null;
@@ -271,32 +272,56 @@ public class LevelDrawable extends Drawable {
 		Room room = m_level.getRooms().get(m_selectedRoomId);
 		switch (m_resizeType) {
 		case RESIZE_ROOM_LEFT_TOP:
-			room.getRect().left += dx;
-			room.getRect().top += dy;
+			if (room.getRect().left + dx < room.getRect().right - MIN_MARGIN
+					&& room.getRect().top + dy < room.getRect().bottom
+							- MIN_MARGIN) {
+				room.getRect().left += dx;
+				room.getRect().top += dy;
+			}
 			break;
 		case RESIZE_ROOM_RIGHT_TOP:
-			room.getRect().right += dx;
-			room.getRect().top += dy;
+			if (room.getRect().right + dx > room.getRect().left + MIN_MARGIN
+					&& room.getRect().top + dy < room.getRect().bottom
+							- MIN_MARGIN) {
+				room.getRect().right += dx;
+				room.getRect().top += dy;
+			}
 			break;
 		case RESIZE_ROOM_LEFT_BOTTOM:
-			room.getRect().left += dx;
-			room.getRect().bottom += dy;
+			if (room.getRect().left + dx < room.getRect().right - MIN_MARGIN
+					&& room.getRect().bottom + dy > room.getRect().top
+							+ MIN_MARGIN) {
+				room.getRect().left += dx;
+				room.getRect().bottom += dy;
+			}
 			break;
 		case RESIZE_ROOM_RIGHT_BOTTOM:
-			room.getRect().right += dx;
-			room.getRect().bottom += dy;
+			if (room.getRect().right + dx > room.getRect().left + MIN_MARGIN
+					&& room.getRect().bottom + dy > room.getRect().top
+							+ MIN_MARGIN) {
+				room.getRect().right += dx;
+				room.getRect().bottom += dy;
+			}
 			break;
 		case RESIZE_ROOM_LEFT:
-			room.getRect().left += dx;
+			if (room.getRect().left + dx < room.getRect().right - MIN_MARGIN) {
+				room.getRect().left += dx;
+			}
 			break;
 		case RESIZE_ROOM_TOP:
-			room.getRect().top += dy;
+			if (room.getRect().top + dy < room.getRect().bottom - MIN_MARGIN) {
+				room.getRect().top += dy;
+			}
 			break;
 		case RESIZE_ROOM_RIGHT:
-			room.getRect().right += dx;
+			if (room.getRect().right + dx > room.getRect().left + MIN_MARGIN) {
+				room.getRect().right += dx;
+			}
 			break;
 		case RESIZE_ROOM_BOTTOM:
-			room.getRect().bottom += dy;
+			if (room.getRect().bottom + dy > room.getRect().top + MIN_MARGIN) {
+				room.getRect().bottom += dy;
+			}
 			break;
 		}
 	}

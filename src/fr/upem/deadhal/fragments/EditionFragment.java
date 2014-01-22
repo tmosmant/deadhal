@@ -45,7 +45,7 @@ public class EditionFragment extends Fragment {
 				rootView.getContext(), new GestureListener(m_touchView,
 						levelDrawable));
 		m_touchView.build(gestureDetector, savedInstanceState);
-
+		
 		relativeLayout.addView(m_touchView);
 
 		return rootView;

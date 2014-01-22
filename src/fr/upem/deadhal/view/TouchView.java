@@ -228,8 +228,11 @@ public class TouchView extends View {
 			}
 			break;
 		}
-		
+
 		bringToFront();
+		View rootView = getRootView();
+		rootView.requestLayout();
+		rootView.invalidate();
 		invalidate();
 
 		return true;
@@ -269,6 +272,8 @@ public class TouchView extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+
+		// getParent().
 
 		canvas.save();
 		canvas.concat(m_matrix);

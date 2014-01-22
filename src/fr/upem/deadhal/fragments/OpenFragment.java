@@ -9,9 +9,11 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ShareActionProvider;
 import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
@@ -57,10 +60,10 @@ public class OpenFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
 		if (savedInstanceState != null) {
 			m_fileName = savedInstanceState.getString("file");
 		}
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -73,9 +76,25 @@ public class OpenFragment extends Fragment {
 	}
 
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		File file = Storage.openFile(m_fileName);
+		if (file.exists() && file.canRead()) {
+			ShareActionProvider mShareActionProvider = (ShareActionProvider) menu
+					.findItem(R.id.action_share).getActionProvider();
+
+			Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setType("text/xml");
+			intent.putExtra(Intent.EXTRA_STREAM,
+					Uri.parse("file://" + file.getAbsolutePath()));
+			intent.putExtra(Intent.EXTRA_SUBJECT, "Share " + file.getName());
+			mShareActionProvider.setShareIntent(intent);
+		}
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
 		View rootView = inflater.inflate(R.layout.fragment_open, container,
 				false);
 
@@ -145,8 +164,9 @@ public class OpenFragment extends Fragment {
 	private void showDialog() {
 		int title = R.string.action_remove;
 		int message = R.string.remove_warning;
-		
-		DialogFragment dialogFragment = CustomDialogFragment.newInstance(title, message);
+
+		DialogFragment dialogFragment = CustomDialogFragment.newInstance(title,
+				message);
 		dialogFragment.setTargetFragment(this, DIALOG_FRAGMENT);
 		dialogFragment.show(getFragmentManager().beginTransaction(), "dialog");
 	}

@@ -39,6 +39,7 @@ public class OpenFragment extends Fragment {
 	private ArrayAdapter<String> m_arrayAdapter = null;
 	private List<String> m_list = new ArrayList<String>();
 	private ListView m_listView = null;
+	private ShareActionProvider mShareActionProvider;
 
 	public OpenFragment() {
 	}
@@ -79,8 +80,8 @@ public class OpenFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		File file = Storage.openFile(m_fileName);
 		if (file.exists() && file.canRead()) {
-			ShareActionProvider mShareActionProvider = (ShareActionProvider) menu
-					.findItem(R.id.action_share).getActionProvider();
+			mShareActionProvider = (ShareActionProvider) menu.findItem(
+					R.id.action_share).getActionProvider();
 
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/xml");
@@ -89,7 +90,6 @@ public class OpenFragment extends Fragment {
 			intent.putExtra(Intent.EXTRA_SUBJECT, "Share " + file.getName());
 			mShareActionProvider.setShareIntent(intent);
 		}
-		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override

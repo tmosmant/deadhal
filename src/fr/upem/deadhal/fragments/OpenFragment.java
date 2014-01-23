@@ -134,9 +134,9 @@ public class OpenFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_consult:
-			return open(R.menu.consult);
+			return open(0);
 		case R.id.action_edit:
-			return open(R.menu.edit);
+			return open(1);
 		case R.id.action_remove:
 			showDialog();
 			return true;

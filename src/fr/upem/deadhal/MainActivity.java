@@ -355,13 +355,13 @@ public class MainActivity extends Activity implements OnDataPass {
 
 	@Override
 	public void nbFilePass() {
-		m_navDrawerItems.get(1).setCount(String.valueOf(Storage.getNbFiles()));
+		m_navDrawerItems.get(2).setCount(String.valueOf(Storage.getNbFiles()));
 		m_adapter.notifyDataSetChanged();
 	}
 
 	@Override
 	public void onEditPass() {
-		m_menu = 1;
+		m_menu = R.menu.edit;
 		displayView(m_menu);
 	}
 	

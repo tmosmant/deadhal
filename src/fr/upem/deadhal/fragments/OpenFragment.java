@@ -8,7 +8,9 @@ import java.util.concurrent.ExecutionException;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -156,6 +158,12 @@ public class OpenFragment extends Fragment {
 
 		try {
 			m_level = openTask.get();
+			SharedPreferences preferences = getActivity().getSharedPreferences(
+					"pref", Context.MODE_PRIVATE);
+			SharedPreferences.Editor ed = preferences.edit();
+			ed.clear();
+			ed.commit();
+
 			m_fileName = null;
 			m_listView.clearChoices();
 			m_callback.onLevelPass(menu, m_level);
@@ -203,7 +211,7 @@ public class OpenFragment extends Fragment {
 					Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(getActivity(), "Impossible de supprimer le fichier",
-					Toast.LENGTH_SHORT).show();			
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 

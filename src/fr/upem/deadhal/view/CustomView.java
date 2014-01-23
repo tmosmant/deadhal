@@ -89,7 +89,8 @@ public abstract class CustomView extends View {
 		float[] values = new float[9];
 		m_matrix = new Matrix();
 		m_savedMatrix = new Matrix();
-		if (preferences != null) {
+
+		if (preferences.contains("matrix1")) {
 			for (int i = 0; i < values.length; i++) {
 				values[i] = preferences.getFloat("matrix" + i, 0);
 			}

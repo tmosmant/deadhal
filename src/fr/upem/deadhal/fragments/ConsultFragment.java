@@ -50,8 +50,6 @@ public class ConsultFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		System.out.println(savedInstanceState != null);
-
 		View rootView = inflater.inflate(R.layout.fragment_consult, container,
 				false);
 

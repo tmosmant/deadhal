@@ -7,10 +7,10 @@ import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
 public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
-	private TouchView m_view;
+	private EditView m_view;
 	private LevelDrawable m_levelDrawable;
 
-	public GestureListener(TouchView view, LevelDrawable levelDrawable) {
+	public GestureListener(EditView view, LevelDrawable levelDrawable) {
 		m_view = view;
 		m_levelDrawable = levelDrawable;
 	}

@@ -2,7 +2,6 @@ package fr.upem.deadhal.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,24 +10,23 @@ import android.widget.TextView;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
-import fr.upem.deadhal.view.EditView;
-import fr.upem.deadhal.view.GestureListener;
+import fr.upem.deadhal.view.ConsultView;
 
-public class EditionFragment extends Fragment {
-
+public class ConsultFragment extends Fragment {
+	
 	private Level m_level = null;
-	private EditView m_editView = null;
+	private ConsultView m_consultView = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_edit, container,
+		View rootView = inflater.inflate(R.layout.fragment_consult, container,
 				false);
 
-		getActivity().setTitle(R.string.edit);
+		getActivity().setTitle(R.string.consult);
 
 		RelativeLayout relativeLayout = (RelativeLayout) rootView
-				.findViewById(R.id.edit_layout);
+				.findViewById(R.id.consult_layout);
 
 		m_level = getArguments().getParcelable("level");
 
@@ -38,22 +36,17 @@ public class EditionFragment extends Fragment {
 
 		LevelDrawable levelDrawable = new LevelDrawable(m_level);
 
-		m_editView = new EditView(rootView.getContext(), levelDrawable);
-
-		GestureDetector gestureDetector = new GestureDetector(
-				rootView.getContext(), new GestureListener(m_editView,
-						levelDrawable));
-		m_editView.build(gestureDetector, savedInstanceState);
-		
-		relativeLayout.addView(m_editView);
+		m_consultView = new ConsultView(rootView.getContext(), levelDrawable);
+		m_consultView.build(savedInstanceState);
+		relativeLayout.addView(m_consultView);
 
 		return rootView;
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		m_editView.saveMatrix(outState);
+		m_consultView.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}
-
+	
 }

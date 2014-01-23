@@ -1,9 +1,7 @@
 package fr.upem.deadhal.view;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.PointF;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -15,31 +13,24 @@ import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
-@Deprecated
-public class TouchView extends View {
+public class EditView extends CustomView {
+	
+	public EditView(Context context) {
+		super(context);
+	}
 
-	// private Drawable m_drawable;
-	private GestureDetector m_gestureDetector;
-	private LevelDrawable m_levelDrawable;
+	public EditView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
 
-	// these matrices will be used to move and zoom image
-	private Matrix m_matrix = new Matrix();
-	private Matrix m_savedMatrix = new Matrix();
-	private Matrix m_savedInverseMatrix = new Matrix();
+	public EditView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+	}
 
-	// we can be in one of these 3 states
-	private TouchEvent m_mode = TouchEvent.NONE;
-
-	// remember some things for zooming
-	private PointF m_start = new PointF();
-	private PointF m_middle = new PointF();
-	private float m_oldDistance = 1f;
-	private float m_distance = 0f;
-	private float m_newRotation = 0f;
-	private float[] m_lastEvent = null;
-
-	private boolean m_antiAlias = true;
-
+	public EditView(Context context, LevelDrawable drawable) {
+		super(context, drawable);
+	}
+	
 	private SelectionRoomListener m_selectionRoomListener = new SelectionRoomListener() {
 
 		@Override
@@ -54,24 +45,7 @@ public class TouchView extends View {
 					Toast.LENGTH_SHORT).show();
 		}
 	};
-
-	public TouchView(Context context) {
-		super(context);
-	}
-
-	public TouchView(Context context, AttributeSet attrs) {
-		this(context, attrs, 0);
-	}
-
-	public TouchView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
-
-	public TouchView(Context context, LevelDrawable drawable) {
-		super(context);
-		m_levelDrawable = drawable;
-	}
-
+	
 	public void build(GestureDetector gestureDetector, Bundle savedInstanceState) {
 		m_gestureDetector = gestureDetector;
 		restoreMatrix(savedInstanceState);
@@ -80,31 +54,11 @@ public class TouchView extends View {
 		if (android.os.Build.VERSION.SDK_INT >= 11) {
 			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
-		invalidate();
-	}
-
-	public void saveMatrix(Bundle savedInstanceState) {
-		float[] values = new float[9];
-		m_matrix.getValues(values);
-		savedInstanceState.putFloatArray("matrix", values);
-	}
-
-	private void restoreMatrix(Bundle savedInstanceState) {
-		float[] values = null;
-		m_matrix = new Matrix();
-		m_savedMatrix = new Matrix();
-		if (savedInstanceState != null) {
-			values = savedInstanceState.getFloatArray("matrix");
-			if (values != null) {
-				m_matrix.setValues(values);
-				m_savedMatrix.set(m_matrix);
-			}
-		}
+		invalidate();		
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-
 		m_gestureDetector.onTouchEvent(event);
 
 		boolean isRoomSelected = m_levelDrawable.isRoomSelected();
@@ -237,59 +191,6 @@ public class TouchView extends View {
 		invalidate();
 
 		return true;
-	}
-
-	/**
-	 * Determine the space between the first two fingers
-	 */
-	private float spacing(MotionEvent event) {
-		float x = event.getX(0) - event.getX(1);
-		float y = event.getY(0) - event.getY(1);
-		return (float) Math.sqrt(x * x + y * y);
-	}
-
-	/**
-	 * Calculate the mid point of the first two fingers
-	 */
-	private void midPoint(PointF point, MotionEvent event) {
-		float x = event.getX(0) + event.getX(1);
-		float y = event.getY(0) + event.getY(1);
-		point.set(x / 2, y / 2);
-	}
-
-	/**
-	 * Calculate the degree to be rotated by.
-	 * 
-	 * @param event
-	 * @return Degrees
-	 */
-	private float rotation(MotionEvent event) {
-		double delta_x = (event.getX(0) - event.getX(1));
-		double delta_y = (event.getY(0) - event.getY(1));
-		double radians = Math.atan2(delta_y, delta_x);
-		return (float) Math.toDegrees(radians);
-	}
-
-	@Override
-	public void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-
-		// getParent().
-
-		canvas.save();
-		canvas.concat(m_matrix);
-		m_levelDrawable.draw(canvas);
-		canvas.restore();
-	}
-
-	public void reset() {
-		m_matrix.reset();
-		m_savedMatrix.reset();
-	}
-
-	@Override
-	public Matrix getMatrix() {
-		return m_matrix;
 	}
 
 }

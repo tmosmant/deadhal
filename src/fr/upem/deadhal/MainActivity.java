@@ -25,6 +25,7 @@ import android.widget.Toast;
 import fr.upem.deadhal.adapter.NavDrawerListAdapter;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.fragments.ConsultFragment;
 import fr.upem.deadhal.fragments.EditionFragment;
 import fr.upem.deadhal.fragments.OpenFragment;
 import fr.upem.deadhal.fragments.SaveFragment;
@@ -40,6 +41,7 @@ public class MainActivity extends Activity implements OnDataPass {
 	private ListView m_drawerList;
 	private ActionBarDrawerToggle m_drawerToggle;
 
+	private Fragment m_consultFragment = new ConsultFragment();
 	private Fragment m_editionFragment = new EditionFragment();
 	private Fragment m_openFragment = new OpenFragment();
 	private Fragment m_saveFragment = new SaveFragment();
@@ -80,17 +82,22 @@ public class MainActivity extends Activity implements OnDataPass {
 		m_navDrawerItems = new ArrayList<NavDrawerItem>();
 
 		// adding nav drawer items to array
-		// New
+		// Consult
 		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[0],
 				m_navMenuIcons.getResourceId(0, -1)));
-		// Open, Will add a counter here
+		
+		// Edit
 		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[1],
-				m_navMenuIcons.getResourceId(1, -1), true, String
+				m_navMenuIcons.getResourceId(1, -1)));
+		
+		// Open, Will add a counter here
+		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[2],
+				m_navMenuIcons.getResourceId(2, -1), true, String
 						.valueOf(Storage.getNbFiles())));
 
 		// Save
-		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[2],
-				m_navMenuIcons.getResourceId(2, -1)));
+		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[3],
+				m_navMenuIcons.getResourceId(3, -1)));
 
 		// Recycle the typed array
 		m_navMenuIcons.recycle();
@@ -198,6 +205,14 @@ public class MainActivity extends Activity implements OnDataPass {
 
 		switch (position) {
 		case 0:
+			if (m_consultFragment.equals(fragment)) {
+				justClose = true;
+				break;
+			}
+			fragment = m_consultFragment;
+			m_menu = R.menu.edit;
+			break;
+		case 1:
 			if (m_editionFragment.equals(fragment)) {
 				justClose = true;
 				break;
@@ -205,7 +220,7 @@ public class MainActivity extends Activity implements OnDataPass {
 			fragment = m_editionFragment;
 			m_menu = R.menu.edit;
 			break;
-		case 1:
+		case 2:
 			if (m_openFragment.equals(fragment)) {
 				justClose = true;
 				break;
@@ -213,7 +228,7 @@ public class MainActivity extends Activity implements OnDataPass {
 			fragment = m_openFragment;
 			m_menu = R.menu.open;
 			break;
-		case 2:
+		case 3:
 			if (m_saveFragment.equals(fragment)) {
 				justClose = true;
 				break;

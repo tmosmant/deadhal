@@ -134,9 +134,9 @@ public class OpenFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_consult:
-			return open(0);
+			return open(R.menu.consult);
 		case R.id.action_edit:
-			return open(1);
+			return open(R.menu.edit);
 		case R.id.action_remove:
 			showDialog();
 			return true;
@@ -183,8 +183,6 @@ public class OpenFragment extends Fragment {
 		case DIALOG_FRAGMENT:
 			if (resultCode == Activity.RESULT_OK) {
 				delete();
-				m_fileName = null;
-				m_listView.clearChoices();
 			} else if (resultCode == Activity.RESULT_CANCELED) {
 				Toast.makeText(getActivity(), "Supression annulée",
 						Toast.LENGTH_SHORT).show();
@@ -197,12 +195,15 @@ public class OpenFragment extends Fragment {
 		File m_file = Storage.openFile(m_fileName);
 		if (m_file.delete()) {
 			m_callback.nbFilePass();
-			m_listView.clearChoices();
 			m_arrayAdapter.remove(m_fileName);
 			m_fileName = null;
+			m_listView.clearChoices();
 			getActivity().invalidateOptionsMenu();
 			Toast.makeText(getActivity(), "Fichier supprimé",
 					Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(getActivity(), "Impossible de supprimer le fichier",
+					Toast.LENGTH_SHORT).show();			
 		}
 	}
 

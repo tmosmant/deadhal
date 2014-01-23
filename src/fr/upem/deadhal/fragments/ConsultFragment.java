@@ -2,6 +2,8 @@ package fr.upem.deadhal.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,8 +21,9 @@ public class ConsultFragment extends Fragment {
 
 	private Level m_level = null;
 	private OnDataPass m_callback;
+	private SharedPreferences m_prefs = null;
 	private ConsultView m_consultView = null;
-	
+
 	public ConsultFragment() {
 	}
 
@@ -37,7 +40,7 @@ public class ConsultFragment extends Fragment {
 					+ " must implement OnDataPass");
 		}
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,6 +50,8 @@ public class ConsultFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		System.out.println(savedInstanceState != null);
+
 		View rootView = inflater.inflate(R.layout.fragment_consult, container,
 				false);
 
@@ -64,7 +69,14 @@ public class ConsultFragment extends Fragment {
 		LevelDrawable levelDrawable = new LevelDrawable(m_level);
 
 		m_consultView = new ConsultView(rootView.getContext(), levelDrawable);
-		m_consultView.build(savedInstanceState);
+
+		m_prefs = getActivity().getSharedPreferences("pref",
+				Context.MODE_PRIVATE);
+		if (savedInstanceState != null) {
+			m_consultView.build(savedInstanceState);
+		} else {
+			m_consultView.build(m_prefs);
+		}
 		relativeLayout.addView(m_consultView);
 
 		return rootView;
@@ -79,6 +91,12 @@ public class ConsultFragment extends Fragment {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onPause() {
+		m_consultView.saveMatrix(m_prefs);
+		super.onPause();
 	}
 
 	@Override

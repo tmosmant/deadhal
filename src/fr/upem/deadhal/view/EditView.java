@@ -1,6 +1,7 @@
 package fr.upem.deadhal.view;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -55,6 +56,17 @@ public class EditView extends CustomView {
 			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
 		invalidate();		
+	}
+	
+	public void build(GestureDetector gestureDetector, SharedPreferences preferences) {
+		m_gestureDetector = gestureDetector;
+		restoreMatrix(preferences);
+		m_levelDrawable.addSelectionRoomListener(m_selectionRoomListener);
+		
+		if (android.os.Build.VERSION.SDK_INT >= 11) {
+			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
+		invalidate();
 	}
 
 	@Override

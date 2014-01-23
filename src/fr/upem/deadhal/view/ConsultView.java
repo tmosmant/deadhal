@@ -1,6 +1,7 @@
 package fr.upem.deadhal.view;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -29,6 +30,14 @@ public class ConsultView extends CustomView {
 
 	public void build(Bundle savedInstanceState) {
 		restoreMatrix(savedInstanceState);
+		if (android.os.Build.VERSION.SDK_INT >= 11) {
+			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
+		invalidate();
+	}
+	
+	public void build(SharedPreferences preferences) {
+		restoreMatrix(preferences);
 		if (android.os.Build.VERSION.SDK_INT >= 11) {
 			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}

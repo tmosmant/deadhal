@@ -1,6 +1,7 @@
 package fr.upem.deadhal.view;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
@@ -61,16 +62,39 @@ public abstract class CustomView extends View {
 		savedInstanceState.putFloatArray("matrix", values);
 	}
 
+	public void saveMatrix(SharedPreferences preferences) {
+		float[] values = new float[9];
+		m_matrix.getValues(values);
+
+		SharedPreferences.Editor ed = preferences.edit();
+		ed.clear();
+		for (int i = 0; i < values.length; i++) {
+			ed.putFloat("matrix" + i, values[i]);
+		}
+		ed.commit();
+	}
+
 	protected void restoreMatrix(Bundle savedInstanceState) {
 		float[] values = null;
 		m_matrix = new Matrix();
 		m_savedMatrix = new Matrix();
-		if (savedInstanceState != null) {
-			values = savedInstanceState.getFloatArray("matrix");
-			if (values != null) {
-				m_matrix.setValues(values);
-				m_savedMatrix.set(m_matrix);
+		values = savedInstanceState.getFloatArray("matrix");
+		if (values != null) {
+			m_matrix.setValues(values);
+			m_savedMatrix.set(m_matrix);
+		}
+	}
+
+	protected void restoreMatrix(SharedPreferences preferences) {
+		float[] values = new float[9];
+		m_matrix = new Matrix();
+		m_savedMatrix = new Matrix();
+		if (preferences != null) {
+			for (int i = 0; i < values.length; i++) {
+				values[i] = preferences.getFloat("matrix" + i, 0);
 			}
+			m_matrix.setValues(values);
+			m_savedMatrix.set(m_matrix);
 		}
 	}
 

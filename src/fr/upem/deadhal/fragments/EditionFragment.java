@@ -1,6 +1,8 @@
 package fr.upem.deadhal.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ public class EditionFragment extends Fragment {
 
 	private Level m_level = null;
 	private EditView m_editView = null;
+	private SharedPreferences m_prefs = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,11 +46,23 @@ public class EditionFragment extends Fragment {
 		GestureDetector gestureDetector = new GestureDetector(
 				rootView.getContext(), new GestureListener(m_editView,
 						levelDrawable));
-		m_editView.build(gestureDetector, savedInstanceState);
+		m_prefs = getActivity().getSharedPreferences("pref",
+				Context.MODE_PRIVATE);
+		if (savedInstanceState != null) {
+			m_editView.build(gestureDetector, savedInstanceState);
+		} else {
+			m_editView.build(gestureDetector, m_prefs);
+		}
 		
 		relativeLayout.addView(m_editView);
 
 		return rootView;
+	}
+	
+	@Override
+	public void onPause() {
+		m_editView.saveMatrix(m_prefs);
+		super.onPause();
 	}
 
 	@Override

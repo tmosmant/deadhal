@@ -6,15 +6,28 @@
         android:icon="@drawable/ic_action_share"
         android:showAsAction="ifRoom"
         android:title="@string/action_share"/>
-    <item
-        android:id="@+id/action_remove"
-        android:icon="@drawable/ic_action_remove"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_remove"/>
-    <item
-        android:id="@+id/action_accept"
-        android:icon="@drawable/ic_action_accept"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_accept"/>
+
+    <group
+        android:id="@+id/group_open"
+        android:enabled="true"
+        android:menuCategory="container"
+        android:visible="true" >
+        <item
+            android:id="@+id/action_consult"
+            android:showAsAction="ifRoom"
+            android:title="@string/action_consult"/>
+        <item
+            android:id="@+id/action_edit"
+            android:showAsAction="ifRoom"
+            android:title="@string/action_edit"/>
+        <item
+            android:id="@+id/action_rename"
+            android:showAsAction="ifRoom"
+            android:title="@string/action_rename"/>
+        <item
+            android:id="@+id/action_remove"
+            android:showAsAction="ifRoom"
+            android:title="@string/action_remove"/>
+    </group>
 
 </menu>

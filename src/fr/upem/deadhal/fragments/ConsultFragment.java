@@ -1,8 +1,10 @@
 package fr.upem.deadhal.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -10,12 +12,37 @@ import android.widget.TextView;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
+import fr.upem.deadhal.utils.OnDataPass;
 import fr.upem.deadhal.view.ConsultView;
 
 public class ConsultFragment extends Fragment {
-	
+
 	private Level m_level = null;
+	private OnDataPass m_callback;
 	private ConsultView m_consultView = null;
+	
+	public ConsultFragment() {
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		// This makes sure that the container activity has implemented
+		// the callback interface. If not, it throws an exception
+		try {
+			m_callback = (OnDataPass) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnDataPass");
+		}
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,9 +71,20 @@ public class ConsultFragment extends Fragment {
 	}
 
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_edit:
+			m_callback.onEditPass();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		m_consultView.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}
-	
+
 }

@@ -72,7 +72,9 @@ public class OpenFragment extends Fragment {
 		super.onPrepareOptionsMenu(menu);
 		boolean isActive = m_fileName != null;
 		menu.findItem(R.id.action_share).setVisible(isActive);
-		menu.findItem(R.id.action_accept).setVisible(isActive);
+		menu.findItem(R.id.action_consult).setVisible(isActive);
+		menu.findItem(R.id.action_edit).setVisible(isActive);
+		menu.findItem(R.id.action_rename).setVisible(isActive);
 		menu.findItem(R.id.action_remove).setVisible(isActive);
 	}
 
@@ -131,8 +133,10 @@ public class OpenFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_accept:
-			return open();
+		case R.id.action_consult:
+			return open(0);
+		case R.id.action_edit:
+			return open(1);
 		case R.id.action_remove:
 			showDialog();
 			return true;
@@ -141,7 +145,7 @@ public class OpenFragment extends Fragment {
 		}
 	}
 
-	private boolean open() {
+	private boolean open(int menu) {
 		File m_file = Storage.openFile(m_fileName);
 		if (m_file == null) {
 			return false;
@@ -152,7 +156,9 @@ public class OpenFragment extends Fragment {
 
 		try {
 			m_level = openTask.get();
-			m_callback.onLevelPass(m_level);
+			m_fileName = null;
+			m_listView.clearChoices();
+			m_callback.onLevelPass(menu, m_level);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -177,6 +183,8 @@ public class OpenFragment extends Fragment {
 		case DIALOG_FRAGMENT:
 			if (resultCode == Activity.RESULT_OK) {
 				delete();
+				m_fileName = null;
+				m_listView.clearChoices();
 			} else if (resultCode == Activity.RESULT_CANCELED) {
 				Toast.makeText(getActivity(), "Supression annulée",
 						Toast.LENGTH_SHORT).show();

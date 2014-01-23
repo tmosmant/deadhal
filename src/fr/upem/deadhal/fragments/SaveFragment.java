@@ -155,6 +155,7 @@ public class SaveFragment extends Fragment {
 		File m_file = Storage.createFile(m_fileName);
 		SaveTask saveTask = new SaveTask(getActivity(), m_file);
 		saveTask.execute(m_level);
+		m_textView.setText("");
 		m_callback.nbFilePass();
 	}
 

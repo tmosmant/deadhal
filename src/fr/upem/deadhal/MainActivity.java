@@ -174,6 +174,9 @@ public class MainActivity extends Activity implements OnDataPass {
 		// if nav drawer is opened, hide the action items
 		boolean drawerOpen = m_drawerLayout.isDrawerOpen(m_drawerList);
 		switch (m_menu) {
+		case R.menu.consult:
+			menu.findItem(R.id.action_edit).setVisible(!drawerOpen);
+			break;
 		case R.menu.edit:
 			menu.findItem(R.id.action_new).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_remove).setVisible(!drawerOpen);
@@ -181,7 +184,8 @@ public class MainActivity extends Activity implements OnDataPass {
 			break;
 		case R.menu.open:
 			menu.findItem(R.id.action_share).setVisible(!drawerOpen);
-			menu.findItem(R.id.action_accept).setVisible(!drawerOpen);
+			menu.findItem(R.id.action_edit).setVisible(!drawerOpen);
+			menu.findItem(R.id.action_rename).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_remove).setVisible(!drawerOpen);
 			break;
 		case R.menu.save:
@@ -210,7 +214,7 @@ public class MainActivity extends Activity implements OnDataPass {
 				break;
 			}
 			fragment = m_consultFragment;
-			m_menu = R.menu.edit;
+			m_menu = R.menu.consult;
 			break;
 		case 1:
 			if (m_editionFragment.equals(fragment)) {
@@ -356,8 +360,14 @@ public class MainActivity extends Activity implements OnDataPass {
 	}
 
 	@Override
-	public void onLevelPass(Level level) {
-		m_menu = 0;
+	public void onEditPass() {
+		m_menu = 1;
+		displayView(m_menu);
+	}
+	
+	@Override
+	public void onLevelPass(int menu, Level level) {
+		m_menu = menu;
 		m_level = level;
 		displayView(m_menu);
 	}

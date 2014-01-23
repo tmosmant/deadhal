@@ -361,7 +361,7 @@ public class MainActivity extends Activity implements OnDataPass {
 
 	@Override
 	public void onEditPass() {
-		m_menu = R.menu.edit;
+		m_menu = 1;
 		displayView(m_menu);
 	}
 	

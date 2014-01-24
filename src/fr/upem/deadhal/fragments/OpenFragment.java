@@ -37,6 +37,7 @@ public class OpenFragment extends Fragment {
 	public static final int DIALOG_FRAGMENT = 1;
 
 	private Level m_level;
+	private int m_selection = -1;
 	private String m_fileName = null;
 	private ArrayAdapter<String> m_arrayAdapter = null;
 	private List<String> m_list = new ArrayList<String>();
@@ -65,6 +66,7 @@ public class OpenFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState != null) {
 			m_fileName = savedInstanceState.getString("file");
+			m_selection = savedInstanceState.getInt("selection");
 		}
 		setHasOptionsMenu(true);
 	}
@@ -122,7 +124,16 @@ public class OpenFragment extends Fragment {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					m_fileName = (String) parent.getItemAtPosition(position);
+					if (m_selection != position) {
+						m_selection = position;
+						m_fileName = (String) parent
+								.getItemAtPosition(position);
+					} else {
+						m_selection = -1;
+						m_fileName = null;
+						m_listView.clearChoices();
+						m_listView.bringToFront();
+					}
 					getActivity().invalidateOptionsMenu();
 				}
 
@@ -219,6 +230,7 @@ public class OpenFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putString("file", m_fileName);
+		outState.putInt("selection", m_selection);
 	}
 
 }

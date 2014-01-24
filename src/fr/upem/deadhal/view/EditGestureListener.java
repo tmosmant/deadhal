@@ -5,12 +5,12 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
-public class GestureListener extends GestureDetector.SimpleOnGestureListener {
+public class EditGestureListener extends GestureDetector.SimpleOnGestureListener {
 
-	private EditView m_view;
+	private CustomView m_view;
 	private LevelDrawable m_levelDrawable;
 
-	public GestureListener(EditView view, LevelDrawable levelDrawable) {
+	public EditGestureListener(CustomView view, LevelDrawable levelDrawable) {
 		m_view = view;
 		m_levelDrawable = levelDrawable;
 	}
@@ -22,7 +22,6 @@ public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
-
 		Matrix inverse = new Matrix();
 
 		m_view.getMatrix().invert(inverse);

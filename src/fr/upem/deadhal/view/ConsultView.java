@@ -1,9 +1,7 @@
 package fr.upem.deadhal.view;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Matrix;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,24 +26,10 @@ public class ConsultView extends CustomView {
 		super(context, drawable);
 	}
 
-	public void build(Bundle savedInstanceState) {
-		restoreMatrix(savedInstanceState);
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-		}
-		invalidate();
-	}
-	
-	public void build(SharedPreferences preferences) {
-		restoreMatrix(preferences);
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-		}
-		invalidate();
-	}
-
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		m_gestureDetector.onTouchEvent(event);
+
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
 		case MotionEvent.ACTION_DOWN:

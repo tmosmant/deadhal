@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 import fr.upem.deadhal.utils.OnDataPass;
+import fr.upem.deadhal.view.ConsultGestureListener;
 import fr.upem.deadhal.view.ConsultView;
 
 public class ConsultFragment extends Fragment {
@@ -70,11 +72,9 @@ public class ConsultFragment extends Fragment {
 
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
-		if (savedInstanceState != null) {
-			m_consultView.build(savedInstanceState);
-		} else {
-			m_consultView.build(m_prefs);
-		}
+		GestureDetector gestureDetector = new GestureDetector(
+				rootView.getContext(), new ConsultGestureListener(m_consultView));
+		m_consultView.build(gestureDetector, savedInstanceState, m_prefs);
 		relativeLayout.addView(m_consultView);
 
 		return rootView;

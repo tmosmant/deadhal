@@ -14,7 +14,7 @@ import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 import fr.upem.deadhal.view.EditView;
-import fr.upem.deadhal.view.GestureListener;
+import fr.upem.deadhal.view.EditGestureListener;
 
 public class EditionFragment extends Fragment {
 
@@ -44,15 +44,11 @@ public class EditionFragment extends Fragment {
 		m_editView = new EditView(rootView.getContext(), levelDrawable);
 
 		GestureDetector gestureDetector = new GestureDetector(
-				rootView.getContext(), new GestureListener(m_editView,
+				rootView.getContext(), new EditGestureListener(m_editView,
 						levelDrawable));
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
-		if (savedInstanceState != null) {
-			m_editView.build(gestureDetector, savedInstanceState);
-		} else {
-			m_editView.build(gestureDetector, m_prefs);
-		}
+		m_editView.build(gestureDetector, savedInstanceState, m_prefs);
 		
 		relativeLayout.addView(m_editView);
 

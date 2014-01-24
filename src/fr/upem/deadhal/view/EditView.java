@@ -1,21 +1,15 @@
 package fr.upem.deadhal.view;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Matrix;
-import android.os.Bundle;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
-import fr.upem.deadhal.components.Room;
-import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
 public class EditView extends CustomView {
-	
+
 	public EditView(Context context) {
 		super(context);
 	}
@@ -30,43 +24,6 @@ public class EditView extends CustomView {
 
 	public EditView(Context context, LevelDrawable drawable) {
 		super(context, drawable);
-	}
-	
-	private SelectionRoomListener m_selectionRoomListener = new SelectionRoomListener() {
-
-		@Override
-		public void onUnselectRoom(Room room) {
-			Toast.makeText(getContext(), room.getTitle() + " unselected.",
-					Toast.LENGTH_SHORT).show();
-		}
-
-		@Override
-		public void onSelectRoom(Room room) {
-			Toast.makeText(getContext(), room.getTitle() + " selected.",
-					Toast.LENGTH_SHORT).show();
-		}
-	};
-	
-	public void build(GestureDetector gestureDetector, Bundle savedInstanceState) {
-		m_gestureDetector = gestureDetector;
-		restoreMatrix(savedInstanceState);
-		m_levelDrawable.addSelectionRoomListener(m_selectionRoomListener);
-
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-		}
-		invalidate();		
-	}
-	
-	public void build(GestureDetector gestureDetector, SharedPreferences preferences) {
-		m_gestureDetector = gestureDetector;
-		restoreMatrix(preferences);
-		m_levelDrawable.addSelectionRoomListener(m_selectionRoomListener);
-		
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-		}
-		invalidate();
 	}
 
 	@Override

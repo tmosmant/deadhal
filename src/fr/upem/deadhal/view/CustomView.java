@@ -10,6 +10,9 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
 public abstract class CustomView extends View {
@@ -56,6 +59,45 @@ public abstract class CustomView extends View {
 	@Override
 	public abstract boolean onTouchEvent(MotionEvent event);
 
+	public void build(GestureDetector gestureDetector,
+			Bundle savedInstanceState, SharedPreferences preferences) {
+		m_gestureDetector = gestureDetector;
+
+		if (savedInstanceState != null) {
+			restoreMatrix(savedInstanceState);
+		} else {
+			restoreMatrix(preferences);
+		}
+
+		if (this instanceof EditView) {
+			addSelectionRoomListener();
+		}
+
+		if (android.os.Build.VERSION.SDK_INT >= 11) {
+			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
+
+		invalidate();
+	}
+
+	private void addSelectionRoomListener() {
+		m_levelDrawable.addSelectionRoomListener(new SelectionRoomListener() {
+
+			@Override
+			public void onUnselectRoom(Room room) {
+				Toast.makeText(getContext(), room.getTitle() + " unselected.",
+						Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onSelectRoom(Room room) {
+				Toast.makeText(getContext(), room.getTitle() + " selected.",
+						Toast.LENGTH_SHORT).show();
+			}
+
+		});
+	}
+
 	public void saveMatrix(Bundle savedInstanceState) {
 		float[] values = new float[9];
 		m_matrix.getValues(values);
@@ -74,7 +116,7 @@ public abstract class CustomView extends View {
 		ed.commit();
 	}
 
-	protected void restoreMatrix(Bundle savedInstanceState) {
+	private void restoreMatrix(Bundle savedInstanceState) {
 		float[] values = null;
 		m_matrix = new Matrix();
 		m_savedMatrix = new Matrix();
@@ -85,7 +127,7 @@ public abstract class CustomView extends View {
 		}
 	}
 
-	protected void restoreMatrix(SharedPreferences preferences) {
+	private void restoreMatrix(SharedPreferences preferences) {
 		float[] values = new float[9];
 		m_matrix = new Matrix();
 		m_savedMatrix = new Matrix();

@@ -85,11 +85,11 @@ public class MainActivity extends Activity implements OnDataPass {
 		// Consult
 		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[0],
 				m_navMenuIcons.getResourceId(0, -1)));
-		
+
 		// Edit
 		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[1],
 				m_navMenuIcons.getResourceId(1, -1)));
-		
+
 		// Open, Will add a counter here
 		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[2],
 				m_navMenuIcons.getResourceId(2, -1), true, String
@@ -183,10 +183,8 @@ public class MainActivity extends Activity implements OnDataPass {
 			menu.findItem(R.id.action_undo).setVisible(!drawerOpen);
 			break;
 		case R.menu.open:
-			menu.findItem(R.id.action_share).setVisible(!drawerOpen);
-			menu.findItem(R.id.action_edit).setVisible(!drawerOpen);
-			menu.findItem(R.id.action_rename).setVisible(!drawerOpen);
-			menu.findItem(R.id.action_remove).setVisible(!drawerOpen);
+			menu.setGroupVisible(R.id.group_open, !drawerOpen);
+			menu.findItem(R.id.action_share).setEnabled(!drawerOpen);
 			break;
 		case R.menu.save:
 			break;
@@ -364,7 +362,7 @@ public class MainActivity extends Activity implements OnDataPass {
 		m_menu = 1;
 		displayView(m_menu);
 	}
-	
+
 	@Override
 	public void onLevelPass(int menu, Level level) {
 		m_menu = menu;

@@ -75,11 +75,8 @@ public class OpenFragment extends Fragment {
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 		boolean isActive = m_fileName != null;
+		menu.setGroupVisible(R.id.group_open, isActive);
 		menu.findItem(R.id.action_share).setVisible(isActive);
-		menu.findItem(R.id.action_consult).setVisible(isActive);
-		menu.findItem(R.id.action_edit).setVisible(isActive);
-		menu.findItem(R.id.action_rename).setVisible(isActive);
-		menu.findItem(R.id.action_remove).setVisible(isActive);
 	}
 
 	@Override

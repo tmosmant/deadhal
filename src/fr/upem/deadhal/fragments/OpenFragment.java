@@ -28,12 +28,13 @@ import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.tasks.OpenTask;
-import fr.upem.deadhal.utils.OnDataPass;
+import fr.upem.deadhal.utils.FragmentObserver;
+import fr.upem.deadhal.utils.Position;
 import fr.upem.deadhal.utils.Storage;
 
 public class OpenFragment extends Fragment {
 
-	private OnDataPass m_callback;
+	private FragmentObserver m_callback;
 	public static final int DIALOG_FRAGMENT = 1;
 
 	private Level m_level;
@@ -54,7 +55,7 @@ public class OpenFragment extends Fragment {
 		// This makes sure that the container activity has implemented
 		// the callback interface. If not, it throws an exception
 		try {
-			m_callback = (OnDataPass) activity;
+			m_callback = (FragmentObserver) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnDataPass");
@@ -144,9 +145,9 @@ public class OpenFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_consult:
-			return open(0);
+			return open(Position.consult);
 		case R.id.action_edit:
-			return open(1);
+			return open(Position.edit);
 		case R.id.action_remove:
 			showDialog();
 			return true;
@@ -155,7 +156,7 @@ public class OpenFragment extends Fragment {
 		}
 	}
 
-	private boolean open(int menu) {
+	private boolean open(Position dest) {
 		File m_file = Storage.openFile(m_fileName);
 		if (m_file == null) {
 			return false;
@@ -174,7 +175,7 @@ public class OpenFragment extends Fragment {
 
 			m_fileName = null;
 			m_listView.clearChoices();
-			m_callback.onLevelPass(menu, m_level);
+			m_callback.notifyLevelChange(dest, m_level);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -210,7 +211,7 @@ public class OpenFragment extends Fragment {
 	private void delete() {
 		File m_file = Storage.openFile(m_fileName);
 		if (m_file.delete()) {
-			m_callback.nbFilePass();
+			m_callback.notifyNbFileChange();
 			m_arrayAdapter.remove(m_fileName);
 			m_fileName = null;
 			m_listView.clearChoices();

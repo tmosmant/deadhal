@@ -30,10 +30,11 @@ import fr.upem.deadhal.fragments.EditionFragment;
 import fr.upem.deadhal.fragments.OpenFragment;
 import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.model.NavDrawerItem;
-import fr.upem.deadhal.utils.OnDataPass;
+import fr.upem.deadhal.utils.FragmentObserver;
 import fr.upem.deadhal.utils.Storage;
+import fr.upem.deadhal.utils.Position;
 
-public class MainActivity extends Activity implements OnDataPass {
+public class MainActivity extends Activity implements FragmentObserver {
 
 	private Level m_level;
 
@@ -129,7 +130,7 @@ public class MainActivity extends Activity implements OnDataPass {
 
 		if (savedInstanceState == null) {
 			// on first time display view for first nav item
-			displayView(0);
+			displayView(Position.consult);
 		}
 
 	}
@@ -143,7 +144,7 @@ public class MainActivity extends Activity implements OnDataPass {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			// display view for selected nav drawer item
-			displayView(position);
+			displayView(Position.values()[position]);
 		}
 	}
 
@@ -198,15 +199,15 @@ public class MainActivity extends Activity implements OnDataPass {
 	/**
 	 * Diplaying fragment view for selected nav drawer list item
 	 * */
-	private void displayView(int position) {
+	private void displayView(Position position) {
 		// update the main content by switching fragments
 		FragmentManager fragmentManager = getFragmentManager();
 		Fragment fragment = null;
 
 		boolean justClose = false;
-
+		
 		switch (position) {
-		case 0:
+		case consult:
 			if (m_consultFragment.equals(fragment)) {
 				justClose = true;
 				break;
@@ -214,7 +215,7 @@ public class MainActivity extends Activity implements OnDataPass {
 			fragment = m_consultFragment;
 			m_menu = R.menu.consult;
 			break;
-		case 1:
+		case edit:
 			if (m_editionFragment.equals(fragment)) {
 				justClose = true;
 				break;
@@ -222,7 +223,7 @@ public class MainActivity extends Activity implements OnDataPass {
 			fragment = m_editionFragment;
 			m_menu = R.menu.edit;
 			break;
-		case 2:
+		case open:
 			if (m_openFragment.equals(fragment)) {
 				justClose = true;
 				break;
@@ -230,7 +231,7 @@ public class MainActivity extends Activity implements OnDataPass {
 			fragment = m_openFragment;
 			m_menu = R.menu.open;
 			break;
-		case 3:
+		case save:
 			if (m_saveFragment.equals(fragment)) {
 				justClose = true;
 				break;
@@ -254,8 +255,8 @@ public class MainActivity extends Activity implements OnDataPass {
 							.replace(R.id.frame_container, fragment).commit();
 
 					// update selected item and title, then close the drawer
-					m_drawerList.setItemChecked(position, true);
-					m_drawerList.setSelection(position);
+					m_drawerList.setItemChecked(position.ordinal(), true);
+					m_drawerList.setSelection(position.ordinal());
 					// setTitle(navMenuTitles[position]);
 				}
 				m_drawerLayout.closeDrawer(m_drawerList);
@@ -352,21 +353,19 @@ public class MainActivity extends Activity implements OnDataPass {
 	}
 
 	@Override
-	public void nbFilePass() {
+	public void notifyNbFileChange() {
 		m_navDrawerItems.get(2).setCount(String.valueOf(Storage.getNbFiles()));
 		m_adapter.notifyDataSetChanged();
 	}
 
 	@Override
-	public void onEditPass() {
-		m_menu = 1;
-		displayView(m_menu);
+	public void notifyFragmentChange(Position position) {
+		displayView(position);
 	}
 
 	@Override
-	public void onLevelPass(int menu, Level level) {
-		m_menu = menu;
+	public void notifyLevelChange(Position position, Level level) {
 		m_level = level;
-		displayView(m_menu);
+		displayView(position);
 	}
 }

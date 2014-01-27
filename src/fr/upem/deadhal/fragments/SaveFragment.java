@@ -22,13 +22,13 @@ import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.tasks.SaveTask;
-import fr.upem.deadhal.utils.OnDataPass;
+import fr.upem.deadhal.utils.FragmentObserver;
 import fr.upem.deadhal.utils.Storage;
 
 public class SaveFragment extends Fragment {
 
 	private TextView m_textView;
-	private OnDataPass m_callback;
+	private FragmentObserver m_callback;
 	private String m_fileName = null;
 	public static final int DIALOG_FRAGMENT = 1;
 
@@ -42,7 +42,7 @@ public class SaveFragment extends Fragment {
 		// This makes sure that the container activity has implemented
 		// the callback interface. If not, it throws an exception
 		try {
-			m_callback = (OnDataPass) activity;
+			m_callback = (FragmentObserver) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnDataPass");
@@ -156,7 +156,7 @@ public class SaveFragment extends Fragment {
 		SaveTask saveTask = new SaveTask(getActivity(), m_file);
 		saveTask.execute(m_level);
 		m_textView.setText("");
-		m_callback.nbFilePass();
+		m_callback.notifyNbFileChange();
 	}
 
 }

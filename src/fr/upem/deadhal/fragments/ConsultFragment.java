@@ -15,14 +15,15 @@ import android.widget.TextView;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
-import fr.upem.deadhal.utils.OnDataPass;
+import fr.upem.deadhal.utils.FragmentObserver;
+import fr.upem.deadhal.utils.Position;
 import fr.upem.deadhal.view.ConsultGestureListener;
 import fr.upem.deadhal.view.ConsultView;
 
 public class ConsultFragment extends Fragment {
 
 	private Level m_level = null;
-	private OnDataPass m_callback;
+	private FragmentObserver m_callback;
 	private SharedPreferences m_prefs = null;
 	private ConsultView m_consultView = null;
 
@@ -36,7 +37,7 @@ public class ConsultFragment extends Fragment {
 		// This makes sure that the container activity has implemented
 		// the callback interface. If not, it throws an exception
 		try {
-			m_callback = (OnDataPass) activity;
+			m_callback = (FragmentObserver) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnDataPass");
@@ -84,7 +85,7 @@ public class ConsultFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit:
-			m_callback.onEditPass();
+			m_callback.notifyFragmentChange(Position.edit);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

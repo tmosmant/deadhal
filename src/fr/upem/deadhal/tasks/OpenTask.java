@@ -127,16 +127,16 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 		UUID corridorId = UUID.randomUUID();
 		UUID src = UUID.fromString(xpp.getAttributeValue(null, "src"));
 		UUID dst = UUID.fromString(xpp.getAttributeValue(null, "dst"));
-		boolean directed = Boolean.getBoolean(xpp.getAttributeValue(null,
+		boolean directed = Boolean.valueOf(xpp.getAttributeValue(null,
 				"directed"));
-
+		
 		Corridor corridor = new Corridor(corridorId, src, dst, directed);
 		m_level.addCorridor(corridor);
 
 		Room roomSrc = m_level.getRooms().get(src);
 		Room roomDst = m_level.getRooms().get(dst);
 		if (corridor.isDirected()) {
-			roomSrc.addNeighbor(corridorId, roomDst);			
+			roomSrc.addNeighbor(corridorId, roomDst);
 		} else {
 			roomSrc.addNeighbor(corridorId, roomDst);
 			roomDst.addNeighbor(corridorId, roomSrc);

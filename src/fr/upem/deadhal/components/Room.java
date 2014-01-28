@@ -50,11 +50,11 @@ public class Room implements Parcelable {
 	public Map<UUID, Room> getNeighbors() {
 		return neighbors;
 	}
-	
+
 	public void addNeighbor(UUID corridor, Room room) {
 		neighbors.put(corridor, room);
 	}
-	
+
 	public boolean isAccessible(Room dst) {
 		return neighbors.containsValue(dst);
 	}

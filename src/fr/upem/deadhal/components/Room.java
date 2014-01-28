@@ -1,5 +1,7 @@
 package fr.upem.deadhal.components;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import android.graphics.RectF;
@@ -12,6 +14,7 @@ public class Room implements Parcelable {
 	private UUID id;
 	private String title;
 	private RectF rect;
+	private Map<UUID, Room> neighbors = new HashMap<UUID, Room>();
 
 	public Room(UUID id, String title, RectF rect) {
 		this.id = id;
@@ -29,6 +32,7 @@ public class Room implements Parcelable {
 		float top = source.readFloat();
 		float bottom = source.readFloat();
 		rect = new RectF(left, top, right, bottom);
+		source.readMap(neighbors, HashMap.class.getClass().getClassLoader());
 	}
 
 	public String getTitle() {
@@ -41,6 +45,18 @@ public class Room implements Parcelable {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public Map<UUID, Room> getNeighbors() {
+		return neighbors;
+	}
+	
+	public void addNeighbor(UUID corridor, Room room) {
+		neighbors.put(corridor, room);
+	}
+	
+	public boolean isAccessible(Room dst) {
+		return neighbors.containsValue(dst);
 	}
 
 	@Override
@@ -57,6 +73,7 @@ public class Room implements Parcelable {
 		dest.writeFloat(rect.right);
 		dest.writeFloat(rect.top);
 		dest.writeFloat(rect.bottom);
+		dest.writeMap(neighbors);
 	}
 
 	public static final Parcelable.Creator<Room> CREATOR = new Parcelable.Creator<Room>() {

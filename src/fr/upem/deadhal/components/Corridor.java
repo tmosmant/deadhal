@@ -13,8 +13,8 @@ public class Corridor implements Parcelable {
 	private UUID dst;
 	private boolean directed;
 
-	public Corridor(UUID src, UUID dst, boolean directed) {
-		id = UUID.randomUUID();
+	public Corridor(UUID id, UUID src, UUID dst, boolean directed) {
+		this.id = id;
 		this.src = src;
 		this.dst = dst;
 		this.directed = directed;

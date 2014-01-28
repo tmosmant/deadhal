@@ -95,8 +95,8 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 
 				else if (xpp.getName().equals("room")) {
 					roomTag(xpp);
-				} 
-				
+				}
+
 				else if (xpp.getName().equals("corridor")) {
 					corridorTag(xpp);
 				}
@@ -124,12 +124,18 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 	}
 
 	private void corridorTag(XmlPullParser xpp) {
+		UUID corridorId = UUID.randomUUID();
 		UUID src = UUID.fromString(xpp.getAttributeValue(null, "src"));
 		UUID dst = UUID.fromString(xpp.getAttributeValue(null, "dst"));
-		boolean directed = Boolean.getBoolean(xpp.getAttributeValue(null, "directed"));
-		
-		Corridor corridor = new Corridor(src, dst, directed);
+		boolean directed = Boolean.getBoolean(xpp.getAttributeValue(null,
+				"directed"));
+
+		Corridor corridor = new Corridor(corridorId, src, dst, directed);
 		m_level.addCorridor(corridor);
+
+		Room roomSrc = m_level.getRooms().get(src);
+		Room roomDst = m_level.getRooms().get(dst);
+		roomSrc.addNeighbor(corridorId, roomDst);
 	}
 
 }

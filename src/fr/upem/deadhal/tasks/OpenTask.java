@@ -13,6 +13,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.graphics.RectF;
 import android.os.AsyncTask;
+import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 
@@ -34,7 +35,7 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return m_level;
 	}
 
@@ -94,6 +95,10 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 
 				else if (xpp.getName().equals("room")) {
 					roomTag(xpp);
+				} 
+				
+				else if (xpp.getName().equals("corridor")) {
+					corridorTag(xpp);
 				}
 			}
 			eventType = xpp.next();
@@ -101,21 +106,30 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 	}
 
 	private void levelTag(XmlPullParser xpp) {
-		String title = xpp.getAttributeValue(0);
+		String title = xpp.getAttributeValue(null, "title");
 		m_level.setTitle(title);
 	}
 
 	private void roomTag(XmlPullParser xpp) {
-		UUID id = UUID.fromString(xpp.getAttributeValue(0));
-		String title = xpp.getAttributeValue(1);
-		float left = Float.valueOf(xpp.getAttributeValue(2));
-		float right = Float.valueOf(xpp.getAttributeValue(3));
-		float top = Float.valueOf(xpp.getAttributeValue(4));
-		float bottom = Float.valueOf(xpp.getAttributeValue(5));
+		UUID id = UUID.fromString(xpp.getAttributeValue(null, "id"));
+		String title = xpp.getAttributeValue(null, "title");
+		float left = Float.valueOf(xpp.getAttributeValue(null, "left"));
+		float right = Float.valueOf(xpp.getAttributeValue(null, "right"));
+		float top = Float.valueOf(xpp.getAttributeValue(null, "top"));
+		float bottom = Float.valueOf(xpp.getAttributeValue(null, "bottom"));
 		RectF rect = new RectF(left, top, right, bottom);
 
 		Room room = new Room(id, title, rect);
 		m_level.addRoom(room);
+	}
+
+	private void corridorTag(XmlPullParser xpp) {
+		UUID src = UUID.fromString(xpp.getAttributeValue(null, "src"));
+		UUID dst = UUID.fromString(xpp.getAttributeValue(null, "dst"));
+		boolean directed = Boolean.getBoolean(xpp.getAttributeValue(null, "directed"));
+		
+		Corridor corridor = new Corridor(src, dst, directed);
+		m_level.addCorridor(corridor);
 	}
 
 }

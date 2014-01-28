@@ -16,6 +16,7 @@ import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.util.Xml;
 import android.widget.Toast;
+import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 
@@ -70,6 +71,8 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 	public static String CreateXMLString(Level level)
 			throws IllegalArgumentException, IllegalStateException, IOException {
 		Map<UUID, Room> rooms = level.getRooms();
+		Map<UUID, Corridor> corridors = level.getCorridors();
+
 		XmlSerializer xmlSerializer = Xml.newSerializer();
 		StringWriter writer = new StringWriter();
 		xmlSerializer.setOutput(writer);
@@ -79,19 +82,29 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 				"http://xmlpull.org/v1/doc/features.html#indent-output", true);
 
 		xmlSerializer.startTag("", "level");
-		xmlSerializer.attribute("", "name", level.getTitle());
+		xmlSerializer.attribute("", "title", level.getTitle());
 		for (Entry<UUID, Room> entry : rooms.entrySet()) {
 			Room room = entry.getValue();
 			RectF rect = room.getRect();
 
 			xmlSerializer.startTag("", "room");
 			xmlSerializer.attribute("", "id", room.getId().toString());
-			xmlSerializer.attribute("", "name", room.getTitle());
+			xmlSerializer.attribute("", "title", room.getTitle());
 			xmlSerializer.attribute("", "left", String.valueOf(rect.left));
 			xmlSerializer.attribute("", "right", String.valueOf(rect.right));
 			xmlSerializer.attribute("", "top", String.valueOf(rect.top));
 			xmlSerializer.attribute("", "bottom", String.valueOf(rect.bottom));
 			xmlSerializer.endTag("", "room");
+		}
+		for (Entry<UUID, Corridor> entry : corridors.entrySet()) {
+			Corridor corridor = entry.getValue();
+
+			xmlSerializer.startTag("", "corridor");
+			xmlSerializer.attribute("", "src", corridor.getSrc().toString());
+			xmlSerializer.attribute("", "dst", corridor.getDst().toString());
+			xmlSerializer.attribute("", "directed",
+					String.valueOf(corridor.isDirected()));
+			xmlSerializer.endTag("", "corridor");
 		}
 		xmlSerializer.endTag("", "level");
 		xmlSerializer.endDocument();

@@ -14,7 +14,7 @@ public class Room implements Parcelable {
 	private UUID id;
 	private String title;
 	private RectF rect;
-	private Map<UUID, Room> neighbors = new HashMap<UUID, Room>();
+	private Map<UUID, UUID> neighbors = new HashMap<UUID, UUID>();
 
 	public Room(UUID id, String title, RectF rect) {
 		this.id = id;
@@ -47,11 +47,11 @@ public class Room implements Parcelable {
 		return id;
 	}
 
-	public Map<UUID, Room> getNeighbors() {
+	public Map<UUID, UUID> getNeighbors() {
 		return neighbors;
 	}
 
-	public void addNeighbor(UUID corridor, Room room) {
+	public void addNeighbor(UUID corridor, UUID room) {
 		neighbors.put(corridor, room);
 	}
 

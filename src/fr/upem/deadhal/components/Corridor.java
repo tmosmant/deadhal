@@ -1,12 +1,65 @@
 package fr.upem.deadhal.components;
 
+import java.util.UUID;
+
 import android.os.Parcel;
+import android.os.ParcelUuid;
 import android.os.Parcelable;
 
 public class Corridor implements Parcelable {
 
+	private UUID id;
+	private UUID src;
+	private UUID dst;
+	private boolean directed;
+
+	public Corridor(UUID src, UUID dst, boolean directed) {
+		id = UUID.randomUUID();
+		this.src = src;
+		this.dst = dst;
+		this.directed = directed;
+	}
+
 	public Corridor(Parcel source) {
-		// TODO Auto-generated constructor stub
+		ParcelUuid src = source.readParcelable(ParcelUuid.class
+				.getClassLoader());
+		this.src = src.getUuid();
+
+		ParcelUuid dst = source.readParcelable(ParcelUuid.class
+				.getClassLoader());
+		this.dst = dst.getUuid();
+
+		boolean[] val = new boolean[1];
+		source.readBooleanArray(val);
+		directed = val[0];
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public UUID getSrc() {
+		return src;
+	}
+
+	public void setSrc(UUID src) {
+		this.src = src;
+	}
+
+	public UUID getDst() {
+		return dst;
+	}
+
+	public void setDst(UUID dst) {
+		this.dst = dst;
+	}
+
+	public boolean isDirected() {
+		return directed;
+	}
+
+	public void setDirected(boolean directed) {
+		this.directed = directed;
 	}
 
 	@Override
@@ -16,7 +69,11 @@ public class Corridor implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
+		ParcelUuid srcParcelUuid = new ParcelUuid(src);
+		srcParcelUuid.writeToParcel(dest, flags);
+		ParcelUuid dstParcelUuid = new ParcelUuid(src);
+		dstParcelUuid.writeToParcel(dest, flags);
+		dest.writeBooleanArray(new boolean[] { directed });
 	}
 
 	public static final Parcelable.Creator<Corridor> CREATOR = new Parcelable.Creator<Corridor>() {

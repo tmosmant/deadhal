@@ -13,6 +13,12 @@ public class Room implements Parcelable {
 	private String title;
 	private RectF rect;
 
+	public Room(UUID id, String title, RectF rect) {
+		this.id = id;
+		this.title = title;
+		this.rect = rect;
+	}
+
 	public Room(Parcel source) {
 		ParcelUuid id = source
 				.readParcelable(ParcelUuid.class.getClassLoader());
@@ -22,13 +28,7 @@ public class Room implements Parcelable {
 		float right = source.readFloat();
 		float top = source.readFloat();
 		float bottom = source.readFloat();
-		this.rect = new RectF(left, top, right, bottom);
-	}
-
-	public Room(UUID id, String title, RectF rect) {
-		this.id = id;
-		this.title = title;
-		this.rect = rect;
+		rect = new RectF(left, top, right, bottom);
 	}
 
 	public String getTitle() {
@@ -70,10 +70,5 @@ public class Room implements Parcelable {
 			return new Room[size];
 		}
 	};
-
-	@Override
-	public String toString() {
-		return "Room [id=" + id + ", title=" + title + ", rect=" + rect + "]";
-	}
 
 }

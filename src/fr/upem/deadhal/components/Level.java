@@ -11,6 +11,7 @@ public class Level implements Parcelable {
 
 	private String title;
 	private Map<UUID, Room> rooms = new HashMap<UUID, Room>();
+	private Map<UUID, Corridor> corridors = new HashMap<UUID, Corridor>();
 
 	public Level() {
 	}
@@ -22,12 +23,21 @@ public class Level implements Parcelable {
 	public Level(Parcel source) {
 		this.title = source.readString();
 		source.readMap(rooms, HashMap.class.getClass().getClassLoader());
+		source.readMap(corridors, HashMap.class.getClass().getClassLoader());
 	}
 
 	public boolean addRoom(Room room) {
 		// TODO improve this
-		
+
 		rooms.put(room.getId(), room);
+
+		return true;
+	}
+
+	public boolean addCorridor(Corridor corridor) {
+		// TODO improve this
+
+		corridors.put(corridor.getId(), corridor);
 
 		return true;
 	}
@@ -44,6 +54,10 @@ public class Level implements Parcelable {
 		return rooms;
 	}
 
+	public Map<UUID, Corridor> getCorridors() {
+		return corridors;
+	}
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -53,6 +67,7 @@ public class Level implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(title);
 		dest.writeMap(rooms);
+		dest.writeMap(corridors);
 	}
 
 	public static final Parcelable.Creator<Level> CREATOR = new Parcelable.Creator<Level>() {

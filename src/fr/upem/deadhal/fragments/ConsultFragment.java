@@ -15,8 +15,6 @@ import android.widget.TextView;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
-import fr.upem.deadhal.utils.FragmentObserver;
-import fr.upem.deadhal.utils.Position;
 import fr.upem.deadhal.view.ConsultGestureListener;
 import fr.upem.deadhal.view.ConsultView;
 
@@ -85,7 +83,7 @@ public class ConsultFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit:
-			m_callback.notifyFragmentChange(Position.edit);
+			m_callback.notifyFragmentChange(FragmentType.edit);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

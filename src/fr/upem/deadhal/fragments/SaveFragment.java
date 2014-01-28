@@ -22,7 +22,6 @@ import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.tasks.SaveTask;
-import fr.upem.deadhal.utils.FragmentObserver;
 import fr.upem.deadhal.utils.Storage;
 
 public class SaveFragment extends Fragment {

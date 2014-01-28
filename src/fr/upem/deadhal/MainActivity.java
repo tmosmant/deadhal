@@ -27,12 +27,12 @@ import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.fragments.ConsultFragment;
 import fr.upem.deadhal.fragments.EditionFragment;
+import fr.upem.deadhal.fragments.FragmentObserver;
+import fr.upem.deadhal.fragments.FragmentType;
 import fr.upem.deadhal.fragments.OpenFragment;
 import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.model.NavDrawerItem;
-import fr.upem.deadhal.utils.FragmentObserver;
 import fr.upem.deadhal.utils.Storage;
-import fr.upem.deadhal.utils.Position;
 
 public class MainActivity extends Activity implements FragmentObserver {
 
@@ -130,7 +130,7 @@ public class MainActivity extends Activity implements FragmentObserver {
 
 		if (savedInstanceState == null) {
 			// on first time display view for first nav item
-			displayView(Position.consult);
+			displayView(FragmentType.consult);
 		}
 
 	}
@@ -144,7 +144,7 @@ public class MainActivity extends Activity implements FragmentObserver {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			// display view for selected nav drawer item
-			displayView(Position.values()[position]);
+			displayView(FragmentType.values()[position]);
 		}
 	}
 
@@ -199,14 +199,14 @@ public class MainActivity extends Activity implements FragmentObserver {
 	/**
 	 * Diplaying fragment view for selected nav drawer list item
 	 * */
-	private void displayView(Position position) {
+	private void displayView(FragmentType fragmentType) {
 		// update the main content by switching fragments
 		FragmentManager fragmentManager = getFragmentManager();
 		Fragment fragment = null;
 
 		boolean justClose = false;
 		
-		switch (position) {
+		switch (fragmentType) {
 		case consult:
 			if (m_consultFragment.equals(fragment)) {
 				justClose = true;
@@ -255,8 +255,8 @@ public class MainActivity extends Activity implements FragmentObserver {
 							.replace(R.id.frame_container, fragment).commit();
 
 					// update selected item and title, then close the drawer
-					m_drawerList.setItemChecked(position.ordinal(), true);
-					m_drawerList.setSelection(position.ordinal());
+					m_drawerList.setItemChecked(fragmentType.ordinal(), true);
+					m_drawerList.setSelection(fragmentType.ordinal());
 					// setTitle(navMenuTitles[position]);
 				}
 				m_drawerLayout.closeDrawer(m_drawerList);
@@ -359,13 +359,13 @@ public class MainActivity extends Activity implements FragmentObserver {
 	}
 
 	@Override
-	public void notifyFragmentChange(Position position) {
-		displayView(position);
+	public void notifyFragmentChange(FragmentType type) {
+		displayView(type);
 	}
 
 	@Override
-	public void notifyLevelChange(Position position, Level level) {
+	public void notifyLevelChange(FragmentType type, Level level) {
 		m_level = level;
-		displayView(position);
+		displayView(type);
 	}
 }

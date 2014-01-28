@@ -28,8 +28,6 @@ import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.tasks.OpenTask;
-import fr.upem.deadhal.utils.FragmentObserver;
-import fr.upem.deadhal.utils.Position;
 import fr.upem.deadhal.utils.Storage;
 
 public class OpenFragment extends Fragment {
@@ -145,9 +143,9 @@ public class OpenFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_consult:
-			return open(Position.consult);
+			return open(FragmentType.consult);
 		case R.id.action_edit:
-			return open(Position.edit);
+			return open(FragmentType.edit);
 		case R.id.action_remove:
 			showDialog();
 			return true;
@@ -156,7 +154,7 @@ public class OpenFragment extends Fragment {
 		}
 	}
 
-	private boolean open(Position dest) {
+	private boolean open(FragmentType dest) {
 		File m_file = Storage.openFile(m_fileName);
 		if (m_file == null) {
 			return false;

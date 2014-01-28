@@ -135,7 +135,12 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 
 		Room roomSrc = m_level.getRooms().get(src);
 		Room roomDst = m_level.getRooms().get(dst);
-		roomSrc.addNeighbor(corridorId, roomDst);
+		if (corridor.isDirected()) {
+			roomSrc.addNeighbor(corridorId, roomDst);			
+		} else {
+			roomSrc.addNeighbor(corridorId, roomDst);
+			roomDst.addNeighbor(corridorId, roomSrc);
+		}
 	}
 
 }

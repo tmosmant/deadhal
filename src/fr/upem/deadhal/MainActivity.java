@@ -47,9 +47,6 @@ public class MainActivity extends Activity implements FragmentObserver {
 	private Fragment m_openFragment = new OpenFragment();
 	private Fragment m_saveFragment = new SaveFragment();
 
-	// used to store app title
-	private CharSequence m_title;
-
 	// slide menu items
 	private String[] m_navMenuTitles;
 	private TypedArray m_navMenuIcons;
@@ -61,14 +58,12 @@ public class MainActivity extends Activity implements FragmentObserver {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_main);
+		m_level = buildSampleLevel();
+		buildDrawer(savedInstanceState);
+	}
 
-		m_level = new Level("Copernic, 3rd level");
-		buildSampleLevel();
-
-		m_title = getTitle();
-
+	private void buildDrawer(Bundle savedInstanceState) {
 		// load slide menu items
 		m_navMenuTitles = getResources().getStringArray(
 				R.array.nav_drawer_items);
@@ -130,9 +125,8 @@ public class MainActivity extends Activity implements FragmentObserver {
 
 		if (savedInstanceState == null) {
 			// on first time display view for first nav item
-			displayView(FragmentType.consult);
+			displayView(FragmentType.edit);
 		}
-
 	}
 
 	/**
@@ -205,7 +199,7 @@ public class MainActivity extends Activity implements FragmentObserver {
 		Fragment fragment = null;
 
 		boolean justClose = false;
-		
+
 		switch (fragmentType) {
 		case consult:
 			if (m_consultFragment.equals(fragment)) {
@@ -267,12 +261,6 @@ public class MainActivity extends Activity implements FragmentObserver {
 		}
 	}
 
-	@Override
-	public void setTitle(CharSequence title) {
-		m_title = title;
-		getActionBar().setTitle(m_title);
-	}
-
 	/**
 	 * When using the ActionBarDrawerToggle, you must call it during
 	 * onPostCreate() and onConfigurationChanged()...
@@ -320,13 +308,6 @@ public class MainActivity extends Activity implements FragmentObserver {
 		toast.show();
 	}
 
-	public void toastDebug(String str) {
-		int duration = Toast.LENGTH_SHORT;
-
-		Toast toast = Toast.makeText(getApplicationContext(), str, duration);
-		toast.show();
-	}
-
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -340,16 +321,17 @@ public class MainActivity extends Activity implements FragmentObserver {
 		invalidateOptionsMenu();
 	}
 
-	private void buildSampleLevel() {
-		m_level.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0,
-				120, 120)));
-		m_level.addRoom(new Room(UUID.randomUUID(), "3B113", new RectF(150, 0,
+	private Level buildSampleLevel() {
+		Level level = new Level("Copernic, 3rd floor");
+		level.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0, 120,
+				120)));
+		level.addRoom(new Room(UUID.randomUUID(), "3B113", new RectF(150, 0,
 				150 + 120, 120)));
-
-		m_level.addRoom(new Room(UUID.randomUUID(), "3B116", new RectF(0, 150,
+		level.addRoom(new Room(UUID.randomUUID(), "3B116", new RectF(0, 150,
 				120, 150 + 120)));
-		m_level.addRoom(new Room(UUID.randomUUID(), "3B112", new RectF(150,
-				150, 150 + 120, 150 + 120)));
+		level.addRoom(new Room(UUID.randomUUID(), "3B112", new RectF(150, 150,
+				150 + 120, 150 + 120)));
+		return level;
 	}
 
 	@Override

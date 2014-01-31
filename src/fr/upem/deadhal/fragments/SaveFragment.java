@@ -29,7 +29,7 @@ public class SaveFragment extends Fragment {
 	private TextView m_textView;
 	private FragmentObserver m_callback;
 	private String m_fileName = null;
-	public static final int DIALOG_FRAGMENT = 1;
+	public static final int OVERRIDE_DIALOG = 1;
 
 	public SaveFragment() {
 	}
@@ -128,23 +128,20 @@ public class SaveFragment extends Fragment {
 		int title = R.string.save;
 		int message = R.string.save_warning;
 
-		DialogFragment dialogFragment = CustomDialogFragment.newInstance(title,
+		DialogFragment dialogFragment = ConfirmDialogFragment.newInstance(title,
 				message);
-		dialogFragment.setTargetFragment(this, DIALOG_FRAGMENT);
+		dialogFragment.setTargetFragment(this, OVERRIDE_DIALOG);
 		dialogFragment.show(getFragmentManager().beginTransaction(), "dialog");
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-		case DIALOG_FRAGMENT:
+		case OVERRIDE_DIALOG:
 			if (resultCode == Activity.RESULT_OK) {
 				m_fileName = m_textView.getText().toString();
 				save();
-			} else if (resultCode == Activity.RESULT_CANCELED) {
-				Toast.makeText(getActivity(), "Sauvegarde annulée",
-						Toast.LENGTH_SHORT).show();
-			}
+			} 
 			break;
 		}
 	}

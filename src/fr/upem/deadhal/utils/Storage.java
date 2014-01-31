@@ -13,6 +13,8 @@ import android.util.Log;
 
 public class Storage {
 
+	private static final String FILE_EXTENSION = ".xml";
+	
 	/* Checks if external storage is available to at least read */
 	public static boolean isExternalStorageReadable() {
 		String state = Environment.getExternalStorageState();
@@ -82,13 +84,20 @@ public class Storage {
 	/* Return a new file */
 	public static File createFile(String name) {
 		File file = new File(getDeadHalDir().getAbsolutePath() + File.separator
-				+ name + ".xml");
+				+ name + FILE_EXTENSION);
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return file;
+	}
+	
+	/* Rename a file */
+	public static boolean renameFile(String src, String dst) {
+		File from = openFile(src);
+		File to = openFile(dst + FILE_EXTENSION);
+		return from.renameTo(to);
 	}
 
 	/* Return the deadhal directory (create it if doesn't exists) */

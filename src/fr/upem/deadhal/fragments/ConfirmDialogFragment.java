@@ -7,17 +7,15 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-public class CustomDialogFragment extends DialogFragment {
-	public static CustomDialogFragment newInstance(int title, int message) {
-
-		CustomDialogFragment dialogFragment = new CustomDialogFragment();
+public class ConfirmDialogFragment extends DialogFragment {
+	
+	public static ConfirmDialogFragment newInstance(int title, int message) {
+		ConfirmDialogFragment dialogFragment = new ConfirmDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt("title", title);
 		bundle.putInt("message", message);
 		dialogFragment.setArguments(bundle);
-
 		return dialogFragment;
-
 	}
 
 	@Override
@@ -43,10 +41,6 @@ public class CustomDialogFragment extends DialogFragment {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
-								getTargetFragment().onActivityResult(
-										getTargetRequestCode(),
-										Activity.RESULT_CANCELED,
-										getActivity().getIntent());
 							}
 						}).create();
 	}

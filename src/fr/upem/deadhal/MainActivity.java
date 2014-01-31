@@ -26,7 +26,7 @@ import fr.upem.deadhal.adapter.NavDrawerListAdapter;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.fragments.ConsultFragment;
-import fr.upem.deadhal.fragments.EditionFragment;
+import fr.upem.deadhal.fragments.EditFragment;
 import fr.upem.deadhal.fragments.FragmentObserver;
 import fr.upem.deadhal.fragments.FragmentType;
 import fr.upem.deadhal.fragments.OpenFragment;
@@ -43,7 +43,7 @@ public class MainActivity extends Activity implements FragmentObserver {
 	private ActionBarDrawerToggle m_drawerToggle;
 
 	private Fragment m_consultFragment = new ConsultFragment();
-	private Fragment m_editionFragment = new EditionFragment();
+	private Fragment m_editionFragment = new EditFragment();
 	private Fragment m_openFragment = new OpenFragment();
 	private Fragment m_saveFragment = new SaveFragment();
 

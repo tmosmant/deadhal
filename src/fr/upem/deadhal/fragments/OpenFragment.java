@@ -33,7 +33,8 @@ import fr.upem.deadhal.utils.Storage;
 public class OpenFragment extends Fragment {
 
 	private FragmentObserver m_callback;
-	public static final int DIALOG_FRAGMENT = 1;
+	public static final int RENAME_DIALOG = 1;
+	public static final int REMOVE_DIALOG = 2;
 
 	private Level m_level;
 	private int m_selection = -1;
@@ -146,8 +147,11 @@ public class OpenFragment extends Fragment {
 			return open(FragmentType.consult);
 		case R.id.action_edit:
 			return open(FragmentType.edit);
+		case R.id.action_rename:
+			showRenameDialog();
+			return true;
 		case R.id.action_remove:
-			showDialog();
+			showRemoveDialog();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -182,28 +186,51 @@ public class OpenFragment extends Fragment {
 		return true;
 	}
 
-	private void showDialog() {
+	private void showRenameDialog() {
+		int title = R.string.action_rename;
+
+		DialogFragment dialogFragment = RenameDialogFragment.newInstance(title);
+		dialogFragment.setTargetFragment(this, RENAME_DIALOG);
+		dialogFragment.show(getFragmentManager().beginTransaction(),
+				"renameDialog");
+	}
+
+	private void showRemoveDialog() {
 		int title = R.string.action_remove;
 		int message = R.string.remove_warning;
 
-		DialogFragment dialogFragment = CustomDialogFragment.newInstance(title,
-				message);
-		dialogFragment.setTargetFragment(this, DIALOG_FRAGMENT);
-		dialogFragment.show(getFragmentManager().beginTransaction(), "dialog");
+		DialogFragment dialogFragment = ConfirmDialogFragment.newInstance(
+				title, message);
+		dialogFragment.setTargetFragment(this, REMOVE_DIALOG);
+		dialogFragment.show(getFragmentManager().beginTransaction(),
+				"removeDialog");
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-		case DIALOG_FRAGMENT:
+		case RENAME_DIALOG:
+			if (resultCode == Activity.RESULT_OK) {
+				String fileName = data.getStringExtra("fileName");
+				rename(fileName);
+			}
+			break;
+		case REMOVE_DIALOG:
 			if (resultCode == Activity.RESULT_OK) {
 				delete();
-			} else if (resultCode == Activity.RESULT_CANCELED) {
-				Toast.makeText(getActivity(), "Supression annulée",
-						Toast.LENGTH_SHORT).show();
 			}
 			break;
 		}
+	}
+
+	private void rename(String fileName) {
+		Storage.renameFile(m_fileName, fileName);
+		m_arrayAdapter.remove(m_fileName);
+		m_arrayAdapter.add(fileName);
+		m_listView.clearChoices();
+		
+		m_fileName = null;
+		m_list = Storage.getFilesList();
 	}
 
 	private void delete() {

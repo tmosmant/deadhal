@@ -21,7 +21,7 @@ import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 import fr.upem.deadhal.view.EditView;
 import fr.upem.deadhal.view.EditGestureListener;
 
-public class EditionFragment extends Fragment {
+public class EditFragment extends Fragment {
 
 	private Level m_level = null;
 	private EditView m_editView = null;

@@ -3,7 +3,6 @@
     <item
         android:id="@+id/action_new"
         android:icon="@drawable/ic_action_new"
-        android:onClick="showAddPopup"
         android:showAsAction="ifRoom"
         android:title="@string/action_new"/>
     <item

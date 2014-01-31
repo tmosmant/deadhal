@@ -39,7 +39,7 @@ public class LevelDrawable extends Drawable {
 	public void removeSelectionRoomListener(SelectionRoomListener listener) {
 		selectionRoomListeners.remove(listener);
 	}
-
+	
 	@Override
 	public void draw(Canvas canvas) {
 		for (Room room : m_level.getRooms().values()) {

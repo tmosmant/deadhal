@@ -1,4 +1,4 @@
-package fr.upem.deadhal.adapter;
+package fr.upem.deadhal.drawers.adapters;
 
 import java.util.ArrayList;
 
@@ -11,15 +11,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import fr.upem.deadhal.R;
-import fr.upem.deadhal.model.NavDrawerItem;
+import fr.upem.deadhal.drawers.models.DrawerMainItem;
 
-public class NavDrawerListAdapter extends BaseAdapter {
+public class DrawerMainListAdapter extends BaseAdapter {
 
 	private Context m_context;
-	private ArrayList<NavDrawerItem> m_navDrawerItems;
+	private ArrayList<DrawerMainItem> m_navDrawerItems;
 
-	public NavDrawerListAdapter(Context context,
-			ArrayList<NavDrawerItem> navDrawerItems) {
+	public DrawerMainListAdapter(Context context,
+			ArrayList<DrawerMainItem> navDrawerItems) {
 		this.m_context = context;
 		this.m_navDrawerItems = navDrawerItems;
 	}
@@ -44,7 +44,7 @@ public class NavDrawerListAdapter extends BaseAdapter {
 		if (convertView == null) {
 			LayoutInflater mInflater = (LayoutInflater) m_context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			convertView = mInflater.inflate(R.layout.drawer_list_item, null);
+			convertView = mInflater.inflate(R.layout.list_adapter_edition_drawer, null);
 		}
 
 		ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);

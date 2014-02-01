@@ -1,4 +1,4 @@
-package fr.upem.deadhal.fragments;
+package fr.upem.deadhal.fragments.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;

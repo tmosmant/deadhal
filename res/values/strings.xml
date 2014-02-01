@@ -3,8 +3,8 @@
 
     <string name="app_name">DeadHal</string>
     <string name="file">File</string>
-    <string name="edit">Edit</string>
-    <string name="consult">Consult</string>
+    <string name="edition">Edition</string>
+    <string name="navigation">Navigation</string>
     <string name="open">Open</string>
     <string name="save">Save</string>
     <string name="not_yet_implemented">Not yet implemented.</string>
@@ -16,14 +16,18 @@
     <string name="action_share">Share</string>
     <string name="action_delete">Delete</string>
     <string name="action_accept">Accept</string>
-    <string name="action_consult">Consult</string>
-    <string name="action_edit">Edit</string>
+    <string name="action_navigate">Navigate</string>
+    <string name="action_edition">Edition</string>
     <string name="action_rename">Rename</string>
+    <string name="yes">Yes</string>
+    <string name="hint">File name</string>
+    <string name="save_warning">Overwrite ?</string>
+    <string name="remove_warning">Are you sure ?</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
-        <item>Consult</item>
-        <item>Edit</item>
+        <item>Navigation</item>
+        <item>Edition</item>
         <item>Open…</item>
         <item>Save…</item>
     </string-array>
@@ -37,11 +41,12 @@
         <item>@drawable/ic_action_save_dark</item>
     </array>
 
-    <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
-    <string name="ok">OK</string>
-    <string name="hint">File name</string>
-    <string name="save_warning">Ecraser ?</string>
-    <string name="remove_warning">Effacer ?</string>
+
+    <string name="deleted_file">File deleted</string>
+
+    <string name="deleted_file_error">Cannot delete file</string>
+
+    <string name="enter_filename">Please enter a name for this file</string>
 
 </resources>

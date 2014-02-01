@@ -21,13 +21,15 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
+import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
+import fr.upem.deadhal.fragments.dialogs.ConfirmDialogFragment;
 import fr.upem.deadhal.tasks.SaveTask;
 import fr.upem.deadhal.utils.Storage;
 
 public class SaveFragment extends Fragment {
 
 	private TextView m_textView;
-	private FragmentObserver m_callback;
+	private DrawerMainListener m_callback;
 	private String m_fileName = null;
 	public static final int OVERRIDE_DIALOG = 1;
 
@@ -41,7 +43,7 @@ public class SaveFragment extends Fragment {
 		// This makes sure that the container activity has implemented
 		// the callback interface. If not, it throws an exception
 		try {
-			m_callback = (FragmentObserver) activity;
+			m_callback = (DrawerMainListener) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnDataPass");
@@ -117,7 +119,7 @@ public class SaveFragment extends Fragment {
 
 	private boolean entryIsValid() {
 		if (m_fileName.isEmpty()) {
-			Toast.makeText(getActivity(), "Veuillez entrer un nom de fichier",
+			Toast.makeText(getActivity(), R.string.enter_filename,
 					Toast.LENGTH_SHORT).show();
 			return false;
 		}
@@ -152,7 +154,7 @@ public class SaveFragment extends Fragment {
 		SaveTask saveTask = new SaveTask(getActivity(), m_file);
 		saveTask.execute(m_level);
 		m_textView.setText("");
-		m_callback.notifyNbFileChange();
+		m_callback.onFileNumberChange();
 	}
 
 }

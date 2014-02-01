@@ -8,21 +8,21 @@ import android.view.View;
 import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
-public class EditView extends CustomView {
+public class EditionView extends CustomView {
 
-	public EditView(Context context) {
+	public EditionView(Context context) {
 		super(context);
 	}
 
-	public EditView(Context context, AttributeSet attrs) {
+	public EditionView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
-	public EditView(Context context, AttributeSet attrs, int defStyle) {
+	public EditionView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
 
-	public EditView(Context context, LevelDrawable drawable) {
+	public EditionView(Context context, LevelDrawable drawable) {
 		super(context, drawable);
 	}
 

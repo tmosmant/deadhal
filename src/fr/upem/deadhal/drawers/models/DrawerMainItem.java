@@ -1,6 +1,6 @@
-package fr.upem.deadhal.model;
+package fr.upem.deadhal.drawers.models;
 
-public class NavDrawerItem {
+public class DrawerMainItem {
 	
 	private String m_title;
 	private int m_icon;
@@ -8,14 +8,14 @@ public class NavDrawerItem {
 	// boolean to set visiblity of the counter
 	private boolean m_isCounterVisible = false;
 	
-	public NavDrawerItem(){}
+	public DrawerMainItem(){}
 
-	public NavDrawerItem(String title, int icon){
+	public DrawerMainItem(String title, int icon){
 		this.m_title = title;
 		this.m_icon = icon;
 	}
 	
-	public NavDrawerItem(String title, int icon, boolean isCounterVisible, String count){
+	public DrawerMainItem(String title, int icon, boolean isCounterVisible, String count){
 		this.m_title = title;
 		this.m_icon = icon;
 		this.m_isCounterVisible = isCounterVisible;

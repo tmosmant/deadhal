@@ -13,13 +13,13 @@
         android:menuCategory="container"
         android:visible="true" >
         <item
-            android:id="@+id/action_consult"
+            android:id="@+id/action_navigation"
             android:showAsAction="ifRoom"
-            android:title="@string/action_consult"/>
+            android:title="@string/action_navigate"/>
         <item
-            android:id="@+id/action_edit"
+            android:id="@+id/action_edition"
             android:showAsAction="ifRoom"
-            android:title="@string/action_edit"/>
+            android:title="@string/action_edition"/>
         <item
             android:id="@+id/action_rename"
             android:showAsAction="ifRoom"

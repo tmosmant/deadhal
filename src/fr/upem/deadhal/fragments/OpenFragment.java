@@ -27,12 +27,15 @@ import android.widget.ShareActionProvider;
 import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
+import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
+import fr.upem.deadhal.fragments.dialogs.ConfirmDialogFragment;
+import fr.upem.deadhal.fragments.dialogs.RenameDialogFragment;
 import fr.upem.deadhal.tasks.OpenTask;
 import fr.upem.deadhal.utils.Storage;
 
 public class OpenFragment extends Fragment {
 
-	private FragmentObserver m_callback;
+	private DrawerMainListener m_callback;
 	public static final int RENAME_DIALOG = 1;
 	public static final int REMOVE_DIALOG = 2;
 
@@ -54,7 +57,7 @@ public class OpenFragment extends Fragment {
 		// This makes sure that the container activity has implemented
 		// the callback interface. If not, it throws an exception
 		try {
-			m_callback = (FragmentObserver) activity;
+			m_callback = (DrawerMainListener) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnDataPass");
@@ -143,10 +146,10 @@ public class OpenFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_consult:
-			return open(FragmentType.consult);
-		case R.id.action_edit:
-			return open(FragmentType.edit);
+		case R.id.action_navigation:
+			return open(FragmentType.NAVIGATION);
+		case R.id.action_edition:
+			return open(FragmentType.EDITION);
 		case R.id.action_rename:
 			showRenameDialog();
 			return true;
@@ -177,7 +180,7 @@ public class OpenFragment extends Fragment {
 
 			m_fileName = null;
 			m_listView.clearChoices();
-			m_callback.notifyLevelChange(dest, m_level);
+			m_callback.onLevelChange(dest, m_level);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -236,15 +239,15 @@ public class OpenFragment extends Fragment {
 	private void delete() {
 		File m_file = Storage.openFile(m_fileName);
 		if (m_file.delete()) {
-			m_callback.notifyNbFileChange();
+			m_callback.onFileNumberChange();
 			m_arrayAdapter.remove(m_fileName);
 			m_fileName = null;
 			m_listView.clearChoices();
 			getActivity().invalidateOptionsMenu();
-			Toast.makeText(getActivity(), "Fichier supprimé",
+			Toast.makeText(getActivity(), R.string.deleted_file,
 					Toast.LENGTH_SHORT).show();
 		} else {
-			Toast.makeText(getActivity(), "Impossible de supprimer le fichier",
+			Toast.makeText(getActivity(), R.string.deleted_file_error,
 					Toast.LENGTH_SHORT).show();
 		}
 	}

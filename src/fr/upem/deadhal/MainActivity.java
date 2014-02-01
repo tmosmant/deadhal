@@ -22,19 +22,19 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Toast;
-import fr.upem.deadhal.adapter.NavDrawerListAdapter;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
-import fr.upem.deadhal.fragments.ConsultFragment;
-import fr.upem.deadhal.fragments.EditFragment;
-import fr.upem.deadhal.fragments.FragmentObserver;
+import fr.upem.deadhal.drawers.adapters.DrawerMainListAdapter;
+import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
+import fr.upem.deadhal.drawers.models.DrawerMainItem;
+import fr.upem.deadhal.fragments.NavigationFragment;
+import fr.upem.deadhal.fragments.EditionFragment;
 import fr.upem.deadhal.fragments.FragmentType;
 import fr.upem.deadhal.fragments.OpenFragment;
 import fr.upem.deadhal.fragments.SaveFragment;
-import fr.upem.deadhal.model.NavDrawerItem;
 import fr.upem.deadhal.utils.Storage;
 
-public class MainActivity extends Activity implements FragmentObserver {
+public class MainActivity extends Activity implements DrawerMainListener {
 
 	private Level m_level;
 
@@ -42,8 +42,8 @@ public class MainActivity extends Activity implements FragmentObserver {
 	private ListView m_drawerList;
 	private ActionBarDrawerToggle m_drawerToggle;
 
-	private Fragment m_consultFragment = new ConsultFragment();
-	private Fragment m_editionFragment = new EditFragment();
+	private Fragment m_navigationFragment = new NavigationFragment();
+	private Fragment m_editionFragment = new EditionFragment();
 	private Fragment m_openFragment = new OpenFragment();
 	private Fragment m_saveFragment = new SaveFragment();
 
@@ -51,9 +51,9 @@ public class MainActivity extends Activity implements FragmentObserver {
 	private String[] m_navMenuTitles;
 	private TypedArray m_navMenuIcons;
 
-	private ArrayList<NavDrawerItem> m_navDrawerItems;
-	private NavDrawerListAdapter m_adapter;
-	private int m_menu = R.menu.edit;
+	private ArrayList<DrawerMainItem> m_navDrawerItems;
+	private DrawerMainListAdapter m_adapter;
+	private int m_menu = R.menu.edition;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,24 +75,24 @@ public class MainActivity extends Activity implements FragmentObserver {
 		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		m_drawerList = (ListView) findViewById(R.id.list_slidermenu);
 
-		m_navDrawerItems = new ArrayList<NavDrawerItem>();
+		m_navDrawerItems = new ArrayList<DrawerMainItem>();
 
 		// adding nav drawer items to array
-		// Consult
-		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[0],
+		// Navigation
+		m_navDrawerItems.add(new DrawerMainItem(m_navMenuTitles[0],
 				m_navMenuIcons.getResourceId(0, -1)));
 
-		// Edit
-		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[1],
+		// Edition
+		m_navDrawerItems.add(new DrawerMainItem(m_navMenuTitles[1],
 				m_navMenuIcons.getResourceId(1, -1)));
 
 		// Open, Will add a counter here
-		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[2],
+		m_navDrawerItems.add(new DrawerMainItem(m_navMenuTitles[2],
 				m_navMenuIcons.getResourceId(2, -1), true, String
 						.valueOf(Storage.getNbFiles())));
 
 		// Save
-		m_navDrawerItems.add(new NavDrawerItem(m_navMenuTitles[3],
+		m_navDrawerItems.add(new DrawerMainItem(m_navMenuTitles[3],
 				m_navMenuIcons.getResourceId(3, -1)));
 
 		// Recycle the typed array
@@ -101,7 +101,7 @@ public class MainActivity extends Activity implements FragmentObserver {
 		m_drawerList.setOnItemClickListener(new SlideMenuClickListener());
 
 		// setting the nav drawer list adapter
-		m_adapter = new NavDrawerListAdapter(getApplicationContext(),
+		m_adapter = new DrawerMainListAdapter(getApplicationContext(),
 				m_navDrawerItems);
 		m_drawerList.setAdapter(m_adapter);
 
@@ -125,7 +125,7 @@ public class MainActivity extends Activity implements FragmentObserver {
 
 		if (savedInstanceState == null) {
 			// on first time display view for first nav item
-			displayView(FragmentType.edit);
+			displayView(FragmentType.EDITION);
 		}
 	}
 
@@ -169,10 +169,10 @@ public class MainActivity extends Activity implements FragmentObserver {
 		// if nav drawer is opened, hide the action items
 		boolean drawerOpen = m_drawerLayout.isDrawerOpen(m_drawerList);
 		switch (m_menu) {
-		case R.menu.consult:
-			menu.findItem(R.id.action_edit).setVisible(!drawerOpen);
+		case R.menu.navigation:
+			menu.findItem(R.id.action_edition).setVisible(!drawerOpen);
 			break;
-		case R.menu.edit:
+		case R.menu.edition:
 			menu.findItem(R.id.action_new).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_remove).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_undo).setVisible(!drawerOpen);
@@ -201,23 +201,23 @@ public class MainActivity extends Activity implements FragmentObserver {
 		boolean justClose = false;
 
 		switch (fragmentType) {
-		case consult:
-			if (m_consultFragment.equals(fragment)) {
+		case NAVIGATION:
+			if (m_navigationFragment.equals(fragment)) {
 				justClose = true;
 				break;
 			}
-			fragment = m_consultFragment;
-			m_menu = R.menu.consult;
+			fragment = m_navigationFragment;
+			m_menu = R.menu.navigation;
 			break;
-		case edit:
+		case EDITION:
 			if (m_editionFragment.equals(fragment)) {
 				justClose = true;
 				break;
 			}
 			fragment = m_editionFragment;
-			m_menu = R.menu.edit;
+			m_menu = R.menu.edition;
 			break;
-		case open:
+		case OPEN:
 			if (m_openFragment.equals(fragment)) {
 				justClose = true;
 				break;
@@ -225,7 +225,7 @@ public class MainActivity extends Activity implements FragmentObserver {
 			fragment = m_openFragment;
 			m_menu = R.menu.open;
 			break;
-		case save:
+		case SAVE:
 			if (m_saveFragment.equals(fragment)) {
 				justClose = true;
 				break;
@@ -335,18 +335,18 @@ public class MainActivity extends Activity implements FragmentObserver {
 	}
 
 	@Override
-	public void notifyNbFileChange() {
+	public void onFileNumberChange() {
 		m_navDrawerItems.get(2).setCount(String.valueOf(Storage.getNbFiles()));
 		m_adapter.notifyDataSetChanged();
 	}
 
 	@Override
-	public void notifyFragmentChange(FragmentType type) {
+	public void onFragmentChange(FragmentType type) {
 		displayView(type);
 	}
 
 	@Override
-	public void notifyLevelChange(FragmentType type, Level level) {
+	public void onLevelChange(FragmentType type, Level level) {
 		m_level = level;
 		displayView(type);
 	}

@@ -1,13 +1,14 @@
-package fr.upem.deadhal.view;
+package fr.upem.deadhal.view.listeners;
 
+import fr.upem.deadhal.view.NavigationView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class ConsultGestureListener extends GestureDetector.SimpleOnGestureListener {
 
-	private ConsultView m_view;
+	private NavigationView m_view;
 
-	public ConsultGestureListener(ConsultView view) {
+	public ConsultGestureListener(NavigationView view) {
 		m_view = view;
 	}
 

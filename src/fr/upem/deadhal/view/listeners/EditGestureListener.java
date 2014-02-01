@@ -1,9 +1,10 @@
-package fr.upem.deadhal.view;
+package fr.upem.deadhal.view.listeners;
 
 import android.graphics.Matrix;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
+import fr.upem.deadhal.view.CustomView;
 
 public class EditGestureListener extends GestureDetector.SimpleOnGestureListener {
 

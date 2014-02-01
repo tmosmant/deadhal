@@ -18,13 +18,13 @@ import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
-import fr.upem.deadhal.view.EditView;
-import fr.upem.deadhal.view.EditGestureListener;
+import fr.upem.deadhal.view.EditionView;
+import fr.upem.deadhal.view.listeners.EditGestureListener;
 
-public class EditFragment extends Fragment {
+public class EditionFragment extends Fragment {
 
 	private Level m_level = null;
-	private EditView m_editView = null;
+	private EditionView m_editionView = null;
 	private SharedPreferences m_prefs = null;
 
 	@Override
@@ -36,10 +36,10 @@ public class EditFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_edit, container,
+		View rootView = inflater.inflate(R.layout.fragment_edition, container,
 				false);
 
-		getActivity().setTitle(R.string.edit);
+		getActivity().setTitle(R.string.edition);
 
 		RelativeLayout relativeLayout = (RelativeLayout) rootView
 				.findViewById(R.id.edit_layout);
@@ -52,16 +52,16 @@ public class EditFragment extends Fragment {
 
 		LevelDrawable levelDrawable = new LevelDrawable(m_level);
 
-		m_editView = new EditView(rootView.getContext(), levelDrawable);
+		m_editionView = new EditionView(rootView.getContext(), levelDrawable);
 
 		GestureDetector gestureDetector = new GestureDetector(
-				rootView.getContext(), new EditGestureListener(m_editView,
+				rootView.getContext(), new EditGestureListener(m_editionView,
 						levelDrawable));
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
-		m_editView.build(gestureDetector, savedInstanceState, m_prefs);
+		m_editionView.build(gestureDetector, savedInstanceState, m_prefs);
 
-		relativeLayout.addView(m_editView);
+		relativeLayout.addView(m_editionView);
 
 		return rootView;
 	}
@@ -85,13 +85,13 @@ public class EditFragment extends Fragment {
 
 	@Override
 	public void onPause() {
-		m_editView.saveMatrix(m_prefs);
+		m_editionView.saveMatrix(m_prefs);
 		super.onPause();
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		m_editView.saveMatrix(outState);
+		m_editionView.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}
 

@@ -8,21 +8,21 @@ import android.view.View;
 import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
-public class ConsultView extends CustomView {
+public class NavigationView extends CustomView {
 
-	public ConsultView(Context context) {
+	public NavigationView(Context context) {
 		super(context);
 	}
 
-	public ConsultView(Context context, AttributeSet attrs) {
+	public NavigationView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
-	public ConsultView(Context context, AttributeSet attrs, int defStyle) {
+	public NavigationView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
 
-	public ConsultView(Context context, LevelDrawable drawable) {
+	public NavigationView(Context context, LevelDrawable drawable) {
 		super(context, drawable);
 	}
 

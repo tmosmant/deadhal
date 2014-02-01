@@ -69,7 +69,7 @@ public abstract class CustomView extends View {
 			restoreMatrix(preferences);
 		}
 
-		if (this instanceof EditView) {
+		if (this instanceof EditionView) {
 			addSelectionRoomListener();
 		}
 

@@ -44,7 +44,7 @@ public class DrawerMainListAdapter extends BaseAdapter {
 		if (convertView == null) {
 			LayoutInflater mInflater = (LayoutInflater) m_context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			convertView = mInflater.inflate(R.layout.list_adapter_edition_drawer, null);
+			convertView = mInflater.inflate(R.layout.list_adapter_main_drawer, null);
 		}
 
 		ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);

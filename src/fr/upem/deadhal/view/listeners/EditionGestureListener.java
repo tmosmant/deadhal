@@ -6,12 +6,12 @@ import android.view.MotionEvent;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 import fr.upem.deadhal.view.CustomView;
 
-public class EditGestureListener extends GestureDetector.SimpleOnGestureListener {
+public class EditionGestureListener extends GestureDetector.SimpleOnGestureListener {
 
 	private CustomView m_view;
 	private LevelDrawable m_levelDrawable;
 
-	public EditGestureListener(CustomView view, LevelDrawable levelDrawable) {
+	public EditionGestureListener(CustomView view, LevelDrawable levelDrawable) {
 		m_view = view;
 		m_levelDrawable = levelDrawable;
 	}

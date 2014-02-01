@@ -1,25 +1,28 @@
 package fr.upem.deadhal.fragments;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fr.upem.deadhal.R;
+import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.drawers.adapters.DrawerEditionListAdapter;
+import fr.upem.deadhal.drawers.models.DrawerEditionItem;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 import fr.upem.deadhal.view.EditionView;
-import fr.upem.deadhal.view.listeners.EditGestureListener;
+import fr.upem.deadhal.view.listeners.EditionGestureListener;
 
 public class EditionFragment extends Fragment {
 
@@ -55,32 +58,49 @@ public class EditionFragment extends Fragment {
 		m_editionView = new EditionView(rootView.getContext(), levelDrawable);
 
 		GestureDetector gestureDetector = new GestureDetector(
-				rootView.getContext(), new EditGestureListener(m_editionView,
-						levelDrawable));
+				rootView.getContext(), new EditionGestureListener(
+						m_editionView, levelDrawable));
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
 		m_editionView.build(gestureDetector, savedInstanceState, m_prefs);
 
 		relativeLayout.addView(m_editionView);
 
+		buildEditionDrawer(rootView);
+
 		return rootView;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_new:
-			newRoom();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+	private void buildEditionDrawer(View rootView) {
+		// DrawerLayout drawerLayout = (DrawerLayout) rootView
+		// .findViewById(R.id.drawer_edit_layout);
+
+		ListView drawerList = (ListView) rootView
+				.findViewById(R.id.list_edit_slidermenu);
+		ArrayList<DrawerEditionItem> drawerItems = new ArrayList<DrawerEditionItem>();
+		drawerItems.add(new DrawerEditionItem(getString(R.string.add_room),
+				true));
+		for (Room room : m_level.getRooms().values()) {
+			drawerItems.add(new DrawerEditionItem(room));
 		}
+		drawerItems.add(new DrawerEditionItem(getString(R.string.add_corridor),
+				true));
+		for (Corridor corridor : m_level.getCorridors().values()) {
+			String title = corridorTitle(corridor);
+			drawerItems.add(new DrawerEditionItem(corridor, title));
+		}
+		DrawerEditionListAdapter adapter = new DrawerEditionListAdapter(
+				getActivity(), drawerItems);
+		drawerList.setAdapter(adapter);
 	}
 
-	private void newRoom() {
-		System.out.println("newroom");
-		m_level.addRoom(new Room(UUID.randomUUID(), "new room", new RectF(0, 0,
-				120, 120)));
+	private String corridorTitle(Corridor corridor) {
+		UUID src = corridor.getSrc();
+		UUID dst = corridor.getDst();
+		String strSrc = m_level.getRooms().get(src).getTitle();
+		String strDst = m_level.getRooms().get(dst).getTitle();
+		String op = (corridor.isDirected()) ? " <-> " : " -> ";
+		return strSrc + op + strDst;
 	}
 
 	@Override

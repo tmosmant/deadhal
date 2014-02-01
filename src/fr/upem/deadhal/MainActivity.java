@@ -13,23 +13,21 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.PopupMenu;
-import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.Toast;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.drawers.adapters.DrawerMainListAdapter;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.drawers.models.DrawerMainItem;
-import fr.upem.deadhal.fragments.NavigationFragment;
 import fr.upem.deadhal.fragments.EditionFragment;
 import fr.upem.deadhal.fragments.FragmentType;
+import fr.upem.deadhal.fragments.NavigationFragment;
 import fr.upem.deadhal.fragments.OpenFragment;
 import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.utils.Storage;
@@ -47,12 +45,9 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	private Fragment m_openFragment = new OpenFragment();
 	private Fragment m_saveFragment = new SaveFragment();
 
-	// slide menu items
-	private String[] m_navMenuTitles;
-	private TypedArray m_navMenuIcons;
-
 	private ArrayList<DrawerMainItem> m_navDrawerItems;
 	private DrawerMainListAdapter m_adapter;
+
 	private int m_menu = R.menu.edition;
 
 	@Override
@@ -64,12 +59,11 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	}
 
 	private void buildDrawer(Bundle savedInstanceState) {
-		// load slide menu items
-		m_navMenuTitles = getResources().getStringArray(
+		String[] navMenuTitles = getResources().getStringArray(
 				R.array.nav_drawer_items);
 
 		// nav drawer icons from resources
-		m_navMenuIcons = getResources().obtainTypedArray(
+		TypedArray navMenuIcons = getResources().obtainTypedArray(
 				R.array.nav_drawer_icons);
 
 		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -79,24 +73,24 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 		// adding nav drawer items to array
 		// Navigation
-		m_navDrawerItems.add(new DrawerMainItem(m_navMenuTitles[0],
-				m_navMenuIcons.getResourceId(0, -1)));
+		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[0], navMenuIcons
+				.getResourceId(0, -1)));
 
 		// Edition
-		m_navDrawerItems.add(new DrawerMainItem(m_navMenuTitles[1],
-				m_navMenuIcons.getResourceId(1, -1)));
+		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[1], navMenuIcons
+				.getResourceId(1, -1)));
 
 		// Open, Will add a counter here
-		m_navDrawerItems.add(new DrawerMainItem(m_navMenuTitles[2],
-				m_navMenuIcons.getResourceId(2, -1), true, String
-						.valueOf(Storage.getNbFiles())));
+		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[2], navMenuIcons
+				.getResourceId(2, -1), true, String.valueOf(Storage
+				.getNbFiles())));
 
 		// Save
-		m_navDrawerItems.add(new DrawerMainItem(m_navMenuTitles[3],
-				m_navMenuIcons.getResourceId(3, -1)));
+		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[3], navMenuIcons
+				.getResourceId(3, -1)));
 
 		// Recycle the typed array
-		m_navMenuIcons.recycle();
+		navMenuIcons.recycle();
 
 		m_drawerList.setOnItemClickListener(new SlideMenuClickListener());
 
@@ -124,7 +118,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		m_drawerLayout.setDrawerListener(m_drawerToggle);
 
 		if (savedInstanceState == null) {
-			// on first time display view for first nav item
+			// on first time display view for edition item
 			displayView(FragmentType.EDITION);
 		}
 	}
@@ -173,8 +167,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			menu.findItem(R.id.action_edition).setVisible(!drawerOpen);
 			break;
 		case R.menu.edition:
-			menu.findItem(R.id.action_new).setVisible(!drawerOpen);
-			menu.findItem(R.id.action_remove).setVisible(!drawerOpen);
+			menu.findItem(R.id.action_list_objects).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_undo).setVisible(!drawerOpen);
 			break;
 		case R.menu.open:
@@ -198,38 +191,20 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		FragmentManager fragmentManager = getFragmentManager();
 		Fragment fragment = null;
 
-		boolean justClose = false;
-
 		switch (fragmentType) {
 		case NAVIGATION:
-			if (m_navigationFragment.equals(fragment)) {
-				justClose = true;
-				break;
-			}
 			fragment = m_navigationFragment;
 			m_menu = R.menu.navigation;
 			break;
 		case EDITION:
-			if (m_editionFragment.equals(fragment)) {
-				justClose = true;
-				break;
-			}
 			fragment = m_editionFragment;
 			m_menu = R.menu.edition;
 			break;
 		case OPEN:
-			if (m_openFragment.equals(fragment)) {
-				justClose = true;
-				break;
-			}
 			fragment = m_openFragment;
 			m_menu = R.menu.open;
 			break;
 		case SAVE:
-			if (m_saveFragment.equals(fragment)) {
-				justClose = true;
-				break;
-			}
 			fragment = m_saveFragment;
 			m_menu = R.menu.save;
 			break;
@@ -237,24 +212,20 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			break;
 		}
 		if (fragment != null) {
-			if (justClose) {
-				m_drawerLayout.closeDrawer(m_drawerList);
-			} else {
-				if (!fragment.isAdded()) {
-					Bundle bundle = new Bundle();
-					bundle.putParcelable("level", m_level);
-					fragment.setArguments(bundle);
+			if (!fragment.isAdded()) {
+				Bundle bundle = new Bundle();
+				bundle.putParcelable("level", m_level);
+				fragment.setArguments(bundle);
 
-					fragmentManager.beginTransaction()
-							.replace(R.id.frame_container, fragment).commit();
+				fragmentManager.beginTransaction()
+						.replace(R.id.frame_container, fragment).commit();
 
-					// update selected item and title, then close the drawer
-					m_drawerList.setItemChecked(fragmentType.ordinal(), true);
-					m_drawerList.setSelection(fragmentType.ordinal());
-					// setTitle(navMenuTitles[position]);
-				}
-				m_drawerLayout.closeDrawer(m_drawerList);
+				// update selected item and title, then close the drawer
+				m_drawerList.setItemChecked(fragmentType.ordinal(), true);
+				m_drawerList.setSelection(fragmentType.ordinal());
+				// setTitle(navMenuTitles[position]);
 			}
+			m_drawerLayout.closeDrawer(m_drawerList);
 		} else {
 			// error in creating fragment
 			Log.e("MainActivity", "Error in creating fragment");
@@ -278,26 +249,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		super.onConfigurationChanged(newConfig);
 		// Pass any configuration change to the drawer toggle
 		m_drawerToggle.onConfigurationChanged(newConfig);
-	}
-
-	public void showAddPopup(MenuItem v) {
-		View menuItemView = findViewById(R.id.action_new);
-		PopupMenu popup = new PopupMenu(this, menuItemView);
-
-		MenuInflater inflater = popup.getMenuInflater();
-		inflater.inflate(R.menu.add, popup.getMenu());
-		OnMenuItemClickListener listener = new OnMenuItemClickListener() {
-
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				toastNotYetImplemented(item);
-				return false;
-			}
-
-		};
-		popup.setOnMenuItemClickListener(listener);
-
-		popup.show();
 	}
 
 	public void toastNotYetImplemented(MenuItem v) {
@@ -349,5 +300,15 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	public void onLevelChange(FragmentType type, Level level) {
 		m_level = level;
 		displayView(type);
+	}
+
+	public void toggleDrawerEdition(MenuItem v) {
+		DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_edit_layout);
+		boolean drawerOpen = drawerLayout.isDrawerOpen(Gravity.END);
+		if (drawerOpen) {
+			drawerLayout.closeDrawer(Gravity.END);
+		} else {
+			drawerLayout.openDrawer(Gravity.END);
+		}
 	}
 }

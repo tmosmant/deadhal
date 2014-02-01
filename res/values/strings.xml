@@ -23,6 +23,9 @@
     <string name="hint">File name</string>
     <string name="save_warning">Overwrite ?</string>
     <string name="remove_warning">Are you sure ?</string>
+    <string name="add_room">Add a room...</string>
+    <string name="add_corridor">Add a corridor...</string>
+    <string name="action_list_objects">Open the objects list</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
@@ -42,11 +45,8 @@
     </array>
 
     <string name="desc_list_item_icon">Item Icon</string>
-
     <string name="deleted_file">File deleted</string>
-
     <string name="deleted_file_error">Cannot delete file</string>
-
     <string name="enter_filename">Please enter a name for this file</string>
 
 </resources>

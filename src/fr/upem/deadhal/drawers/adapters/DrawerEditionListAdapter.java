@@ -1,8 +1,6 @@
 package fr.upem.deadhal.drawers.adapters;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +17,6 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 
 	private Context m_context;
 	private ArrayList<DrawerEditionItem> m_navDrawerItems;
-	private Set<Integer> m_disabledPositions = new HashSet<Integer>();
 
 	public DrawerEditionListAdapter(Context context,
 			ArrayList<DrawerEditionItem> navDrawerItems) {
@@ -43,20 +40,12 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public boolean isEnabled(int position) {
-		if (m_disabledPositions.contains(position)) {
-			return false;
-		}
-		return super.isEnabled(position);
-	}
-
-	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			LayoutInflater mInflater = (LayoutInflater) m_context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			convertView = mInflater.inflate(R.layout.list_adapter_main_drawer,
-					null);
+			convertView = mInflater.inflate(
+					R.layout.list_adapter_edition_drawer, null);
 		}
 
 		TextView superTitle = (TextView) convertView
@@ -64,13 +53,14 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 		TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
 		ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
 
-		if (m_navDrawerItems.get(position).isSuperTitle()) {
-			superTitle.setText(m_navDrawerItems.get(position).getTitle());
+		DrawerEditionItem item = m_navDrawerItems.get(position);
+
+		if (item.isSuperTitle()) {
+			superTitle.setText(item.getTitle());
 			imgIcon.setVisibility(View.GONE);
-			m_disabledPositions.add(position);
 		} else {
-			txtTitle.setText(m_navDrawerItems.get(position).getTitle());
-			imgIcon.setImageResource(R.drawable.ic_action_remove);
+			txtTitle.setText(item.getTitle());
+			imgIcon.setImageResource(R.drawable.ic_action_remove_dark);
 		}
 
 		return convertView;

@@ -35,7 +35,7 @@
     <!-- Nav Drawer List Item Icons -->
     <!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">
-        <item>@drawable/ic_action_accept</item>
+        <item>@drawable/ic_action_directions_dark</item>
         <item>@drawable/ic_action_edit_dark</item>
         <item>@drawable/ic_action_collection_dark</item>
         <item>@drawable/ic_action_save_dark</item>

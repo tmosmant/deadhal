@@ -29,6 +29,7 @@ public class EditionFragment extends Fragment {
 	private Level m_level = null;
 	private EditionView m_editionView = null;
 	private SharedPreferences m_prefs = null;
+	private EditionGestureListener m_editionGestureListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,23 +58,22 @@ public class EditionFragment extends Fragment {
 
 		m_editionView = new EditionView(rootView.getContext(), levelDrawable);
 
-		EditionGestureListener editionGestureListener = new EditionGestureListener(
-				m_editionView, levelDrawable);
+		m_editionGestureListener = new EditionGestureListener(m_editionView,
+				levelDrawable);
 		GestureDetector gestureDetector = new GestureDetector(
-				rootView.getContext(), editionGestureListener);
+				rootView.getContext(), m_editionGestureListener);
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
 		m_editionView.build(gestureDetector, savedInstanceState, m_prefs);
 
 		relativeLayout.addView(m_editionView);
 
-		buildEditionDrawer(rootView, editionGestureListener);
+		buildEditionDrawer(rootView);
 
 		return rootView;
 	}
 
-	private void buildEditionDrawer(View rootView,
-			EditionGestureListener editionGestureListener) {
+	public void buildEditionDrawer(View rootView) {
 		// DrawerLayout drawerLayout = (DrawerLayout) rootView
 		// .findViewById(R.id.drawer_edit_layout);
 
@@ -92,7 +92,7 @@ public class EditionFragment extends Fragment {
 			drawerItems.add(new DrawerEditionItem(corridor, title));
 		}
 		DrawerEditionListAdapter adapter = new DrawerEditionListAdapter(
-				getActivity(), drawerItems, editionGestureListener);
+				getActivity(), this, drawerItems, m_editionGestureListener);
 		drawerList.setAdapter(adapter);
 	}
 

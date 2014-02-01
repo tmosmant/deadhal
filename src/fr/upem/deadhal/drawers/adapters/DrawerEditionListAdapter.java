@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.drawers.models.DrawerEditionItem;
+import fr.upem.deadhal.fragments.EditionFragment;
 import fr.upem.deadhal.view.listeners.EditionGestureListener;
 
 public class DrawerEditionListAdapter extends BaseAdapter {
@@ -21,11 +22,14 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 	private Context m_context;
 	private ArrayList<DrawerEditionItem> m_navDrawerItems;
 	private EditionGestureListener m_editionGestureListener;
+	private EditionFragment m_editionFragment;
 
 	public DrawerEditionListAdapter(Context context,
+			EditionFragment editionFragment,
 			ArrayList<DrawerEditionItem> navDrawerItems,
 			EditionGestureListener editionGestureListener) {
 		m_context = context;
+		m_editionFragment = editionFragment;
 		m_navDrawerItems = navDrawerItems;
 		m_editionGestureListener = editionGestureListener;
 	}
@@ -72,6 +76,7 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 				public void onClick(View v) {
 					Log.v("deadhal", "deleting " + item.getRoom().getTitle());
 					m_editionGestureListener.removeRoom(item.getRoom());
+					m_editionFragment.buildEditionDrawer(m_editionFragment.getView());
 				}
 			});
 		}

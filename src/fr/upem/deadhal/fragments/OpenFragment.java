@@ -229,7 +229,7 @@ public class OpenFragment extends Fragment {
 	private void rename(String fileName) {
 		Storage.renameFile(m_fileName, fileName);
 		m_arrayAdapter.remove(m_fileName);
-		m_arrayAdapter.add(fileName);
+		m_arrayAdapter.add(fileName + ".xml");
 		m_listView.clearChoices();
 		
 		m_fileName = null;

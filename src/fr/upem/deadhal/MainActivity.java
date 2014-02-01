@@ -274,14 +274,14 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 	private Level buildSampleLevel() {
 		Level level = new Level("First instruction.");
-		level.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0,
-				120, 120)));
+		level.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0, 120,
+				120)));
 		level.addRoom(new Room(UUID.randomUUID(), "3B113", new RectF(150, 0,
 				270, 120)));
 		level.addRoom(new Room(UUID.randomUUID(), "3B116", new RectF(0, 150,
 				120, 270)));
-		level.addRoom(new Room(UUID.randomUUID(), "3B112", new RectF(150,
-				150, 270, 270)));
+		level.addRoom(new Room(UUID.randomUUID(), "3B112", new RectF(150, 150,
+				270, 270)));
 		return level;
 	}
 
@@ -311,4 +311,5 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			drawerLayout.openDrawer(Gravity.END);
 		}
 	}
+
 }

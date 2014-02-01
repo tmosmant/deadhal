@@ -61,6 +61,9 @@ public class EditionFragment extends Fragment {
 				.findViewById(R.id.edit_layout);
 
 		m_level = getArguments().getParcelable("level");
+		if (savedInstanceState != null) {
+			m_level = savedInstanceState.getParcelable("level");
+		}
 
 		TextView levelTitleTextView = (TextView) rootView
 				.findViewById(R.id.levelTitleTextView);
@@ -76,6 +79,7 @@ public class EditionFragment extends Fragment {
 				rootView.getContext(), m_editionGestureListener);
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
+		
 		m_editionView.build(gestureDetector, savedInstanceState, m_prefs);
 
 		relativeLayout.addView(m_editionView);
@@ -214,6 +218,7 @@ public class EditionFragment extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		outState.putParcelable("level", m_level);
 		m_editionView.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}

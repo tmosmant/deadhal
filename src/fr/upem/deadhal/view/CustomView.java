@@ -10,9 +10,6 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
-import fr.upem.deadhal.components.Room;
-import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
 public abstract class CustomView extends View {
@@ -69,33 +66,11 @@ public abstract class CustomView extends View {
 			restoreMatrix(preferences);
 		}
 
-		if (this instanceof EditionView) {
-			addSelectionRoomListener();
-		}
-
 		if (android.os.Build.VERSION.SDK_INT >= 11) {
 			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
 
 		invalidate();
-	}
-
-	private void addSelectionRoomListener() {
-		m_levelDrawable.addSelectionRoomListener(new SelectionRoomListener() {
-
-			@Override
-			public void onUnselectRoom(Room room) {
-				Toast.makeText(getContext(), room.getTitle() + " unselected.",
-						Toast.LENGTH_SHORT).show();
-			}
-
-			@Override
-			public void onSelectRoom(Room room) {
-				Toast.makeText(getContext(), room.getTitle() + " selected.",
-						Toast.LENGTH_SHORT).show();
-			}
-
-		});
 	}
 
 	public void saveMatrix(Bundle savedInstanceState) {

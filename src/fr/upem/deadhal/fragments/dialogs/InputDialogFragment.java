@@ -16,13 +16,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class RenameDialogFragment extends DialogFragment {
+public class InputDialogFragment extends DialogFragment {
 
-	private String m_fileName = null;
+	private String m_inputText = null;
 	private EditText m_editText = null;
 
-	public static RenameDialogFragment newInstance(int title) {
-		RenameDialogFragment renameDialogFragment = new RenameDialogFragment();
+	public static InputDialogFragment newInstance(int title) {
+		InputDialogFragment renameDialogFragment = new InputDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt("title", title);
 		renameDialogFragment.setArguments(bundle);
@@ -34,9 +34,9 @@ public class RenameDialogFragment extends DialogFragment {
 		super.onCreate(savedInstanceState);
 		m_editText = new EditText(getActivity());
 		if (savedInstanceState != null) {
-			m_fileName = savedInstanceState.getString("fileName");
-			m_editText.setText(m_fileName);
-			m_editText.setSelection(m_fileName.length());
+			m_inputText = savedInstanceState.getString("inputText");
+			m_editText.setText(m_inputText);
+			m_editText.setSelection(m_inputText.length());
 		}
 		m_editText.setSingleLine(true);
 		m_editText.setOnEditorActionListener(editorActionListener());
@@ -92,7 +92,7 @@ public class RenameDialogFragment extends DialogFragment {
 
 	private void passNewName(String name) {
 		Intent data = new Intent();
-		data.putExtra("fileName", name);
+		data.putExtra("inputText", name);
 
 		getTargetFragment().onActivityResult(getTargetRequestCode(),
 				Activity.RESULT_OK, data);
@@ -102,7 +102,7 @@ public class RenameDialogFragment extends DialogFragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (m_editText != null) {
-			outState.putString("fileName", m_editText.getText().toString());
+			outState.putString("inputText", m_editText.getText().toString());
 		}
 	}
 

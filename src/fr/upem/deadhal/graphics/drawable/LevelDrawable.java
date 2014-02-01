@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
@@ -39,7 +40,7 @@ public class LevelDrawable extends Drawable {
 	public void removeSelectionRoomListener(SelectionRoomListener listener) {
 		selectionRoomListeners.remove(listener);
 	}
-	
+
 	@Override
 	public void draw(Canvas canvas) {
 		for (Room room : m_level.getRooms().values()) {
@@ -170,7 +171,7 @@ public class LevelDrawable extends Drawable {
 		return m_selectedRoomId != null;
 	}
 
-	public boolean selectRoom(float x, float y) {
+	public boolean selectRoomFromCoordinates(float x, float y) {
 		Collection<Room> rooms = m_level.getRooms().values();
 		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
 		Collections.reverse(reverseRooms);
@@ -196,6 +197,34 @@ public class LevelDrawable extends Drawable {
 			}
 		}
 		return false;
+	}
+
+	public boolean selectRoom(Room room) {
+		if (room.getId() == m_selectedRoomId) {
+			Log.v("deadhal", "1");
+			for (SelectionRoomListener listener : selectionRoomListeners) {
+				listener.onUnselectRoom(m_level.getRooms()
+						.get(m_selectedRoomId));
+			}
+			m_selectedRoomId = null;
+			return false;
+		} else if (m_selectedRoomId != null) {
+			Log.v("deadhal", "2");
+
+			for (SelectionRoomListener listener : selectionRoomListeners) {
+				listener.onUnselectRoom(m_level.getRooms()
+						.get(m_selectedRoomId));
+				listener.onSelectRoom(m_level.getRooms().get(room.getId()));
+			}
+		} else {
+			for (SelectionRoomListener listener : selectionRoomListeners) {
+				listener.onSelectRoom(m_level.getRooms().get(room.getId()));
+			}
+			Log.v("deadhal", "+");
+
+		}
+		m_selectedRoomId = room.getId();
+		return true;
 	}
 
 	public void endProcess() {
@@ -312,13 +341,13 @@ public class LevelDrawable extends Drawable {
 					&& room.getRect().bottom + dy > room.getRect().top
 							+ MIN_MARGIN) {
 				room.getRect().bottom += dy;
-			}
-			else if (room.getRect().left + dx < room.getRect().right - MIN_MARGIN
+			} else if (room.getRect().left + dx < room.getRect().right
+					- MIN_MARGIN
 					&& room.getRect().bottom + dy <= room.getRect().top
-					+ MIN_MARGIN) {
+							+ MIN_MARGIN) {
 				room.getRect().left += dx;
-			}
-			else if (room.getRect().left + dx < room.getRect().right - MIN_MARGIN
+			} else if (room.getRect().left + dx < room.getRect().right
+					- MIN_MARGIN
 					&& room.getRect().bottom + dy > room.getRect().top
 							+ MIN_MARGIN) {
 				room.getRect().left += dx;
@@ -330,13 +359,13 @@ public class LevelDrawable extends Drawable {
 					&& room.getRect().bottom + dy > room.getRect().top
 							+ MIN_MARGIN) {
 				room.getRect().bottom += dy;
-			}
-			else if (room.getRect().right + dx > room.getRect().left + MIN_MARGIN
+			} else if (room.getRect().right + dx > room.getRect().left
+					+ MIN_MARGIN
 					&& room.getRect().bottom + dy <= room.getRect().top
-					+ MIN_MARGIN) {
+							+ MIN_MARGIN) {
 				room.getRect().right += dx;
-			}
-			else if (room.getRect().right + dx > room.getRect().left + MIN_MARGIN
+			} else if (room.getRect().right + dx > room.getRect().left
+					+ MIN_MARGIN
 					&& room.getRect().bottom + dy > room.getRect().top
 							+ MIN_MARGIN) {
 				room.getRect().right += dx;
@@ -369,4 +398,18 @@ public class LevelDrawable extends Drawable {
 	public void removeRoom(Room room) {
 		m_level.removeRoom(room);
 	}
+
+	public void testAddRoom() {
+		m_level.addRoom(new Room(UUID.randomUUID(), "test", new RectF(0, 0,
+				150, 150)));
+	}
+
+	public void addRoom(Room room) {
+		m_level.addRoom(room);
+	}
+
+	public Level getCurrentLevel() {
+		return m_level;
+	}
+	
 }

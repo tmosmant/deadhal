@@ -29,7 +29,7 @@ import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.fragments.dialogs.ConfirmDialogFragment;
-import fr.upem.deadhal.fragments.dialogs.RenameDialogFragment;
+import fr.upem.deadhal.fragments.dialogs.InputDialogFragment;
 import fr.upem.deadhal.tasks.OpenTask;
 import fr.upem.deadhal.utils.Storage;
 
@@ -192,7 +192,7 @@ public class OpenFragment extends Fragment {
 	private void showRenameDialog() {
 		int title = R.string.action_rename;
 
-		DialogFragment dialogFragment = RenameDialogFragment.newInstance(title);
+		DialogFragment dialogFragment = InputDialogFragment.newInstance(title);
 		dialogFragment.setTargetFragment(this, RENAME_DIALOG);
 		dialogFragment.show(getFragmentManager().beginTransaction(),
 				"renameDialog");
@@ -214,7 +214,7 @@ public class OpenFragment extends Fragment {
 		switch (requestCode) {
 		case RENAME_DIALOG:
 			if (resultCode == Activity.RESULT_OK) {
-				String fileName = data.getStringExtra("fileName");
+				String fileName = data.getStringExtra("inputText");
 				rename(fileName);
 			}
 			break;

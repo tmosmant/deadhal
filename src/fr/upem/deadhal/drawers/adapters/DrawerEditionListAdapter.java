@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -74,9 +73,8 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 			imgIcon.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Log.v("deadhal", "deleting " + item.getRoom().getTitle());
 					m_editionGestureListener.removeRoom(item.getRoom());
-					m_editionFragment.buildEditionDrawer(m_editionFragment.getView());
+					m_editionFragment.updateDrawer(m_editionFragment.getView());
 				}
 			});
 		}

@@ -32,7 +32,6 @@ public class EditionView extends CustomView {
 
 		boolean isRoomSelected = m_levelDrawable.isRoomSelected();
 
-		// Room selectedRoom = m_drawable.getSelectedRoom();
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
 		case MotionEvent.ACTION_DOWN:

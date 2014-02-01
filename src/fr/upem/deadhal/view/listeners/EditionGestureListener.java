@@ -3,6 +3,7 @@ package fr.upem.deadhal.view.listeners;
 import android.graphics.Matrix;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 import fr.upem.deadhal.view.CustomView;
 
@@ -43,6 +44,11 @@ public class EditionGestureListener extends GestureDetector.SimpleOnGestureListe
 		}
 
 		return true;
+	}
+	
+	public void removeRoom(Room room) {
+		m_levelDrawable.removeRoom(room);
+		m_view.invalidate();
 	}
 
 }

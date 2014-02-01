@@ -273,15 +273,21 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	}
 
 	private Level buildSampleLevel() {
-		Level level = new Level("Copernic, 3rd floor");
-		level.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0, 120,
-				120)));
-		level.addRoom(new Room(UUID.randomUUID(), "3B113", new RectF(150, 0,
-				150 + 120, 120)));
-		level.addRoom(new Room(UUID.randomUUID(), "3B116", new RectF(0, 150,
-				120, 150 + 120)));
-		level.addRoom(new Room(UUID.randomUUID(), "3B112", new RectF(150, 150,
-				150 + 120, 150 + 120)));
+		Level level = new Level("First instruction.");
+		level.addRoom(new Room(UUID.randomUUID(), "Welcome", new RectF(6, 11,
+				137, 76)));
+		level.addRoom(new Room(UUID.randomUUID(), "to", new RectF(165, 26, 218,
+				76)));
+		level.addRoom(new Room(UUID.randomUUID(), "DeadHal", new RectF(6, 97,
+				220, 198)));
+		level.addRoom(new Room(UUID.randomUUID(), "!!!", new RectF(75, 219,
+				154, 280)));
+		level.addRoom(new Room(UUID.randomUUID(), "Swipe left", new RectF(3,
+				295, 223, 367)));
+		level.addRoom(new Room(UUID.randomUUID(), "to", new RectF(9, 387, 61,
+				442)));
+		level.addRoom(new Room(UUID.randomUUID(), "begin...", new RectF(91, 381,
+				211, 454)));
 		return level;
 	}
 

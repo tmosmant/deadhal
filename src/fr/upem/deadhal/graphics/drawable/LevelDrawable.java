@@ -365,4 +365,8 @@ public class LevelDrawable extends Drawable {
 			break;
 		}
 	}
+
+	public void removeRoom(Room room) {
+		m_level.removeRoom(room);
+	}
 }

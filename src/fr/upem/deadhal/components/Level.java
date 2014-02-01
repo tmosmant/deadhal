@@ -9,53 +9,53 @@ import android.os.Parcelable;
 
 public class Level implements Parcelable {
 
-	private String title;
-	private Map<UUID, Room> rooms = new HashMap<UUID, Room>();
-	private Map<UUID, Corridor> corridors = new HashMap<UUID, Corridor>();
+	private String m_title;
+	private Map<UUID, Room> m_rooms = new HashMap<UUID, Room>();
+	private Map<UUID, Corridor> m_corridors = new HashMap<UUID, Corridor>();
 
 	public Level() {
 	}
 
 	public Level(String title) {
-		this.title = title;
+		this.m_title = title;
 	}
 
 	public Level(Parcel source) {
-		this.title = source.readString();
-		source.readMap(rooms, HashMap.class.getClass().getClassLoader());
-		source.readMap(corridors, HashMap.class.getClass().getClassLoader());
+		this.m_title = source.readString();
+		source.readMap(m_rooms, HashMap.class.getClass().getClassLoader());
+		source.readMap(m_corridors, HashMap.class.getClass().getClassLoader());
 	}
 
-	public boolean addRoom(Room room) {
-		// TODO improve this
-
-		rooms.put(room.getId(), room);
-
-		return true;
+	public void addRoom(Room room) {
+		m_rooms.put(room.getId(), room);
 	}
 
-	public boolean addCorridor(Corridor corridor) {
-		// TODO improve this
+	public void addCorridor(Corridor corridor) {
+		m_corridors.put(corridor.getId(), corridor);
+	}
 
-		corridors.put(corridor.getId(), corridor);
+	public void removeRoom(Room room) {
+		m_rooms.remove(room.getId());
+	}
 
-		return true;
+	public void removeCorridor(Corridor corridor) {
+		m_corridors.remove(corridor.getId());
 	}
 
 	public String getTitle() {
-		return title;
+		return m_title;
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		this.m_title = title;
 	}
 
 	public Map<UUID, Room> getRooms() {
-		return rooms;
+		return m_rooms;
 	}
 
 	public Map<UUID, Corridor> getCorridors() {
-		return corridors;
+		return m_corridors;
 	}
 
 	@Override
@@ -65,9 +65,9 @@ public class Level implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(title);
-		dest.writeMap(rooms);
-		dest.writeMap(corridors);
+		dest.writeString(m_title);
+		dest.writeMap(m_rooms);
+		dest.writeMap(m_corridors);
 	}
 
 	public static final Parcelable.Creator<Level> CREATOR = new Parcelable.Creator<Level>() {

@@ -4,24 +4,30 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.drawers.models.DrawerEditionItem;
+import fr.upem.deadhal.view.listeners.EditionGestureListener;
 
 public class DrawerEditionListAdapter extends BaseAdapter {
 
 	private Context m_context;
 	private ArrayList<DrawerEditionItem> m_navDrawerItems;
+	private EditionGestureListener m_editionGestureListener;
 
 	public DrawerEditionListAdapter(Context context,
-			ArrayList<DrawerEditionItem> navDrawerItems) {
-		this.m_context = context;
-		this.m_navDrawerItems = navDrawerItems;
+			ArrayList<DrawerEditionItem> navDrawerItems,
+			EditionGestureListener editionGestureListener) {
+		m_context = context;
+		m_navDrawerItems = navDrawerItems;
+		m_editionGestureListener = editionGestureListener;
 	}
 
 	@Override
@@ -53,7 +59,7 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 		TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
 		ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
 
-		DrawerEditionItem item = m_navDrawerItems.get(position);
+		final DrawerEditionItem item = m_navDrawerItems.get(position);
 
 		if (item.isSuperTitle()) {
 			superTitle.setText(item.getTitle());
@@ -61,6 +67,13 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 		} else {
 			txtTitle.setText(item.getTitle());
 			imgIcon.setImageResource(R.drawable.ic_action_remove_dark);
+			imgIcon.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Log.v("deadhal", "deleting " + item.getRoom().getTitle());
+					m_editionGestureListener.removeRoom(item.getRoom());
+				}
+			});
 		}
 
 		return convertView;

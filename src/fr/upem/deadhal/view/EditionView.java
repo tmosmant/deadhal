@@ -7,9 +7,11 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import fr.upem.deadhal.graphics.Paints;
-import fr.upem.deadhal.graphics.drawable.LevelDrawable;
+import fr.upem.deadhal.graphics.drawable.EditionLevelDrawable;
 
 public class EditionView extends AbstractView {
+
+	protected EditionLevelDrawable m_levelDrawable;
 
 	public EditionView(Context context) {
 		super(context);
@@ -23,8 +25,9 @@ public class EditionView extends AbstractView {
 		super(context, attrs, defStyle);
 	}
 
-	public EditionView(Context context, LevelDrawable drawable) {
+	public EditionView(Context context, EditionLevelDrawable drawable) {
 		super(context, drawable);
+		this.m_levelDrawable = drawable;
 	}
 
 	@Override

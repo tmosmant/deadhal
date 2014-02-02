@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import fr.upem.deadhal.graphics.Paints;
-import fr.upem.deadhal.graphics.drawable.LevelDrawable;
+import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
 
 public class NavigationView extends AbstractView {
 
@@ -22,7 +22,7 @@ public class NavigationView extends AbstractView {
 		super(context, attrs, defStyle);
 	}
 
-	public NavigationView(Context context, LevelDrawable drawable) {
+	public NavigationView(Context context, NavigationLevelDrawable drawable) {
 		super(context, drawable);
 	}
 
@@ -58,7 +58,6 @@ public class NavigationView extends AbstractView {
 		case MotionEvent.ACTION_POINTER_UP:
 			m_mode = TouchEvent.NONE;
 			m_lastEvent = null;
-			m_levelDrawable.endProcess();
 			break;
 
 		case MotionEvent.ACTION_MOVE:
@@ -68,23 +67,7 @@ public class NavigationView extends AbstractView {
 				float dy = event.getY() - m_start.y;
 				m_matrix.postTranslate(dx, dy);
 
-			} else if (m_mode == TouchEvent.RESIZE_ROOM) {
-				final float x = event.getX();
-				final float y = event.getY();
-
-				float[] pts = { x, y };
-				m_savedInverseMatrix.mapPoints(pts);
-
-				// Calculate the distance moved
-				final float dx = pts[0] - m_start.x;
-				final float dy = pts[1] - m_start.y;
-
-				m_levelDrawable.resizeSelectedRoom(dx, dy);
-
-				m_start.set(pts[0], pts[1]);
-			}
-
-			else if (m_mode == TouchEvent.ZOOM) {
+			} else if (m_mode == TouchEvent.ZOOM) {
 				float newDist = spacing(event);
 
 				if (newDist > 10f) {

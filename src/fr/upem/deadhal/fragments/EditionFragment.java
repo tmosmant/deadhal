@@ -33,7 +33,7 @@ import fr.upem.deadhal.drawers.adapters.DrawerEditionListAdapter;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.drawers.models.DrawerEditionItem;
 import fr.upem.deadhal.fragments.dialogs.InputDialogFragment;
-import fr.upem.deadhal.graphics.drawable.LevelDrawable;
+import fr.upem.deadhal.graphics.drawable.EditionLevelDrawable;
 import fr.upem.deadhal.view.EditionView;
 import fr.upem.deadhal.view.listeners.EditionGestureListener;
 
@@ -89,7 +89,7 @@ public class EditionFragment extends Fragment {
 				.findViewById(R.id.levelTitleTextView);
 		levelTitleTextView.setText(m_level.getTitle());
 
-		LevelDrawable levelDrawable = new LevelDrawable(m_level);
+		EditionLevelDrawable levelDrawable = new EditionLevelDrawable(m_level);
 
 		m_editionView = new EditionView(rootView.getContext(), levelDrawable);
 

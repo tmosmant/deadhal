@@ -22,7 +22,7 @@ import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.fragments.dialogs.NavigationDialogFragment;
-import fr.upem.deadhal.graphics.drawable.LevelDrawable;
+import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
 import fr.upem.deadhal.view.NavigationView;
 import fr.upem.deadhal.view.listeners.NavigationGestureListener;
 
@@ -77,7 +77,7 @@ public class NavigationFragment extends Fragment {
 				.findViewById(R.id.levelTitleTextView);
 		levelTitleTextView.setText(m_level.getTitle());
 
-		LevelDrawable levelDrawable = new LevelDrawable(m_level);
+		NavigationLevelDrawable levelDrawable = new NavigationLevelDrawable(m_level);
 
 		m_navigationView = new NavigationView(rootView.getContext(),
 				levelDrawable);
@@ -124,9 +124,7 @@ public class NavigationFragment extends Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 		case NAV_DIALOG:
-			if (resultCode == 0) {
-				m_navigationGestureListener.unselectRoom(m_selected);
-			} else if (resultCode == 1) {
+			if (resultCode == 1) {
 				m_start = m_selected;
 				m_navigationGestureListener.setStart(m_start);
 			} else if (resultCode == 2) {
@@ -141,7 +139,6 @@ public class NavigationFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_unlock:
-			Log.e("action", "unlock");
 			m_callback.onFragmentChange(FragmentType.EDITION);
 			return true;
 		case R.id.action_start_navigation:

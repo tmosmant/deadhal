@@ -5,16 +5,16 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
-import fr.upem.deadhal.graphics.drawable.LevelDrawable;
+import fr.upem.deadhal.graphics.drawable.EditionLevelDrawable;
 import fr.upem.deadhal.view.EditionView;
 
 public class EditionGestureListener extends
 		GestureDetector.SimpleOnGestureListener {
 
 	private EditionView m_view;
-	private LevelDrawable m_levelDrawable;
+	private EditionLevelDrawable m_levelDrawable;
 
-	public EditionGestureListener(EditionView view, LevelDrawable levelDrawable) {
+	public EditionGestureListener(EditionView view, EditionLevelDrawable levelDrawable) {
 		m_view = view;
 		m_levelDrawable = levelDrawable;
 	}

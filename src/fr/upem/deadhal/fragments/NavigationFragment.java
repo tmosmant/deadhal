@@ -84,7 +84,7 @@ public class NavigationFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_edition:
+		case R.id.action_unlock:
 			m_callback.onFragmentChange(FragmentType.EDITION);
 			return true;
 		default:

@@ -77,18 +77,14 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[0], navMenuIcons
 				.getResourceId(0, -1)));
 
-		// Edition
-		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[1], navMenuIcons
-				.getResourceId(1, -1)));
-
 		// Open, Will add a counter here
-		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[2], navMenuIcons
-				.getResourceId(2, -1), true, String.valueOf(Storage
+		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[1], navMenuIcons
+				.getResourceId(1, -1), true, String.valueOf(Storage
 				.getNbFiles())));
 
 		// Save
-		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[3], navMenuIcons
-				.getResourceId(3, -1)));
+		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[2], navMenuIcons
+				.getResourceId(2, -1)));
 
 		// Recycle the typed array
 		navMenuIcons.recycle();
@@ -120,7 +116,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 		if (savedInstanceState == null) {
 			// on first time display view for edition item
-			displayView(FragmentType.EDITION);
+			displayView(FragmentType.NAVIGATION);
 		}
 	}
 
@@ -165,10 +161,12 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		boolean drawerOpen = m_drawerLayout.isDrawerOpen(m_drawerList);
 		switch (m_menu) {
 		case R.menu.navigation:
-			menu.findItem(R.id.action_edition).setVisible(!drawerOpen);
+			menu.findItem(R.id.action_list_objects).setVisible(!drawerOpen);
+			menu.findItem(R.id.action_unlock).setVisible(!drawerOpen);
 			break;
 		case R.menu.edition:
 			menu.findItem(R.id.action_list_objects).setVisible(!drawerOpen);
+			menu.findItem(R.id.action_lock).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_undo).setVisible(!drawerOpen);
 			break;
 		case R.menu.open:
@@ -274,7 +272,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	}
 
 	private Level buildSampleLevel() {
-		Level level = new Level("First instruction.");
+		Level level = new Level("Copernic, 3rd floor.");
 		level.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0, 120,
 				120)));
 		level.addRoom(new Room(UUID.randomUUID(), "3B113", new RectF(150, 0,

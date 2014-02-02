@@ -15,6 +15,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
@@ -38,6 +40,7 @@ import fr.upem.deadhal.view.listeners.EditionGestureListener;
 public class EditionFragment extends Fragment {
 
 	private static final int ADD_NEW_ROOM = 0;
+	private static final int ADD_NEW_CORRIDOR = 1;
 
 	private DrawerMainListener m_callback;
 
@@ -56,8 +59,7 @@ public class EditionFragment extends Fragment {
 		try {
 			m_callback = (DrawerMainListener) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnDataPass");
+			throw new ClassCastException();
 		}
 	}
 
@@ -169,6 +171,8 @@ public class EditionFragment extends Fragment {
 
 				switch (item.getType()) {
 				case ADD_CORRIDOR:
+					Toast.makeText(getActivity(), "test", Toast.LENGTH_SHORT)
+							.show();
 					break;
 				case ADD_ROOM:
 					int title = R.string.action_add;
@@ -229,6 +233,16 @@ public class EditionFragment extends Fragment {
 				m_editionGestureListener.selectRoom(room);
 			}
 			break;
+		case ADD_NEW_CORRIDOR:
+			if (resultCode == Activity.RESULT_OK) {
+				String title = data.getStringExtra("inputText");
+				Room room = new Room(UUID.randomUUID(), title, new RectF(0, 0,
+						150, 150));
+				m_editionGestureListener.addRoom(room);
+				updateDrawer(getView());
+				m_editionGestureListener.selectRoom(room);
+			}
+			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -242,6 +256,17 @@ public class EditionFragment extends Fragment {
 		return strSrc + op + strDst;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_lock:
+			m_callback.onFragmentChange(FragmentType.NAVIGATION);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
 	@Override
 	public void onPause() {
 		m_editionView.saveMatrix(m_prefs);

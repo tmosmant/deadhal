@@ -7,6 +7,11 @@
         android:showAsAction="ifRoom"
         android:title="@string/action_undo"/>
     <item
+        android:id="@+id/action_lock"
+        android:icon="@drawable/ic_action_not_secure"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_edition"/>
+    <item
         android:id="@+id/action_list_objects"
         android:icon="@drawable/ic_action_view_as_list"
         android:onClick="toggleDrawerEdition"

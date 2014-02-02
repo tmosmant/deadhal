@@ -8,7 +8,7 @@ import android.view.View;
 import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
-public class NavigationView extends CustomView {
+public class NavigationView extends AbstractView {
 
 	public NavigationView(Context context) {
 		super(context);

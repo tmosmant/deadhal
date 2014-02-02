@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
-public abstract class CustomView extends View {
+public abstract class AbstractView extends View {
 
 	// private Drawable m_drawable;
 	protected LevelDrawable m_levelDrawable;
@@ -36,19 +36,19 @@ public abstract class CustomView extends View {
 
 	protected boolean m_antiAlias = true;
 
-	public CustomView(Context context) {
+	public AbstractView(Context context) {
 		super(context);
 	}
 
-	public CustomView(Context context, AttributeSet attrs) {
+	public AbstractView(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
 
-	public CustomView(Context context, AttributeSet attrs, int defStyle) {
+	public AbstractView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
 
-	public CustomView(Context context, LevelDrawable drawable) {
+	public AbstractView(Context context, LevelDrawable drawable) {
 		super(context);
 		m_levelDrawable = drawable;
 	}

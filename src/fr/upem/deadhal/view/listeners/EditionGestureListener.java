@@ -7,15 +7,15 @@ import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
-import fr.upem.deadhal.view.CustomView;
+import fr.upem.deadhal.view.AbstractView;
 
 public class EditionGestureListener extends
 		GestureDetector.SimpleOnGestureListener {
 
-	private CustomView m_view;
+	private AbstractView m_view;
 	private LevelDrawable m_levelDrawable;
 
-	public EditionGestureListener(CustomView view, LevelDrawable levelDrawable) {
+	public EditionGestureListener(AbstractView view, LevelDrawable levelDrawable) {
 		m_view = view;
 		m_levelDrawable = levelDrawable;
 	}

@@ -2,9 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_edition"
-        android:icon="@drawable/ic_action_edit"
+        android:id="@+id/action_unlock"
+        android:icon="@drawable/ic_action_secure"
         android:showAsAction="ifRoom"
         android:title="@string/action_edition"/>
+    <item
+        android:id="@+id/action_list_objects"
+        android:icon="@drawable/ic_action_view_as_list"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_list_objects"/>
 
 </menu>

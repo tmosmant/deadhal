@@ -17,7 +17,7 @@
             android:showAsAction="ifRoom"
             android:title="@string/action_navigate"/>
         <item
-            android:id="@+id/action_edition"
+            android:id="@+id/action_unlock"
             android:showAsAction="ifRoom"
             android:title="@string/action_edition"/>
         <item

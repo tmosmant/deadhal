@@ -9,7 +9,7 @@ import android.view.View;
 import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
 
-public class EditionView extends CustomView {
+public class EditionView extends AbstractView {
 
 	public EditionView(Context context) {
 		super(context);

@@ -148,7 +148,7 @@ public class OpenFragment extends Fragment {
 		switch (item.getItemId()) {
 		case R.id.action_navigation:
 			return open(FragmentType.NAVIGATION);
-		case R.id.action_edition:
+		case R.id.action_unlock:
 			return open(FragmentType.EDITION);
 		case R.id.action_rename:
 			showRenameDialog();

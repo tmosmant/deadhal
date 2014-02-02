@@ -13,7 +13,6 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
@@ -202,7 +201,6 @@ public class LevelDrawable extends Drawable {
 
 	public boolean selectRoom(Room room) {
 		if (room.getId() == m_selectedRoomId) {
-			Log.v("deadhal", "1");
 			for (SelectionRoomListener listener : selectionRoomListeners) {
 				listener.onUnselectRoom(m_level.getRooms()
 						.get(m_selectedRoomId));
@@ -210,8 +208,6 @@ public class LevelDrawable extends Drawable {
 			m_selectedRoomId = null;
 			return false;
 		} else if (m_selectedRoomId != null) {
-			Log.v("deadhal", "2");
-
 			for (SelectionRoomListener listener : selectionRoomListeners) {
 				listener.onUnselectRoom(m_level.getRooms()
 						.get(m_selectedRoomId));
@@ -221,8 +217,6 @@ public class LevelDrawable extends Drawable {
 			for (SelectionRoomListener listener : selectionRoomListeners) {
 				listener.onSelectRoom(m_level.getRooms().get(room.getId()));
 			}
-			Log.v("deadhal", "+");
-
 		}
 		m_selectedRoomId = room.getId();
 		return true;

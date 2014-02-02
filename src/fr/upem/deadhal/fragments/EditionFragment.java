@@ -1,9 +1,7 @@
 package fr.upem.deadhal.fragments;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -30,23 +28,38 @@ import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.drawers.adapters.DrawerEditionListAdapter;
+import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.drawers.models.DrawerEditionItem;
 import fr.upem.deadhal.fragments.dialogs.InputDialogFragment;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
-import fr.upem.deadhal.tasks.OpenTask;
-import fr.upem.deadhal.tasks.SaveTask;
-import fr.upem.deadhal.utils.Storage;
 import fr.upem.deadhal.view.EditionView;
 import fr.upem.deadhal.view.listeners.EditionGestureListener;
 
 public class EditionFragment extends Fragment {
 
 	private static final int ADD_NEW_ROOM = 0;
+
+	private DrawerMainListener m_callback;
+
 	private Level m_level = null;
 	private EditionView m_editionView = null;
 	private SharedPreferences m_prefs = null;
 	private EditionGestureListener m_editionGestureListener;
 	private ListView m_drawerList;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		// This makes sure that the container activity has implemented
+		// the callback interface. If not, it throws an exception
+		try {
+			m_callback = (DrawerMainListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnDataPass");
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,20 +81,6 @@ public class EditionFragment extends Fragment {
 		m_level = getArguments().getParcelable("level");
 		if (savedInstanceState != null) {
 			m_level = savedInstanceState.getParcelable("level");
-		} else if (Storage.fileExists(".tmp")) {
-			File file = Storage.openFile(".tmp.xml");
-			OpenTask openTask = new OpenTask();
-			openTask.execute(file);
-
-			try {
-				m_level = openTask.get();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}
-
-			file.delete();
 		}
 
 		TextView levelTitleTextView = (TextView) rootView
@@ -232,11 +231,7 @@ public class EditionFragment extends Fragment {
 	@Override
 	public void onPause() {
 		m_editionView.saveMatrix(m_prefs);
-
-		File m_file = Storage.createFile(".tmp");
-		SaveTask saveTask = new SaveTask(getActivity(), m_file);
-		saveTask.execute(m_level);
-
+		m_callback.onLevelChange(m_level);
 		super.onPause();
 	}
 

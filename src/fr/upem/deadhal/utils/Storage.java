@@ -42,8 +42,7 @@ public class Storage {
 			files = directory.listFiles(new FilenameFilter() {
 				@SuppressLint("DefaultLocale")
 				public boolean accept(File dir, String name) {
-					return !name.toLowerCase().startsWith(".")
-							&& name.toLowerCase().endsWith(".xml");
+					return name.toLowerCase().endsWith(".xml");
 				}
 			});
 			return files.length;
@@ -60,8 +59,7 @@ public class Storage {
 			File files[] = directory.listFiles(new FilenameFilter() {
 				@SuppressLint("DefaultLocale")
 				public boolean accept(File dir, String name) {
-					return !name.toLowerCase().startsWith(".")
-							&& name.toLowerCase().endsWith(".xml");
+					return name.toLowerCase().endsWith(".xml");
 				}
 			});
 			for (int i = 0; i < files.length; i++) {

@@ -114,13 +114,11 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 
 	@Override
 	protected void onPostExecute(Integer result) {
-		if (!m_file.isHidden()) {
-			if (result == 1) {
-				Toast.makeText(activity, "Sauvegarde effectuée",
-						Toast.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(activity, m_error, Toast.LENGTH_LONG).show();
-			}
+		if (result == 1) {
+			Toast.makeText(activity, "Sauvegarde effectuée", Toast.LENGTH_SHORT)
+					.show();
+		} else {
+			Toast.makeText(activity, m_error, Toast.LENGTH_LONG).show();
 		}
 		super.onPostExecute(result);
 	}

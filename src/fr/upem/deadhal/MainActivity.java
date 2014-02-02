@@ -6,6 +6,7 @@ import java.util.UUID;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
@@ -297,6 +298,11 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	}
 
 	@Override
+	public void onLevelChange(Level level) {
+		m_level = level;
+	}
+
+	@Override
 	public void onLevelChange(FragmentType type, Level level) {
 		m_level = level;
 		displayView(type);
@@ -310,6 +316,14 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		} else {
 			drawerLayout.openDrawer(Gravity.END);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		Intent setIntent = new Intent(Intent.ACTION_MAIN);
+		setIntent.addCategory(Intent.CATEGORY_HOME);
+		setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(setIntent);
 	}
 
 }

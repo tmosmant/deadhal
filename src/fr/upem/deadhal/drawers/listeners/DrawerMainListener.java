@@ -5,8 +5,10 @@ import fr.upem.deadhal.fragments.FragmentType;
 
 public interface DrawerMainListener {
 	public void onFileNumberChange();
-	
+
 	public void onFragmentChange(FragmentType type);
-	
+
+	public void onLevelChange(Level level);
+
 	public void onLevelChange(FragmentType type, Level level);
 }

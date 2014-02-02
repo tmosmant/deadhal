@@ -60,9 +60,6 @@ public class NavigationFragment extends Fragment {
 				.findViewById(R.id.navigation_layout);
 
 		m_level = getArguments().getParcelable("level");
-		if (savedInstanceState != null) {
-			m_level = savedInstanceState.getParcelable("level");
-		}
 
 		TextView levelTitleTextView = (TextView) rootView
 				.findViewById(R.id.levelTitleTextView);
@@ -103,7 +100,6 @@ public class NavigationFragment extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		outState.putParcelable("level", m_level);
 		m_navigationView.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}

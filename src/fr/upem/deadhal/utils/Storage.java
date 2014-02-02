@@ -14,7 +14,7 @@ import android.util.Log;
 public class Storage {
 
 	private static final String FILE_EXTENSION = ".xml";
-	
+
 	/* Checks if external storage is available to at least read */
 	public static boolean isExternalStorageReadable() {
 		String state = Environment.getExternalStorageState();
@@ -42,7 +42,8 @@ public class Storage {
 			files = directory.listFiles(new FilenameFilter() {
 				@SuppressLint("DefaultLocale")
 				public boolean accept(File dir, String name) {
-					return name.toLowerCase().endsWith(".xml");
+					return !name.toLowerCase().startsWith(".")
+							&& name.toLowerCase().endsWith(".xml");
 				}
 			});
 			return files.length;
@@ -59,7 +60,8 @@ public class Storage {
 			File files[] = directory.listFiles(new FilenameFilter() {
 				@SuppressLint("DefaultLocale")
 				public boolean accept(File dir, String name) {
-					return name.toLowerCase().endsWith(".xml");
+					return !name.toLowerCase().startsWith(".")
+							&& name.toLowerCase().endsWith(".xml");
 				}
 			});
 			for (int i = 0; i < files.length; i++) {
@@ -72,7 +74,7 @@ public class Storage {
 
 	public static boolean fileExists(String name) {
 		return new File(getDeadHalDir().getAbsolutePath() + File.separator
-				+ name + ".xml").exists();
+				+ name + FILE_EXTENSION).exists();
 	}
 
 	/* Return a file */
@@ -92,7 +94,7 @@ public class Storage {
 		}
 		return file;
 	}
-	
+
 	/* Rename a file */
 	public static boolean renameFile(String src, String dst) {
 		File from = openFile(src);

@@ -51,8 +51,8 @@ public class NavigationFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_navigation, container,
-				false);
+		View rootView = inflater.inflate(R.layout.fragment_navigation,
+				container, false);
 
 		getActivity().setTitle(R.string.navigation);
 
@@ -60,6 +60,9 @@ public class NavigationFragment extends Fragment {
 				.findViewById(R.id.navigation_layout);
 
 		m_level = getArguments().getParcelable("level");
+		if (savedInstanceState != null) {
+			m_level = savedInstanceState.getParcelable("level");
+		}
 
 		TextView levelTitleTextView = (TextView) rootView
 				.findViewById(R.id.levelTitleTextView);
@@ -67,13 +70,14 @@ public class NavigationFragment extends Fragment {
 
 		LevelDrawable levelDrawable = new LevelDrawable(m_level);
 
-		m_navigationView = new NavigationView(rootView.getContext(), levelDrawable);
+		m_navigationView = new NavigationView(rootView.getContext(),
+				levelDrawable);
 
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
 		GestureDetector gestureDetector = new GestureDetector(
-				rootView.getContext(),
-				new ConsultGestureListener(m_navigationView));
+				rootView.getContext(), new ConsultGestureListener(
+						m_navigationView));
 		m_navigationView.build(gestureDetector, savedInstanceState, m_prefs);
 		relativeLayout.addView(m_navigationView);
 
@@ -99,6 +103,7 @@ public class NavigationFragment extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		outState.putParcelable("level", m_level);
 		m_navigationView.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}

@@ -1,7 +1,9 @@
 package fr.upem.deadhal.fragments;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -31,6 +33,9 @@ import fr.upem.deadhal.drawers.adapters.DrawerEditionListAdapter;
 import fr.upem.deadhal.drawers.models.DrawerEditionItem;
 import fr.upem.deadhal.fragments.dialogs.InputDialogFragment;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
+import fr.upem.deadhal.tasks.OpenTask;
+import fr.upem.deadhal.tasks.SaveTask;
+import fr.upem.deadhal.utils.Storage;
 import fr.upem.deadhal.view.EditionView;
 import fr.upem.deadhal.view.listeners.EditionGestureListener;
 
@@ -63,6 +68,20 @@ public class EditionFragment extends Fragment {
 		m_level = getArguments().getParcelable("level");
 		if (savedInstanceState != null) {
 			m_level = savedInstanceState.getParcelable("level");
+		} else if (Storage.fileExists(".tmp")) {
+			File file = Storage.openFile(".tmp.xml");
+			OpenTask openTask = new OpenTask();
+			openTask.execute(file);
+
+			try {
+				m_level = openTask.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+
+			file.delete();
 		}
 
 		TextView levelTitleTextView = (TextView) rootView
@@ -79,7 +98,7 @@ public class EditionFragment extends Fragment {
 				rootView.getContext(), m_editionGestureListener);
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
-		
+
 		m_editionView.build(gestureDetector, savedInstanceState, m_prefs);
 
 		relativeLayout.addView(m_editionView);
@@ -213,6 +232,11 @@ public class EditionFragment extends Fragment {
 	@Override
 	public void onPause() {
 		m_editionView.saveMatrix(m_prefs);
+
+		File m_file = Storage.createFile(".tmp");
+		SaveTask saveTask = new SaveTask(getActivity(), m_file);
+		saveTask.execute(m_level);
+
 		super.onPause();
 	}
 

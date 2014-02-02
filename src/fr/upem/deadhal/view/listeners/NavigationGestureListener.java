@@ -1,22 +1,23 @@
 package fr.upem.deadhal.view.listeners;
 
-import android.graphics.Matrix;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.graphics.drawable.LevelDrawable;
-import fr.upem.deadhal.view.EditionView;
+import fr.upem.deadhal.view.NavigationView;
+import android.graphics.Matrix;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 
-public class EditionGestureListener extends
+public class NavigationGestureListener extends
 		GestureDetector.SimpleOnGestureListener {
 
-	private EditionView m_view;
+	private NavigationView m_view;
 	private LevelDrawable m_levelDrawable;
 
-	public EditionGestureListener(EditionView view, LevelDrawable levelDrawable) {
-		m_view = view;
-		m_levelDrawable = levelDrawable;
+	public NavigationGestureListener(NavigationView m_view,
+			LevelDrawable m_levelDrawable) {
+		this.m_view = m_view;
+		this.m_levelDrawable = m_levelDrawable;
 	}
 
 	@Override
@@ -24,7 +25,12 @@ public class EditionGestureListener extends
 		return true;
 	}
 
-	@Override
+	// @Override
+	// public boolean onDoubleTap(MotionEvent e) {
+	// m_view.reset();
+	// m_view.invalidate();
+	// return true;
+	// }
 	public boolean onDoubleTap(MotionEvent e) {
 		Matrix inverse = new Matrix();
 
@@ -49,20 +55,20 @@ public class EditionGestureListener extends
 		return true;
 	}
 
-	public void removeRoom(Room room) {
-		m_levelDrawable.removeRoom(room);
-		m_view.invalidate();
-	}
-
-	public void addRoom(Room room) {
-		m_levelDrawable.addRoom(room);
-		m_view.invalidate();
-	}
-
-	public boolean selectRoom(Room room) {
+	public boolean unselectRoom(Room room) {
 		boolean selectRoom = m_levelDrawable.selectRoom(room);
 		m_view.invalidate();
 		return selectRoom;
+	}
+	
+	public void setStart(Room room) {
+		m_levelDrawable.selectRoom(room);
+		m_view.invalidate();
+	}
+	
+	public void setEnd(Room room) {
+		m_levelDrawable.selectRoom(room);
+		m_view.invalidate();
 	}
 
 	public void addSelectionRoomListener(SelectionRoomListener listener) {

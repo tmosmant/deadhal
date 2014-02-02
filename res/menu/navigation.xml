@@ -7,8 +7,8 @@
         android:showAsAction="ifRoom"
         android:title="@string/action_edition"/>
     <item
-        android:id="@+id/action_list_objects"
-        android:icon="@drawable/ic_action_view_as_list"
+        android:id="@+id/action_start_navigation"
+        android:icon="@drawable/ic_action_accept"
         android:showAsAction="ifRoom"
         android:title="@string/action_list_objects"/>
 

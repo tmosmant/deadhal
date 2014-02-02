@@ -424,8 +424,4 @@ public class LevelDrawable extends Drawable {
 		m_level.addRoom(room);
 	}
 
-	public Level getCurrentLevel() {
-		return m_level;
-	}
-
 }

@@ -114,6 +114,14 @@ public class EditionFragment extends Fragment {
 				super.onDrawerOpened(drawerView);
 			}
 		});
+
+		m_drawerList = (ListView) rootView
+				.findViewById(R.id.list_edit_slidermenu);
+
+		OnItemClickListener listener = buildOnItemClickListener();
+
+		m_drawerList.setOnItemClickListener(listener);
+
 		updateDrawer(rootView);
 
 		m_editionGestureListener
@@ -150,32 +158,19 @@ public class EditionFragment extends Fragment {
 		return rootView;
 	}
 
-	public void updateDrawer(View rootView) {
-
-		m_drawerList = (ListView) rootView
-				.findViewById(R.id.list_edit_slidermenu);
-		ArrayList<DrawerEditionItem> drawerItems = new ArrayList<DrawerEditionItem>();
-		drawerItems.add(new DrawerEditionItem(getString(R.string.add_room),
-				true));
-		for (Room room : m_level.getRooms().values()) {
-			drawerItems.add(new DrawerEditionItem(room));
-		}
-		drawerItems.add(new DrawerEditionItem(getString(R.string.add_corridor),
-				true));
-		for (Corridor corridor : m_level.getCorridors().values()) {
-			String title = corridorTitle(corridor);
-			drawerItems.add(new DrawerEditionItem(corridor, title));
-		}
-		DrawerEditionListAdapter adapter = new DrawerEditionListAdapter(
-				getActivity(), this, drawerItems, m_editionGestureListener);
-		m_drawerList.setAdapter(adapter);
-
-		m_drawerList.setOnItemClickListener(new OnItemClickListener() {
+	private OnItemClickListener buildOnItemClickListener() {
+		return new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if (position == 0) {
+				DrawerEditionItem item = (DrawerEditionItem) parent
+						.getItemAtPosition(position);
+
+				switch (item.getType()) {
+				case ADD_CORRIDOR:
+					break;
+				case ADD_ROOM:
 					int title = R.string.action_add;
 
 					DialogFragment dialogFragment = InputDialogFragment
@@ -187,19 +182,38 @@ public class EditionFragment extends Fragment {
 							"addDialog");
 
 					m_drawerList.setItemChecked(position, false);
-				} else {
-					DrawerEditionItem item = (DrawerEditionItem) parent
-							.getItemAtPosition(position);
+					break;
+				case CORRIDOR:
+					break;
+				case ROOM:
 					Room room = item.getRoom();
 					if (room != null) {
-
 						boolean selectRoom = m_editionGestureListener
 								.selectRoom(room);
 						m_drawerList.setItemChecked(position, selectRoom);
 					}
+					break;
 				}
 			}
-		});
+		};
+	}
+
+	public void updateDrawer(View rootView) {
+		ArrayList<DrawerEditionItem> drawerItems = new ArrayList<DrawerEditionItem>();
+		drawerItems.add(new DrawerEditionItem(getString(R.string.add_room),
+				DrawerEditionItem.Type.ADD_ROOM));
+		for (Room room : m_level.getRooms().values()) {
+			drawerItems.add(new DrawerEditionItem(room));
+		}
+		drawerItems.add(new DrawerEditionItem(getString(R.string.add_corridor),
+				DrawerEditionItem.Type.ADD_CORRIDOR));
+		for (Corridor corridor : m_level.getCorridors().values()) {
+			String title = corridorTitle(corridor);
+			drawerItems.add(new DrawerEditionItem(corridor, title));
+		}
+		DrawerEditionListAdapter adapter = new DrawerEditionListAdapter(
+				getActivity(), this, drawerItems, m_editionGestureListener);
+		m_drawerList.setAdapter(adapter);
 	}
 
 	@Override

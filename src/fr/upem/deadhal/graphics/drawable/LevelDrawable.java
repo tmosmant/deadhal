@@ -396,6 +396,9 @@ public class LevelDrawable extends Drawable {
 	}
 
 	public void removeRoom(Room room) {
+		if (room.getId().equals(m_selectedRoomId)) {
+			m_selectedRoomId = null;
+		}
 		m_level.removeRoom(room);
 	}
 
@@ -411,5 +414,5 @@ public class LevelDrawable extends Drawable {
 	public Level getCurrentLevel() {
 		return m_level;
 	}
-	
+
 }

@@ -9,6 +9,7 @@ import java.util.UUID;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -297,7 +298,12 @@ public class LevelDrawable extends Drawable {
 		room.getRect().bottom += dy;
 	}
 
-	public void resizeSelectedRoom(float dx, float dy) {
+	private Point m_minNone = new Point(1, 1);
+	private Point m_minX = new Point(0, 1);
+	private Point m_minY = new Point(1, 0);
+	private Point m_minBoth = new Point(0, 0);
+
+	public Point resizeSelectedRoom(float dx, float dy) {
 		Room room = m_level.getRooms().get(m_selectedRoomId);
 		switch (m_resizeType) {
 		case RESIZE_ROOM_LEFT_TOP:
@@ -305,17 +311,20 @@ public class LevelDrawable extends Drawable {
 					&& room.getRect().top + dy < room.getRect().bottom
 							- MIN_MARGIN) {
 				room.getRect().top += dy;
+				return m_minX;
 			} else if (room.getRect().left + dx < room.getRect().right
 					- MIN_MARGIN
 					&& room.getRect().top + dy >= room.getRect().bottom
 							- MIN_MARGIN) {
 				room.getRect().left += dx;
+				return m_minY;
 			} else if (room.getRect().left + dx < room.getRect().right
 					- MIN_MARGIN
 					&& room.getRect().top + dy < room.getRect().bottom
 							- MIN_MARGIN) {
 				room.getRect().left += dx;
 				room.getRect().top += dy;
+				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_RIGHT_TOP:
@@ -323,17 +332,20 @@ public class LevelDrawable extends Drawable {
 					&& room.getRect().top + dy < room.getRect().bottom
 							- MIN_MARGIN) {
 				room.getRect().top += dy;
+				return m_minX;
 			} else if (room.getRect().right + dx > room.getRect().left
 					+ MIN_MARGIN
 					&& room.getRect().top + dy >= room.getRect().bottom
 							- MIN_MARGIN) {
 				room.getRect().right += dx;
+				return m_minY;
 			} else if (room.getRect().right + dx > room.getRect().left
 					+ MIN_MARGIN
 					&& room.getRect().top + dy < room.getRect().bottom
 							- MIN_MARGIN) {
 				room.getRect().right += dx;
 				room.getRect().top += dy;
+				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_LEFT_BOTTOM:
@@ -341,17 +353,20 @@ public class LevelDrawable extends Drawable {
 					&& room.getRect().bottom + dy > room.getRect().top
 							+ MIN_MARGIN) {
 				room.getRect().bottom += dy;
+				return m_minX;
 			} else if (room.getRect().left + dx < room.getRect().right
 					- MIN_MARGIN
 					&& room.getRect().bottom + dy <= room.getRect().top
 							+ MIN_MARGIN) {
 				room.getRect().left += dx;
+				return m_minY;
 			} else if (room.getRect().left + dx < room.getRect().right
 					- MIN_MARGIN
 					&& room.getRect().bottom + dy > room.getRect().top
 							+ MIN_MARGIN) {
 				room.getRect().left += dx;
 				room.getRect().bottom += dy;
+				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_RIGHT_BOTTOM:
@@ -359,40 +374,44 @@ public class LevelDrawable extends Drawable {
 					&& room.getRect().bottom + dy > room.getRect().top
 							+ MIN_MARGIN) {
 				room.getRect().bottom += dy;
+				return m_minX;
 			} else if (room.getRect().right + dx > room.getRect().left
 					+ MIN_MARGIN
 					&& room.getRect().bottom + dy <= room.getRect().top
 							+ MIN_MARGIN) {
 				room.getRect().right += dx;
+				return m_minY;
 			} else if (room.getRect().right + dx > room.getRect().left
 					+ MIN_MARGIN
 					&& room.getRect().bottom + dy > room.getRect().top
 							+ MIN_MARGIN) {
 				room.getRect().right += dx;
 				room.getRect().bottom += dy;
+				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_LEFT:
 			if (room.getRect().left + dx < room.getRect().right - MIN_MARGIN) {
 				room.getRect().left += dx;
 			}
-			break;
+			return m_minX;
 		case RESIZE_ROOM_TOP:
 			if (room.getRect().top + dy < room.getRect().bottom - MIN_MARGIN) {
 				room.getRect().top += dy;
 			}
-			break;
+			return m_minY;
 		case RESIZE_ROOM_RIGHT:
 			if (room.getRect().right + dx > room.getRect().left + MIN_MARGIN) {
 				room.getRect().right += dx;
 			}
-			break;
+			return m_minY;
 		case RESIZE_ROOM_BOTTOM:
 			if (room.getRect().bottom + dy > room.getRect().top + MIN_MARGIN) {
 				room.getRect().bottom += dy;
 			}
-			break;
+			return m_minX;
 		}
+		return m_minBoth;
 	}
 
 	public void removeRoom(Room room) {

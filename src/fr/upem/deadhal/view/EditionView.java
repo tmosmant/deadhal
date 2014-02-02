@@ -2,6 +2,7 @@ package fr.upem.deadhal.view;
 
 import android.content.Context;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -108,9 +109,15 @@ public class EditionView extends CustomView {
 				final float dx = pts[0] - m_start.x;
 				final float dy = pts[1] - m_start.y;
 
-				m_levelDrawable.resizeSelectedRoom(dx, dy);
+				Point point = m_levelDrawable.resizeSelectedRoom(dx, dy);
 
-				m_start.set(pts[0], pts[1]);
+				// Avoid to store coordinates when the resize reach the min size
+				if (point.x != 0) {
+					m_start.x = pts[0];
+				}
+				if (point.y != 0) {
+					m_start.y = pts[1];
+				}
 			}
 
 			else if (m_mode == TouchEvent.ZOOM) {

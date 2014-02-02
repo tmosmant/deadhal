@@ -16,6 +16,7 @@ import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.util.Xml;
 import android.widget.Toast;
+import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
@@ -115,7 +116,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 	@Override
 	protected void onPostExecute(Integer result) {
 		if (result == 1) {
-			Toast.makeText(activity, "Sauvegarde effectuée", Toast.LENGTH_SHORT)
+			Toast.makeText(activity, R.string.saved_file, Toast.LENGTH_SHORT)
 					.show();
 		} else {
 			Toast.makeText(activity, m_error, Toast.LENGTH_LONG).show();

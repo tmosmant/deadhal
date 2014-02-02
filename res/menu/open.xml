@@ -11,22 +11,19 @@
         android:id="@+id/group_open"
         android:enabled="true"
         android:menuCategory="container"
+        android:showAsAction="ifRoom"
         android:visible="true" >
         <item
             android:id="@+id/action_navigation"
-            android:showAsAction="ifRoom"
             android:title="@string/action_navigate"/>
         <item
             android:id="@+id/action_unlock"
-            android:showAsAction="ifRoom"
             android:title="@string/action_edition"/>
         <item
             android:id="@+id/action_rename"
-            android:showAsAction="ifRoom"
             android:title="@string/action_rename"/>
         <item
             android:id="@+id/action_remove"
-            android:showAsAction="ifRoom"
             android:title="@string/action_remove"/>
     </group>
 

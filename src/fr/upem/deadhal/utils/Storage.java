@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class Storage {
 
-	private static final String FILE_EXTENSION = ".xml";
+	private static final String FILE_EXTENSION = ".dh";
 
 	/* Checks if external storage is available to at least read */
 	public static boolean isExternalStorageReadable() {
@@ -34,17 +34,22 @@ public class Storage {
 		return false;
 	}
 
+	/* Create a filter on files names */
+	private static FilenameFilter filter() {
+		return new FilenameFilter() {
+			@SuppressLint("DefaultLocale")
+			public boolean accept(File dir, String name) {
+				return name.toLowerCase().endsWith(FILE_EXTENSION);
+			}
+		};
+	}
+
 	/* Return the number of file to open */
 	public static int getNbFiles() {
 		File[] files = null;
 		File directory = getDeadHalDir();
 		if (directory.isDirectory()) {
-			files = directory.listFiles(new FilenameFilter() {
-				@SuppressLint("DefaultLocale")
-				public boolean accept(File dir, String name) {
-					return name.toLowerCase().endsWith(".xml");
-				}
-			});
+			files = directory.listFiles(filter());
 			return files.length;
 		}
 		return 0;
@@ -56,20 +61,18 @@ public class Storage {
 		List<String> list = new ArrayList<String>();
 
 		if (directory.isDirectory()) {
-			File files[] = directory.listFiles(new FilenameFilter() {
-				@SuppressLint("DefaultLocale")
-				public boolean accept(File dir, String name) {
-					return name.toLowerCase().endsWith(".xml");
-				}
-			});
+			File files[] = directory.listFiles(filter());
 			for (int i = 0; i < files.length; i++) {
-				list.add(files[i].getName());
+				String name = files[i].getName();
+				name = name.replace(FILE_EXTENSION, "");
+				list.add(name);
 			}
 			Collections.sort(list);
 		}
 		return list;
 	}
 
+	/* Return true if the file exists */
 	public static boolean fileExists(String name) {
 		return new File(getDeadHalDir().getAbsolutePath() + File.separator
 				+ name + FILE_EXTENSION).exists();
@@ -78,7 +81,7 @@ public class Storage {
 	/* Return a file */
 	public static File openFile(String name) {
 		return new File(getDeadHalDir().getAbsolutePath() + File.separator
-				+ name);
+				+ name + FILE_EXTENSION);
 	}
 
 	/* Return a new file */
@@ -96,7 +99,7 @@ public class Storage {
 	/* Rename a file */
 	public static boolean renameFile(String src, String dst) {
 		File from = openFile(src);
-		File to = openFile(dst + FILE_EXTENSION);
+		File to = openFile(dst);
 		return from.renameTo(to);
 	}
 

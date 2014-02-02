@@ -45,7 +45,6 @@ public class OpenFragment extends Fragment {
 	private ArrayAdapter<String> m_arrayAdapter = null;
 	private List<String> m_list = new ArrayList<String>();
 	private ListView m_listView = null;
-	private ShareActionProvider mShareActionProvider;
 
 	public OpenFragment() {
 	}
@@ -86,15 +85,14 @@ public class OpenFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		File file = Storage.openFile(m_fileName);
 		if (file.exists() && file.canRead()) {
-			mShareActionProvider = (ShareActionProvider) menu.findItem(
+			ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(
 					R.id.action_share).getActionProvider();
-
+			
 			Intent intent = new Intent(Intent.ACTION_SEND);
-			intent.setType("text/xml");
-			intent.putExtra(Intent.EXTRA_STREAM,
-					Uri.parse("file://" + file.getAbsolutePath()));
+			intent.setType("text/plain");
+			intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
 			intent.putExtra(Intent.EXTRA_SUBJECT, "Share " + file.getName());
-			mShareActionProvider.setShareIntent(intent);
+			shareActionProvider.setShareIntent(intent);
 		}
 	}
 
@@ -229,9 +227,9 @@ public class OpenFragment extends Fragment {
 	private void rename(String fileName) {
 		Storage.renameFile(m_fileName, fileName);
 		m_arrayAdapter.remove(m_fileName);
-		m_arrayAdapter.add(fileName + ".xml");
+		m_arrayAdapter.add(fileName);
 		m_listView.clearChoices();
-		
+
 		m_fileName = null;
 		m_list = Storage.getFilesList();
 	}
@@ -241,15 +239,26 @@ public class OpenFragment extends Fragment {
 		if (m_file.delete()) {
 			m_callback.onFileNumberChange();
 			m_arrayAdapter.remove(m_fileName);
-			m_fileName = null;
-			m_listView.clearChoices();
-			getActivity().invalidateOptionsMenu();
+			
+			clearChoice();
 			Toast.makeText(getActivity(), R.string.deleted_file,
 					Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(getActivity(), R.string.deleted_file_error,
 					Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		clearChoice();
+	}
+	
+	public void clearChoice() {
+		m_fileName = null;
+		m_listView.clearChoices();
+		getActivity().invalidateOptionsMenu();		
 	}
 
 	@Override

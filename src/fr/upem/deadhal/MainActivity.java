@@ -286,7 +286,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 	@Override
 	public void onFileNumberChange() {
-		m_navDrawerItems.get(2).setCount(String.valueOf(Storage.getNbFiles()));
+		m_navDrawerItems.get(1).setCount(String.valueOf(Storage.getNbFiles()));
 		m_adapter.notifyDataSetChanged();
 	}
 

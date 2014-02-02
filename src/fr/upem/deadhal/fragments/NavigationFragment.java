@@ -140,6 +140,10 @@ public class NavigationFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.action_unlock:
+			Log.e("action", "unlock");
+			m_callback.onFragmentChange(FragmentType.EDITION);
+			return true;
 		case R.id.action_start_navigation:
 			if (m_start != null && m_end != null) {
 				Log.e("start", m_start.toString());
@@ -149,9 +153,6 @@ public class NavigationFragment extends Fragment {
 				Toast.makeText(getActivity(), "Please choose start and end", Toast.LENGTH_SHORT)
 				.show();
 			}
-			return true;
-		case R.id.action_unlock:
-			m_callback.onFragmentChange(FragmentType.EDITION);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

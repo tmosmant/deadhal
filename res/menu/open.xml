@@ -17,7 +17,7 @@
             android:id="@+id/action_navigation"
             android:title="@string/action_navigate"/>
         <item
-            android:id="@+id/action_unlock"
+            android:id="@+id/action_edition"
             android:title="@string/action_edition"/>
         <item
             android:id="@+id/action_rename"

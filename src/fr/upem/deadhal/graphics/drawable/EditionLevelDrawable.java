@@ -330,21 +330,25 @@ public class EditionLevelDrawable extends AbstractDrawable {
 		case RESIZE_ROOM_LEFT:
 			if (room.getRect().left + dx < room.getRect().right - MIN_MARGIN) {
 				room.getRect().left += dx;
+				return m_minNone;
 			}
 			return m_minX;
 		case RESIZE_ROOM_TOP:
 			if (room.getRect().top + dy < room.getRect().bottom - MIN_MARGIN) {
 				room.getRect().top += dy;
+				return m_minNone;
 			}
 			return m_minY;
 		case RESIZE_ROOM_RIGHT:
 			if (room.getRect().right + dx > room.getRect().left + MIN_MARGIN) {
 				room.getRect().right += dx;
+				return m_minNone;
 			}
 			return m_minY;
 		case RESIZE_ROOM_BOTTOM:
 			if (room.getRect().bottom + dy > room.getRect().top + MIN_MARGIN) {
 				room.getRect().bottom += dy;
+				return m_minNone;
 			}
 			return m_minX;
 		}

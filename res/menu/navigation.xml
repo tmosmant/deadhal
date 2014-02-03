@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/action_start_navigation"
-        android:icon="@drawable/ic_action_accept"
+        android:icon="@drawable/ic_action_play"
         android:showAsAction="ifRoom"
         android:title="@string/start_navigation">
     </item>

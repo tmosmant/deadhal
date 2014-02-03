@@ -74,7 +74,7 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					m_editionGestureListener.removeRoom(item.getRoom());
-					m_editionFragment.updateDrawer(m_editionFragment.getView());
+					m_editionFragment.updateDrawer();
 				}
 			});
 		}

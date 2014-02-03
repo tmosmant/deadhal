@@ -77,7 +77,8 @@ public class NavigationFragment extends Fragment {
 				.findViewById(R.id.levelTitleTextView);
 		levelTitleTextView.setText(m_level.getTitle());
 
-		NavigationLevelDrawable levelDrawable = new NavigationLevelDrawable(m_level);
+		NavigationLevelDrawable levelDrawable = new NavigationLevelDrawable(
+				m_level);
 
 		m_navigationView = new NavigationView(rootView.getContext(),
 				levelDrawable);
@@ -130,6 +131,14 @@ public class NavigationFragment extends Fragment {
 			} else if (resultCode == 2) {
 				m_end = m_selected;
 				m_navigationGestureListener.setEnd(m_end);
+			} else if (m_selected != null && m_start != null
+					&& m_start.getId().equals(m_selected.getId())) {
+				m_start = null;
+				m_navigationGestureListener.setStart(m_start);
+			} else if (m_selected != null && m_end != null
+					&& m_end.getId().equals(m_selected.getId())) {
+				m_end = null;
+				m_navigationGestureListener.setEnd(m_end);
 			}
 			break;
 		}
@@ -145,10 +154,9 @@ public class NavigationFragment extends Fragment {
 			if (m_start != null && m_end != null) {
 				Log.e("start", m_start.toString());
 				Log.e("end", m_end.toString());
-			}
-			else {
-				Toast.makeText(getActivity(), "Please choose start and end", Toast.LENGTH_SHORT)
-				.show();
+			} else {
+				Toast.makeText(getActivity(), "Please choose start and end",
+						Toast.LENGTH_SHORT).show();
 			}
 			return true;
 		default:

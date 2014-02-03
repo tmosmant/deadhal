@@ -1,40 +1,25 @@
 package fr.upem.deadhal.graphics.drawable;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import fr.upem.deadhal.components.Level;
-import fr.upem.deadhal.components.Room;
-import fr.upem.deadhal.components.listeners.SelectionRoomListener;
-import fr.upem.deadhal.graphics.Paints;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
+import fr.upem.deadhal.graphics.Paints;
 
 public abstract class AbstractDrawable extends Drawable {
 
-	protected Level m_level;
+	protected AbstractLevelHandler m_levelHandler;
 	private int m_alpha = 255;
-	protected List<SelectionRoomListener> selectionRoomListeners = new LinkedList<SelectionRoomListener>();
 
-	public AbstractDrawable(Level m_level) {
-		this.m_level = m_level;
+	public AbstractDrawable(AbstractLevelHandler levelHandler) {
+		m_levelHandler = levelHandler;
 	}
 
 	@Override
 	public abstract void draw(Canvas canvas);
-
-	public abstract boolean selectRoomFromCoordinates(float x, float y);
-
-	public void addSelectionRoomListener(SelectionRoomListener listener) {
-		selectionRoomListeners.add(listener);
-	}
-
-	public void removeSelectionRoomListener(SelectionRoomListener listener) {
-		selectionRoomListeners.remove(listener);
-	}
 
 	@Override
 	public void setAlpha(int alpha) {

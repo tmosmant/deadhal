@@ -27,6 +27,8 @@ import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
+import fr.upem.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.drawers.adapters.DrawerEditionListAdapter;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
@@ -35,7 +37,7 @@ import fr.upem.deadhal.drawers.models.DrawerEditionItem.Type;
 import fr.upem.deadhal.fragments.dialogs.InputDialogFragment;
 import fr.upem.deadhal.graphics.drawable.EditionLevelDrawable;
 import fr.upem.deadhal.view.EditionView;
-import fr.upem.deadhal.view.listeners.EditionGestureListener;
+import fr.upem.deadhal.view.listeners.GestureListener;
 
 public class EditionFragment extends Fragment {
 
@@ -45,11 +47,12 @@ public class EditionFragment extends Fragment {
 	private DrawerMainListener m_callback;
 
 	private Level m_level;
-	private EditionView m_editionView;
+	private EditionView m_view;
 	private SharedPreferences m_prefs;
-	private EditionGestureListener m_editionGestureListener;
+	private GestureListener m_editionGestureListener;
 	private ListView m_drawerList;
 	private View m_rootView;
+	private AbstractLevelHandler m_levelHandler;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -90,20 +93,25 @@ public class EditionFragment extends Fragment {
 				.findViewById(R.id.levelTitleTextView);
 		levelTitleTextView.setText(m_level.getTitle());
 
-		EditionLevelDrawable levelDrawable = new EditionLevelDrawable(m_level);
+		m_levelHandler = new EditionLevelHandler(m_level);
 
-		m_editionView = new EditionView(m_rootView.getContext(), levelDrawable);
+		EditionLevelDrawable levelDrawable = new EditionLevelDrawable(
+				m_levelHandler);
 
-		m_editionGestureListener = new EditionGestureListener(m_editionView,
-				levelDrawable);
+		m_view = new EditionView(m_rootView.getContext(), m_levelHandler, levelDrawable);
+
+		m_levelHandler.setView(m_view);
+		
+		m_editionGestureListener = new GestureListener(m_view,
+				m_levelHandler);
 		GestureDetector gestureDetector = new GestureDetector(
 				m_rootView.getContext(), m_editionGestureListener);
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
 
-		m_editionView.build(gestureDetector, savedInstanceState, m_prefs);
+		m_view.build(gestureDetector, savedInstanceState, m_prefs);
 
-		relativeLayout.addView(m_editionView);
+		relativeLayout.addView(m_view);
 
 		DrawerLayout drawerLayout = (DrawerLayout) m_rootView
 				.findViewById(R.id.drawer_edit_layout);
@@ -127,37 +135,32 @@ public class EditionFragment extends Fragment {
 
 		updateDrawer();
 
-		m_editionGestureListener
-				.addSelectionRoomListener(new SelectionRoomListener() {
-					@Override
-					public void onUnselectRoom(Room room) {
-						for (int i = 0; i < m_drawerList.getAdapter()
-								.getCount(); i++) {
-							DrawerEditionItem item = (DrawerEditionItem) m_drawerList
-									.getAdapter().getItem(i);
-							Room room2 = item.getRoom();
-							if (room2 != null
-									&& room.getId().equals(room2.getId())) {
-								m_drawerList.setItemChecked(i, false);
-								return;
-							}
-						}
+		m_levelHandler.addSelectionRoomListener(new SelectionRoomListener() {
+			@Override
+			public void onUnselectRoom(Room room) {
+				for (int i = 0; i < m_drawerList.getAdapter().getCount(); i++) {
+					DrawerEditionItem item = (DrawerEditionItem) m_drawerList
+							.getAdapter().getItem(i);
+					Room room2 = item.getRoom();
+					if (room2 != null && room.getId().equals(room2.getId())) {
+						m_drawerList.setItemChecked(i, false);
+						return;
 					}
+				}
+			}
 
-					@Override
-					public void onSelectRoom(Room room) {
-						for (int i = 0; i < m_drawerList.getAdapter()
-								.getCount(); i++) {
-							DrawerEditionItem item = (DrawerEditionItem) m_drawerList
-									.getAdapter().getItem(i);
-							Room room2 = item.getRoom();
-							if (room2 != null
-									&& room.getId().equals(room2.getId())) {
-								m_drawerList.setItemChecked(i, true);
-							}
-						}
+			@Override
+			public void onSelectRoom(Room room) {
+				for (int i = 0; i < m_drawerList.getAdapter().getCount(); i++) {
+					DrawerEditionItem item = (DrawerEditionItem) m_drawerList
+							.getAdapter().getItem(i);
+					Room room2 = item.getRoom();
+					if (room2 != null && room.getId().equals(room2.getId())) {
+						m_drawerList.setItemChecked(i, true);
 					}
-				});
+				}
+			}
+		});
 		return m_rootView;
 	}
 
@@ -193,8 +196,7 @@ public class EditionFragment extends Fragment {
 				case ROOM:
 					Room room = item.getRoom();
 					if (room != null) {
-						boolean selectRoom = m_editionGestureListener
-								.selectRoom(room);
+						boolean selectRoom = m_levelHandler.selectRoom(room);
 						m_drawerList.setItemChecked(position, selectRoom);
 					}
 					break;
@@ -217,7 +219,7 @@ public class EditionFragment extends Fragment {
 			drawerItems.add(new DrawerEditionItem(corridor, title));
 		}
 		DrawerEditionListAdapter adapter = new DrawerEditionListAdapter(
-				getActivity(), this, drawerItems, m_editionGestureListener);
+				getActivity(), this, drawerItems, m_levelHandler, m_view);
 		m_drawerList.setAdapter(adapter);
 	}
 
@@ -229,9 +231,9 @@ public class EditionFragment extends Fragment {
 				String title = data.getStringExtra("inputText");
 				Room room = new Room(UUID.randomUUID(), title, new RectF(0, 0,
 						150, 150));
-				m_editionGestureListener.addRoom(room);
+				m_levelHandler.addRoom(room);
 				updateDrawer();
-				m_editionGestureListener.selectRoom(room);
+				m_levelHandler.selectRoom(room);
 			}
 			break;
 		case ADD_NEW_CORRIDOR:
@@ -239,9 +241,9 @@ public class EditionFragment extends Fragment {
 				String title = data.getStringExtra("inputText");
 				Room room = new Room(UUID.randomUUID(), title, new RectF(0, 0,
 						150, 150));
-				m_editionGestureListener.addRoom(room);
+				m_levelHandler.addRoom(room);
 				updateDrawer();
-				m_editionGestureListener.selectRoom(room);
+				m_levelHandler.selectRoom(room);
 			}
 			break;
 		}
@@ -270,7 +272,7 @@ public class EditionFragment extends Fragment {
 
 	@Override
 	public void onPause() {
-		m_editionView.saveMatrix(m_prefs);
+		m_view.saveMatrix(m_prefs);
 		m_callback.onLevelChange(m_level);
 		super.onPause();
 	}
@@ -278,7 +280,7 @@ public class EditionFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putParcelable("level", m_level);
-		m_editionView.saveMatrix(outState);
+		m_view.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}
 

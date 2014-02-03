@@ -12,25 +12,28 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import fr.upem.deadhal.R;
+import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
 import fr.upem.deadhal.drawers.models.DrawerEditionItem;
 import fr.upem.deadhal.fragments.EditionFragment;
-import fr.upem.deadhal.view.listeners.EditionGestureListener;
+import fr.upem.deadhal.view.AbstractView;
 
 public class DrawerEditionListAdapter extends BaseAdapter {
 
 	private Context m_context;
 	private ArrayList<DrawerEditionItem> m_navDrawerItems;
-	private EditionGestureListener m_editionGestureListener;
 	private EditionFragment m_editionFragment;
+	private AbstractLevelHandler m_levelHandler;
+	private AbstractView m_view;
 
 	public DrawerEditionListAdapter(Context context,
 			EditionFragment editionFragment,
 			ArrayList<DrawerEditionItem> navDrawerItems,
-			EditionGestureListener editionGestureListener) {
+			AbstractLevelHandler levelHandler, AbstractView view) {
 		m_context = context;
 		m_editionFragment = editionFragment;
 		m_navDrawerItems = navDrawerItems;
-		m_editionGestureListener = editionGestureListener;
+		m_levelHandler = levelHandler;
+		m_view = view;
 	}
 
 	@Override
@@ -73,8 +76,16 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 			imgIcon.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					m_editionGestureListener.removeRoom(item.getRoom());
+					switch (item.getType()) {
+					case CORRIDOR:
+						break;
+					case ROOM:
+						m_levelHandler.removeRoom(item.getRoom());
+					default:
+						break;
+					}
 					m_editionFragment.updateDrawer();
+					m_view.invalidate();
 				}
 			});
 		}

@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
 import fr.upem.deadhal.graphics.drawable.AbstractDrawable;
 
 public abstract class AbstractView extends View {
@@ -17,6 +18,7 @@ public abstract class AbstractView extends View {
 	// private Drawable m_drawable;
 	private AbstractDrawable m_levelDrawable;
 	protected GestureDetector m_gestureDetector;
+	protected AbstractLevelHandler m_levelHandler;
 
 	// these matrices will be used to move and zoom image
 	protected Matrix m_matrix = new Matrix();
@@ -48,8 +50,9 @@ public abstract class AbstractView extends View {
 		super(context, attrs, defStyle);
 	}
 
-	public AbstractView(Context context, AbstractDrawable drawable) {
+	public AbstractView(Context context, AbstractLevelHandler levelHandler, AbstractDrawable drawable) {
 		super(context);
+		m_levelHandler = levelHandler;
 		m_levelDrawable = drawable;
 	}
 

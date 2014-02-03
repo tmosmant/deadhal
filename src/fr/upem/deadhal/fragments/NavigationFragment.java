@@ -19,12 +19,13 @@ import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.fragments.dialogs.NavigationDialogFragment;
 import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
 import fr.upem.deadhal.view.NavigationView;
-import fr.upem.deadhal.view.listeners.NavigationGestureListener;
+import fr.upem.deadhal.view.listeners.GestureListener;
 
 public class NavigationFragment extends Fragment {
 	private static final int NAV_DIALOG = 1;
@@ -36,7 +37,8 @@ public class NavigationFragment extends Fragment {
 	private DrawerMainListener m_callback;
 	private SharedPreferences m_prefs = null;
 	private NavigationView m_navigationView = null;
-	private NavigationGestureListener m_navigationGestureListener;
+	private GestureListener m_gestureListener;
+	private NavigationLevelHandler m_levelHandler;
 
 	public NavigationFragment() {
 	}
@@ -77,35 +79,35 @@ public class NavigationFragment extends Fragment {
 				.findViewById(R.id.levelTitleTextView);
 		levelTitleTextView.setText(m_level.getTitle());
 
+		m_levelHandler = new NavigationLevelHandler(m_level);
+
 		NavigationLevelDrawable levelDrawable = new NavigationLevelDrawable(
-				m_level);
+				m_levelHandler);
 
 		m_navigationView = new NavigationView(rootView.getContext(),
-				levelDrawable);
+				m_levelHandler, levelDrawable);
 
-		m_navigationGestureListener = new NavigationGestureListener(
-				m_navigationView, levelDrawable);
+		m_gestureListener = new GestureListener(m_navigationView, m_levelHandler);
 
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
 		GestureDetector gestureDetector = new GestureDetector(
-				rootView.getContext(), m_navigationGestureListener);
+				rootView.getContext(), m_gestureListener);
 		m_navigationView.build(gestureDetector, savedInstanceState, m_prefs);
 		relativeLayout.addView(m_navigationView);
 
-		m_navigationGestureListener
-				.addSelectionRoomListener(new SelectionRoomListener() {
+		m_levelHandler.addSelectionRoomListener(new SelectionRoomListener() {
 
-					@Override
-					public void onSelectRoom(Room room) {
-						m_selected = room;
-						showNavigationDialog();
-					}
+			@Override
+			public void onSelectRoom(Room room) {
+				m_selected = room;
+				showNavigationDialog();
+			}
 
-					@Override
-					public void onUnselectRoom(Room room) {
-					}
-				});
+			@Override
+			public void onUnselectRoom(Room room) {
+			}
+		});
 
 		return rootView;
 	}
@@ -127,18 +129,18 @@ public class NavigationFragment extends Fragment {
 		case NAV_DIALOG:
 			if (resultCode == 1) {
 				m_start = m_selected;
-				m_navigationGestureListener.setStart(m_start);
+				// m_gestureListener.setStart(m_start);
 			} else if (resultCode == 2) {
 				m_end = m_selected;
-				m_navigationGestureListener.setEnd(m_end);
+				// m_gestureListener.setEnd(m_end);
 			} else if (m_selected != null && m_start != null
 					&& m_start.getId().equals(m_selected.getId())) {
 				m_start = null;
-				m_navigationGestureListener.setStart(m_start);
+				// m_gestureListener.setStart(m_start);
 			} else if (m_selected != null && m_end != null
 					&& m_end.getId().equals(m_selected.getId())) {
 				m_end = null;
-				m_navigationGestureListener.setEnd(m_end);
+				// m_gestureListener.setEnd(m_end);
 			}
 			break;
 		}

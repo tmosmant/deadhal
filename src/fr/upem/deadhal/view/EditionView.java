@@ -6,12 +6,11 @@ import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
 import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.EditionLevelDrawable;
 
 public class EditionView extends AbstractView {
-
-	protected EditionLevelDrawable m_levelDrawable;
 
 	public EditionView(Context context) {
 		super(context);
@@ -25,16 +24,15 @@ public class EditionView extends AbstractView {
 		super(context, attrs, defStyle);
 	}
 
-	public EditionView(Context context, EditionLevelDrawable drawable) {
-		super(context, drawable);
-		this.m_levelDrawable = drawable;
+	public EditionView(Context context, AbstractLevelHandler levelHandler, EditionLevelDrawable drawable) {
+		super(context, levelHandler, drawable);
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		m_gestureDetector.onTouchEvent(event);
 
-		boolean isRoomSelected = m_levelDrawable.isRoomSelected();
+		boolean isRoomSelected = m_levelHandler.isRoomSelected();
 
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
@@ -45,7 +43,7 @@ public class EditionView extends AbstractView {
 				float[] pts = { event.getX(), event.getY() };
 				m_savedInverseMatrix.mapPoints(pts);
 				m_start.set(pts[0], pts[1]);
-				m_mode = m_levelDrawable.getProcess(pts[0], pts[1]);
+				m_mode = m_levelHandler.getProcess(pts[0], pts[1]);
 			} else {
 				m_savedMatrix.set(m_matrix);
 				m_start.set(event.getX(), event.getY());
@@ -74,7 +72,7 @@ public class EditionView extends AbstractView {
 		case MotionEvent.ACTION_POINTER_UP:
 			m_mode = TouchEvent.NONE;
 			m_lastEvent = null;
-			m_levelDrawable.endProcess();
+			m_levelHandler.endProcess();
 			break;
 
 		case MotionEvent.ACTION_MOVE:
@@ -95,7 +93,7 @@ public class EditionView extends AbstractView {
 					final float dx = pts[0] - m_start.x;
 					final float dy = pts[1] - m_start.y;
 
-					m_levelDrawable.translateSelectedRoom(dx, dy);
+					m_levelHandler.translateSelectedRoom(dx, dy);
 
 					// Remember this touch position for the next move
 					// event
@@ -112,7 +110,7 @@ public class EditionView extends AbstractView {
 				final float dx = pts[0] - m_start.x;
 				final float dy = pts[1] - m_start.y;
 
-				Point point = m_levelDrawable.resizeSelectedRoom(dx, dy);
+				Point point = m_levelHandler.resizeSelectedRoom(dx, dy);
 
 				// Avoid to store coordinates when the resize reach the min size
 				if (point.x != 0) {

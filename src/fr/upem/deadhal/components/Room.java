@@ -92,7 +92,4 @@ public class Room implements Parcelable {
 	public String toString() {
 		return title;
 	}
-	
-	
-
 }

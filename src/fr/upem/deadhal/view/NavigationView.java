@@ -5,6 +5,7 @@ import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
 import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
 
@@ -22,8 +23,9 @@ public class NavigationView extends AbstractView {
 		super(context, attrs, defStyle);
 	}
 
-	public NavigationView(Context context, NavigationLevelDrawable drawable) {
-		super(context, drawable);
+	public NavigationView(Context context, AbstractLevelHandler levelHandler,
+			NavigationLevelDrawable drawable) {
+		super(context, levelHandler, drawable);
 	}
 
 	@Override

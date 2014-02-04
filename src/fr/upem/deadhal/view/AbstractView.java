@@ -50,7 +50,8 @@ public abstract class AbstractView extends View {
 		super(context, attrs, defStyle);
 	}
 
-	public AbstractView(Context context, AbstractLevelHandler levelHandler, AbstractDrawable drawable) {
+	public AbstractView(Context context, AbstractLevelHandler levelHandler,
+			AbstractDrawable drawable) {
 		super(context);
 		m_levelHandler = levelHandler;
 		m_levelDrawable = drawable;
@@ -170,4 +171,7 @@ public abstract class AbstractView extends View {
 		return m_matrix;
 	}
 
+	public void setMode(TouchEvent mode) {
+		m_mode = mode;
+	}
 }

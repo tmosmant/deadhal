@@ -24,14 +24,14 @@ public class EditionView extends AbstractView {
 		super(context, attrs, defStyle);
 	}
 
-	public EditionView(Context context, AbstractLevelHandler levelHandler, EditionLevelDrawable drawable) {
+	public EditionView(Context context, AbstractLevelHandler levelHandler,
+			EditionLevelDrawable drawable) {
 		super(context, levelHandler, drawable);
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		m_gestureDetector.onTouchEvent(event);
-
 		boolean isRoomSelected = m_levelHandler.isRoomSelected();
 
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -112,7 +112,8 @@ public class EditionView extends AbstractView {
 
 				Point point = m_levelHandler.resizeSelectedRoom(dx, dy);
 
-				// Avoid to store coordinates when the resize reach the min size
+				// Avoid to store coordinates when the resize reach the min
+				// size
 				if (point.x != 0) {
 					m_start.x = pts[0];
 				}
@@ -168,5 +169,4 @@ public class EditionView extends AbstractView {
 
 		return true;
 	}
-
 }

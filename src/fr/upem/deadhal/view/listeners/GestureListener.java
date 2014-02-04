@@ -5,6 +5,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
 import fr.upem.deadhal.view.AbstractView;
+import fr.upem.deadhal.view.TouchEvent;
 
 public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
@@ -17,12 +18,7 @@ public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 	}
 
 	@Override
-	public boolean onDown(MotionEvent e) {
-		return true;
-	}
-
-	@Override
-	public boolean onDoubleTap(MotionEvent e) {
+	public void onLongPress(MotionEvent e) {
 		Matrix inverse = new Matrix();
 
 		m_view.getMatrix().invert(inverse);
@@ -34,15 +30,16 @@ public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
 		inverse.mapPoints(pts);
 		if (e.getPointerCount() == 1) {
-			boolean isSelectedRoom = m_levelHander.selectRoomFromCoordinates(
-					pts[0], pts[1]);
-			if (isSelectedRoom == false
-					&& m_levelHander.isRoomSelected() == false) {
-				m_view.reset();
-				m_view.invalidate();
-			}
+			m_levelHander.selectRoomFromCoordinates(pts[0], pts[1]);
+			m_view.setMode(TouchEvent.NONE);
 		}
+		super.onLongPress(e);
+	}
 
+	@Override
+	public boolean onDoubleTap(MotionEvent e) {
+		m_view.reset();
+		m_view.invalidate();
 		return true;
 	}
 

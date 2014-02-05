@@ -18,7 +18,8 @@ public class Storage {
 	/* Checks if external storage is available to at least read */
 	public static boolean isExternalStorageReadable() {
 		String state = Environment.getExternalStorageState();
-		return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
+		return Environment.MEDIA_MOUNTED.equals(state)
+				|| Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
 	}
 
 	/* Checks if external storage is available for read and write */
@@ -52,7 +53,7 @@ public class Storage {
 	/* List all the files in the deadhal directory */
 	public static List<String> getFilesList() {
 		File directory = getDeadHalDir();
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 
 		if (directory.isDirectory()) {
 			File files[] = directory.listFiles(filter());
@@ -68,12 +69,14 @@ public class Storage {
 
 	/* Return true if the file exists */
 	public static boolean fileExists(String name) {
-		return new File(getDeadHalDir().getAbsolutePath() + File.separator + name + FILE_EXTENSION).exists();
+		return new File(getDeadHalDir().getAbsolutePath() + File.separator
+				+ name + FILE_EXTENSION).exists();
 	}
 
 	/* Return a file */
 	public static File openFile(String name) {
-		return new File(getDeadHalDir().getAbsolutePath() + File.separator + name + FILE_EXTENSION);
+		return new File(getDeadHalDir().getAbsolutePath() + File.separator
+				+ name + FILE_EXTENSION);
 	}
 
 	/* Return a new file */
@@ -82,7 +85,8 @@ public class Storage {
 			return null;
 		}
 
-		File file = new File(getDeadHalDir().getAbsolutePath() + File.separator + name + FILE_EXTENSION);
+		File file = new File(getDeadHalDir().getAbsolutePath() + File.separator
+				+ name + FILE_EXTENSION);
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
@@ -100,7 +104,8 @@ public class Storage {
 
 	/* Return the deadhal directory (create it if doesn't exists) */
 	private static File getDeadHalDir() {
-		File directory = new File(Environment.getExternalStorageDirectory() + File.separator + "Deadhal");
+		File directory = new File(Environment.getExternalStorageDirectory()
+				+ File.separator + "Deadhal");
 		if (!directory.exists()) {
 			if (!directory.mkdirs()) {
 				Log.e("dir", "Directory not created");

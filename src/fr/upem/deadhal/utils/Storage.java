@@ -1,15 +1,15 @@
 package fr.upem.deadhal.utils;
 
+import android.annotation.SuppressLint;
+import android.os.Environment;
+import android.util.Log;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import android.annotation.SuppressLint;
-import android.os.Environment;
-import android.util.Log;
 
 public class Storage {
 
@@ -18,25 +18,19 @@ public class Storage {
 	/* Checks if external storage is available to at least read */
 	public static boolean isExternalStorageReadable() {
 		String state = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(state)
-				|| Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			return true;
-		}
-		return false;
+		return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
 	}
 
 	/* Checks if external storage is available for read and write */
 	public static boolean isExternalStorageWritable() {
 		String state = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(state)) {
-			return true;
-		}
-		return false;
+		return Environment.MEDIA_MOUNTED.equals(state);
 	}
 
 	/* Create a filter on files names */
 	private static FilenameFilter filter() {
 		return new FilenameFilter() {
+
 			@SuppressLint("DefaultLocale")
 			public boolean accept(File dir, String name) {
 				return name.toLowerCase().endsWith(FILE_EXTENSION);
@@ -46,7 +40,7 @@ public class Storage {
 
 	/* Return the number of file to open */
 	public static int getNbFiles() {
-		File[] files = null;
+		File[] files;
 		File directory = getDeadHalDir();
 		if (directory.isDirectory()) {
 			files = directory.listFiles(filter());
@@ -58,12 +52,12 @@ public class Storage {
 	/* List all the files in the deadhal directory */
 	public static List<String> getFilesList() {
 		File directory = getDeadHalDir();
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 
 		if (directory.isDirectory()) {
 			File files[] = directory.listFiles(filter());
-			for (int i = 0; i < files.length; i++) {
-				String name = files[i].getName();
+			for (File file : files) {
+				String name = file.getName();
 				name = name.replace(FILE_EXTENSION, "");
 				list.add(name);
 			}
@@ -74,20 +68,21 @@ public class Storage {
 
 	/* Return true if the file exists */
 	public static boolean fileExists(String name) {
-		return new File(getDeadHalDir().getAbsolutePath() + File.separator
-				+ name + FILE_EXTENSION).exists();
+		return new File(getDeadHalDir().getAbsolutePath() + File.separator + name + FILE_EXTENSION).exists();
 	}
 
 	/* Return a file */
 	public static File openFile(String name) {
-		return new File(getDeadHalDir().getAbsolutePath() + File.separator
-				+ name + FILE_EXTENSION);
+		return new File(getDeadHalDir().getAbsolutePath() + File.separator + name + FILE_EXTENSION);
 	}
 
 	/* Return a new file */
 	public static File createFile(String name) {
-		File file = new File(getDeadHalDir().getAbsolutePath() + File.separator
-				+ name + FILE_EXTENSION);
+		if (!isExternalStorageWritable()) {
+			return null;
+		}
+
+		File file = new File(getDeadHalDir().getAbsolutePath() + File.separator + name + FILE_EXTENSION);
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
@@ -105,8 +100,7 @@ public class Storage {
 
 	/* Return the deadhal directory (create it if doesn't exists) */
 	private static File getDeadHalDir() {
-		File directory = new File(Environment.getExternalStorageDirectory()
-				+ File.separator + "Deadhal");
+		File directory = new File(Environment.getExternalStorageDirectory() + File.separator + "Deadhal");
 		if (!directory.exists()) {
 			if (!directory.mkdirs()) {
 				Log.e("dir", "Directory not created");
@@ -114,5 +108,4 @@ public class Storage {
 		}
 		return directory;
 	}
-
 }

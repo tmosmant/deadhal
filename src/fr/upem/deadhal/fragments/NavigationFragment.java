@@ -170,11 +170,13 @@ public class NavigationFragment extends Fragment {
 	@Override
 	public void onPause() {
 		m_navigationView.saveMatrix(m_prefs);
+		m_callback.onLevelChange(m_level);
 		super.onPause();
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		outState.putParcelable("level", m_level);
 		m_navigationView.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}

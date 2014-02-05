@@ -41,11 +41,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	private ListView m_drawerList;
 	private ActionBarDrawerToggle m_drawerToggle;
 
-	private Fragment m_navigationFragment = new NavigationFragment();
-	private Fragment m_editionFragment = new EditionFragment();
-	private Fragment m_openFragment = new OpenFragment();
-	private Fragment m_saveFragment = new SaveFragment();
-
 	private ArrayList<DrawerMainItem> m_navDrawerItems;
 	private DrawerMainListAdapter m_adapter;
 
@@ -73,18 +68,23 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		m_navDrawerItems = new ArrayList<DrawerMainItem>();
 
 		// adding nav drawer items to array
-		// Navigation
+
+		// New
 		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[0], navMenuIcons
 				.getResourceId(0, -1)));
 
-		// Open, Will add a counter here
+		// Navigation
 		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[1], navMenuIcons
-				.getResourceId(1, -1), true, String.valueOf(Storage
+				.getResourceId(1, -1)));
+
+		// Open, Will add a counter here
+		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[2], navMenuIcons
+				.getResourceId(2, -1), true, String.valueOf(Storage
 				.getNbFiles())));
 
 		// Save
-		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[2], navMenuIcons
-				.getResourceId(2, -1)));
+		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[3], navMenuIcons
+				.getResourceId(3, -1)));
 
 		// Recycle the typed array
 		navMenuIcons.recycle();
@@ -129,7 +129,22 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			// display view for selected nav drawer item
-			displayView(FragmentType.values()[position]);
+
+			switch (position) {
+			case 0:
+				m_level = new Level();
+				displayView(FragmentType.NAVIGATION);
+				break;
+			case 1:
+				displayView(FragmentType.NAVIGATION);
+				break;
+			case 2:
+				displayView(FragmentType.OPEN);
+				break;
+			case 3:
+				displayView(FragmentType.SAVE);
+				break;
+			}
 		}
 	}
 
@@ -192,38 +207,43 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 		switch (fragmentType) {
 		case NAVIGATION:
-			fragment = m_navigationFragment;
+			// fragment = m_navigationFragment;
+			fragment = new NavigationFragment();
 			m_menu = R.menu.navigation;
 			break;
 		case EDITION:
-			fragment = m_editionFragment;
+			// fragment = m_editionFragment;
+			fragment = new EditionFragment();
 			m_menu = R.menu.edition;
 			break;
 		case OPEN:
-			fragment = m_openFragment;
+			// fragment = m_openFragment;
+			fragment = new OpenFragment();
 			m_menu = R.menu.open;
 			break;
 		case SAVE:
-			fragment = m_saveFragment;
+			// fragment = m_saveFragment;
+			fragment = new SaveFragment();
 			m_menu = R.menu.save;
 			break;
 		default:
 			break;
 		}
 		if (fragment != null) {
-			if (!fragment.isAdded()) {
-				Bundle bundle = new Bundle();
-				bundle.putParcelable("level", m_level);
-				fragment.setArguments(bundle);
+			// if (!fragment.isAdded()) {
+			Log.v("deadhal", "bundle");
 
-				fragmentManager.beginTransaction()
-						.replace(R.id.frame_container, fragment).commit();
+			Bundle bundle = new Bundle();
+			bundle.putParcelable("level", m_level);
+			fragment.setArguments(bundle);
 
-				// update selected item and title, then close the drawer
-				m_drawerList.setItemChecked(fragmentType.ordinal(), true);
-				m_drawerList.setSelection(fragmentType.ordinal());
-				// setTitle(navMenuTitles[position]);
-			}
+			fragmentManager.beginTransaction()
+					.replace(R.id.frame_container, fragment).commit();
+			// }
+			int index = fragmentType.getIndex();
+
+			m_drawerList.setItemChecked(index, true);
+			m_drawerList.setSelection(index);
 			m_drawerLayout.closeDrawer(m_drawerList);
 		} else {
 			// error in creating fragment

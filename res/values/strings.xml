@@ -30,6 +30,7 @@
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
+        <item>New</item>
         <item>Navigation</item>
         <item>Open&#8230;</item>
         <item>Save&#8230;</item>
@@ -38,6 +39,7 @@
     <!-- Nav Drawer List Item Icons -->
     <!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">
+        <item>@drawable/ic_action_new</item>
         <item>@drawable/ic_action_directions_dark</item>
         <item>@drawable/ic_action_collection_dark</item>
         <item>@drawable/ic_action_save_dark</item>

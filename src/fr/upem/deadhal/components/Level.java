@@ -9,7 +9,7 @@ import android.os.Parcelable;
 
 public class Level implements Parcelable {
 
-	private String m_title;
+	private String m_title = new String();
 	private Map<UUID, Room> m_rooms = new HashMap<UUID, Room>();
 	private Map<UUID, Corridor> m_corridors = new HashMap<UUID, Corridor>();
 

@@ -1,12 +1,9 @@
 package fr.upem.deadhal.view;
 
 import android.content.Context;
-import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
-import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
 
 public class NavigationView extends AbstractView {
@@ -33,86 +30,44 @@ public class NavigationView extends AbstractView {
 		m_gestureDetector.onTouchEvent(event);
 
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
-
 		case MotionEvent.ACTION_DOWN:
-			m_mode = TouchEvent.DRAG;
-			m_savedMatrix.set(m_matrix);
-			m_start.set(event.getX(), event.getY());
-			m_lastEvent = null;
+			getProcess(event);
 			break;
-
 		case MotionEvent.ACTION_POINTER_DOWN:
-			m_oldDistance = spacing(event);
-			if (m_oldDistance > 10f) {
-				m_savedMatrix.set(m_matrix);
-				midPoint(m_middle, event);
-				m_mode = TouchEvent.ZOOM;
-			}
-			m_lastEvent = new float[4];
-			m_lastEvent[0] = event.getX(0);
-			m_lastEvent[1] = event.getX(1);
-			m_lastEvent[2] = event.getY(0);
-			m_lastEvent[3] = event.getY(1);
-			m_distance = rotation(event);
+			initZoom(event);
 			break;
-
 		case MotionEvent.ACTION_UP:
 		case MotionEvent.ACTION_POINTER_UP:
-			m_mode = TouchEvent.NONE;
-			m_lastEvent = null;
+			cancel();
 			break;
-
 		case MotionEvent.ACTION_MOVE:
-			if (m_mode == TouchEvent.DRAG) {
-				m_matrix.set(m_savedMatrix);
-				float dx = event.getX() - m_start.x;
-				float dy = event.getY() - m_start.y;
-				m_matrix.postTranslate(dx, dy);
-
-			} else if (m_mode == TouchEvent.ZOOM) {
-				float newDist = spacing(event);
-
-				if (newDist > 10f) {
-					m_matrix.set(m_savedMatrix);
-					float scale = (newDist / m_oldDistance);
-					m_matrix.postScale(scale, scale, m_middle.x, m_middle.y);
-
-					float[] f = new float[9];
-					m_matrix.getValues(f);
-
-					float scaleX = f[Matrix.MSCALE_X];
-					float scaleY = f[Matrix.MSCALE_Y];
-
-					if (scaleX >= 40 && scaleY >= 40 && m_antiAlias) {
-						Paints.setAntiAlias(false);
-						m_antiAlias = false;
-					} else if (!m_antiAlias) {
-						Paints.setAntiAlias(true);
-						m_antiAlias = true;
-					}
-				}
-
-				if (m_lastEvent != null && event.getPointerCount() >= 2) {
-					m_newRotation = rotation(event);
-					float r = m_newRotation - m_distance;
-					float[] values = new float[9];
-					m_matrix.getValues(values);
-
-					float xc = m_middle.x;
-					float yc = m_middle.y;
-					m_matrix.postRotate(r, xc, yc);
-				}
+			switch (m_mode) {
+			case DRAG:
+				drag(event);
+				break;
+			case NONE:
+				break;
+			case RESIZE_ROOM:
+				break;
+			case ZOOM:
+				zoom(event);
+				break;
+			default:
+				break;
 			}
 			break;
 		}
 
-		bringToFront();
-		View rootView = getRootView();
-		rootView.requestLayout();
-		rootView.invalidate();
-		invalidate();
+		refresh();
 
 		return true;
+	}
+
+	private void getProcess(MotionEvent event) {
+		m_mode = TouchEvent.DRAG;
+		m_savedMatrix.set(m_matrix);
+		m_start.set(event.getX(), event.getY());
+		m_lastEvent = null;
 	}
 
 }

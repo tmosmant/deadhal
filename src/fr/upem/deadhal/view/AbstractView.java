@@ -11,6 +11,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
+import fr.upem.deadhal.graphics.Paints;
 import fr.upem.deadhal.graphics.drawable.AbstractDrawable;
 
 public abstract class AbstractView extends View {
@@ -173,5 +174,75 @@ public abstract class AbstractView extends View {
 
 	public void setMode(TouchEvent mode) {
 		m_mode = mode;
+	}
+
+	public void refresh() {
+		bringToFront();
+		View rootView = getRootView();
+		rootView.requestLayout();
+		rootView.invalidate();
+		invalidate();
+	}
+
+	public void zoom(MotionEvent event) {
+		float newDist = spacing(event);
+		if (newDist > 10f) {
+			m_matrix.set(m_savedMatrix);
+			float scale = (newDist / m_oldDistance);
+			m_matrix.postScale(scale, scale, m_middle.x, m_middle.y);
+
+			float[] f = new float[9];
+			m_matrix.getValues(f);
+
+			float scaleX = f[Matrix.MSCALE_X];
+			float scaleY = f[Matrix.MSCALE_Y];
+
+			if (scaleX >= 40 && scaleY >= 40 && m_antiAlias) {
+				Paints.setAntiAlias(false);
+				m_antiAlias = false;
+			} else if (!m_antiAlias) {
+				Paints.setAntiAlias(true);
+				m_antiAlias = true;
+			}
+		}
+
+		if (m_lastEvent != null && event.getPointerCount() >= 2) {
+			m_newRotation = rotation(event);
+			float r = m_newRotation - m_distance;
+			float[] values = new float[9];
+			m_matrix.getValues(values);
+
+			float xc = m_middle.x;
+			float yc = m_middle.y;
+			m_matrix.postRotate(r, xc, yc);
+		}
+	}
+
+	protected void drag(MotionEvent event) {
+		m_matrix.set(m_savedMatrix);
+		float dx = event.getX() - m_start.x;
+		float dy = event.getY() - m_start.y;
+		m_matrix.postTranslate(dx, dy);
+	}
+
+	protected void initZoom(MotionEvent event) {
+		m_oldDistance = spacing(event);
+		if (m_oldDistance > 10f) {
+			m_savedMatrix.set(m_matrix);
+			midPoint(m_middle, event);
+			m_mode = TouchEvent.ZOOM;
+		}
+		m_lastEvent = new float[4];
+		m_lastEvent[0] = event.getX(0);
+		m_lastEvent[1] = event.getX(1);
+		m_lastEvent[2] = event.getY(0);
+		m_lastEvent[3] = event.getY(1);
+		m_distance = rotation(event);
+	}
+
+	protected void cancel() {
+		m_mode = TouchEvent.NONE;
+		m_lastEvent = null;
+		m_levelHandler.endProcess();
 	}
 }

@@ -5,14 +5,17 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
-import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
+import fr.upem.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.deadhal.components.handlers.ResizeType;
 import fr.upem.deadhal.graphics.Paints;
 
 public class EditionLevelDrawable extends AbstractDrawable {
 
-	public EditionLevelDrawable(AbstractLevelHandler levelHandler) {
+	private EditionLevelHandler m_levelHandler;
+
+	public EditionLevelDrawable(EditionLevelHandler levelHandler) {
 		super(levelHandler);
+		m_levelHandler = levelHandler;
 	}
 
 	@Override

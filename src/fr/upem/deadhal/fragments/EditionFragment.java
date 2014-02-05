@@ -27,7 +27,6 @@ import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
-import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
 import fr.upem.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.drawers.adapters.DrawerEditionListAdapter;
@@ -37,7 +36,7 @@ import fr.upem.deadhal.drawers.models.DrawerEditionItem.Type;
 import fr.upem.deadhal.fragments.dialogs.InputDialogFragment;
 import fr.upem.deadhal.graphics.drawable.EditionLevelDrawable;
 import fr.upem.deadhal.view.EditionView;
-import fr.upem.deadhal.view.listeners.GestureListener;
+import fr.upem.deadhal.view.listeners.EditionGestureListener;
 
 public class EditionFragment extends Fragment {
 
@@ -49,10 +48,10 @@ public class EditionFragment extends Fragment {
 	private Level m_level;
 	private EditionView m_view;
 	private SharedPreferences m_prefs;
-	private GestureListener m_editionGestureListener;
+	private EditionGestureListener m_editionGestureListener;
 	private ListView m_drawerList;
 	private View m_rootView;
-	private AbstractLevelHandler m_levelHandler;
+	private EditionLevelHandler m_levelHandler;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -98,12 +97,12 @@ public class EditionFragment extends Fragment {
 		EditionLevelDrawable levelDrawable = new EditionLevelDrawable(
 				m_levelHandler);
 
-		m_view = new EditionView(m_rootView.getContext(), m_levelHandler, levelDrawable);
+		m_view = new EditionView(m_rootView.getContext(), m_levelHandler,
+				levelDrawable);
 
 		m_levelHandler.setView(m_view);
-		
-		m_editionGestureListener = new GestureListener(m_view,
-				m_levelHandler);
+
+		m_editionGestureListener = new EditionGestureListener(m_view, m_levelHandler);
 		GestureDetector gestureDetector = new GestureDetector(
 				m_rootView.getContext(), m_editionGestureListener);
 		m_prefs = getActivity().getSharedPreferences("pref",

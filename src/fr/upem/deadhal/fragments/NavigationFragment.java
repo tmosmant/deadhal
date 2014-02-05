@@ -25,7 +25,7 @@ import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.fragments.dialogs.NavigationDialogFragment;
 import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
 import fr.upem.deadhal.view.NavigationView;
-import fr.upem.deadhal.view.listeners.GestureListener;
+import fr.upem.deadhal.view.listeners.NavigationGestureListener;
 
 public class NavigationFragment extends Fragment {
 	private static final int NAV_DIALOG = 1;
@@ -37,7 +37,7 @@ public class NavigationFragment extends Fragment {
 	private DrawerMainListener m_callback;
 	private SharedPreferences m_prefs = null;
 	private NavigationView m_navigationView = null;
-	private GestureListener m_gestureListener;
+	private NavigationGestureListener m_gestureListener;
 	private NavigationLevelHandler m_levelHandler;
 
 	public NavigationFragment() {
@@ -87,7 +87,8 @@ public class NavigationFragment extends Fragment {
 		m_navigationView = new NavigationView(rootView.getContext(),
 				m_levelHandler, levelDrawable);
 
-		m_gestureListener = new GestureListener(m_navigationView, m_levelHandler);
+		m_gestureListener = new NavigationGestureListener(m_navigationView,
+				m_levelHandler);
 
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);

@@ -2,6 +2,7 @@ package fr.upem.deadhal.components.handlers;
 
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.view.TouchEvent;
 
 public class NavigationLevelHandler extends AbstractLevelHandler {
 
@@ -26,5 +27,14 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 
 	public void setRoomEnd(Room room) {
 		m_roomEnd = room;
+	}
+
+	@Override
+	public TouchEvent getProcess(float x, float y) {
+		return null;
+	}
+
+	@Override
+	public void endProcess() {
 	}
 }

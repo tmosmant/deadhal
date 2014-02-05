@@ -3,16 +3,16 @@ package fr.upem.deadhal.view.listeners;
 import android.graphics.Matrix;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
+import fr.upem.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.deadhal.view.AbstractView;
 import fr.upem.deadhal.view.TouchEvent;
 
-public class GestureListener extends GestureDetector.SimpleOnGestureListener {
+public class EditionGestureListener extends GestureDetector.SimpleOnGestureListener {
 
 	private AbstractView m_view;
-	private AbstractLevelHandler m_levelHander;
+	private EditionLevelHandler m_levelHander;
 
-	public GestureListener(AbstractView view, AbstractLevelHandler levelHandler) {
+	public EditionGestureListener(AbstractView view, EditionLevelHandler levelHandler) {
 		m_view = view;
 		m_levelHander = levelHandler;
 	}

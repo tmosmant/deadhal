@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.GestureDetector;
@@ -52,6 +53,7 @@ public class EditionFragment extends Fragment {
 	private ListView m_drawerList;
 	private View m_rootView;
 	private EditionLevelHandler m_levelHandler;
+	private Vibrator m_vibratorService;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -102,7 +104,8 @@ public class EditionFragment extends Fragment {
 
 		m_levelHandler.setView(m_view);
 
-		m_editionGestureListener = new EditionGestureListener(m_view, m_levelHandler);
+		m_editionGestureListener = new EditionGestureListener(m_view,
+				m_levelHandler);
 		GestureDetector gestureDetector = new GestureDetector(
 				m_rootView.getContext(), m_editionGestureListener);
 		m_prefs = getActivity().getSharedPreferences("pref",
@@ -134,9 +137,15 @@ public class EditionFragment extends Fragment {
 
 		updateDrawer();
 
+		m_vibratorService = (Vibrator) m_view.getContext().getSystemService(
+				Context.VIBRATOR_SERVICE);
+
 		m_levelHandler.addSelectionRoomListener(new SelectionRoomListener() {
 			@Override
 			public void onUnselectRoom(Room room) {
+				if (m_vibratorService != null) {
+					m_vibratorService.vibrate(100);
+				}
 				for (int i = 0; i < m_drawerList.getAdapter().getCount(); i++) {
 					DrawerEditionItem item = (DrawerEditionItem) m_drawerList
 							.getAdapter().getItem(i);
@@ -150,6 +159,9 @@ public class EditionFragment extends Fragment {
 
 			@Override
 			public void onSelectRoom(Room room) {
+				if (m_vibratorService != null) {
+					m_vibratorService.vibrate(100);
+				}
 				for (int i = 0; i < m_drawerList.getAdapter().getCount(); i++) {
 					DrawerEditionItem item = (DrawerEditionItem) m_drawerList
 							.getAdapter().getItem(i);

@@ -23,7 +23,7 @@ public class EditionLevelDrawable extends AbstractDrawable {
 		Level level = m_levelHandler.getLevel();
 		Room selectedRoom = m_levelHandler.getSelectedRoom();
 		for (Room room : level.getRooms().values()) {
-			if (!room.getId().equals(selectedRoom)) {
+			if (!room.equals(selectedRoom)) {
 				drawRoom(canvas, room);
 			}
 		}

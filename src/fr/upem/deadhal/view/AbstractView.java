@@ -97,7 +97,7 @@ public abstract class AbstractView extends View {
 	}
 
 	private void restoreMatrix(Bundle savedInstanceState) {
-		float[] values = null;
+		float[] values;
 		m_matrix = new Matrix();
 		m_savedMatrix = new Matrix();
 		values = savedInstanceState.getFloatArray("matrix");
@@ -141,8 +141,8 @@ public abstract class AbstractView extends View {
 
 	/**
 	 * Calculate the degree to be rotated by.
-	 * 
-	 * @param event
+	 *
+	 * @param event evenement
 	 * @return Degrees
 	 */
 	protected float rotation(MotionEvent event) {

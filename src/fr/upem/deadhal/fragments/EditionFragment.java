@@ -1,8 +1,5 @@
 package fr.upem.deadhal.fragments;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -14,11 +11,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -39,6 +32,9 @@ import fr.upem.deadhal.graphics.drawable.EditionLevelDrawable;
 import fr.upem.deadhal.view.EditionView;
 import fr.upem.deadhal.view.listeners.EditionGestureListener;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class EditionFragment extends Fragment {
 
 	private static final int ADD_NEW_ROOM = 0;
@@ -49,9 +45,7 @@ public class EditionFragment extends Fragment {
 	private Level m_level;
 	private EditionView m_view;
 	private SharedPreferences m_prefs;
-	private EditionGestureListener m_editionGestureListener;
 	private ListView m_drawerList;
-	private View m_rootView;
 	private EditionLevelHandler m_levelHandler;
 	private Vibrator m_vibratorService;
 
@@ -75,61 +69,51 @@ public class EditionFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		m_rootView = inflater.inflate(R.layout.fragment_edition, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View m_rootView = inflater.inflate(R.layout.fragment_edition, container, false);
 
 		getActivity().setTitle(R.string.edition);
 
-		RelativeLayout relativeLayout = (RelativeLayout) m_rootView
-				.findViewById(R.id.edit_layout);
+		RelativeLayout relativeLayout = (RelativeLayout) m_rootView.findViewById(R.id.edit_layout);
 
 		m_level = getArguments().getParcelable("level");
 		if (savedInstanceState != null) {
 			m_level = savedInstanceState.getParcelable("level");
 		}
 
-		TextView levelTitleTextView = (TextView) m_rootView
-				.findViewById(R.id.levelTitleTextView);
+		TextView levelTitleTextView = (TextView) m_rootView.findViewById(R.id.levelTitleTextView);
 		levelTitleTextView.setText(m_level.getTitle());
 
 		m_levelHandler = new EditionLevelHandler(m_level);
 
-		EditionLevelDrawable levelDrawable = new EditionLevelDrawable(
-				m_levelHandler);
+		EditionLevelDrawable levelDrawable = new EditionLevelDrawable(m_levelHandler);
 
-		m_view = new EditionView(m_rootView.getContext(), m_levelHandler,
-				levelDrawable);
+		m_view = new EditionView(m_rootView.getContext(), m_levelHandler, levelDrawable);
 
 		m_levelHandler.setView(m_view);
 
-		m_editionGestureListener = new EditionGestureListener(m_view,
-				m_levelHandler);
-		GestureDetector gestureDetector = new GestureDetector(
-				m_rootView.getContext(), m_editionGestureListener);
-		m_prefs = getActivity().getSharedPreferences("pref",
-				Context.MODE_PRIVATE);
+		EditionGestureListener m_editionGestureListener = new EditionGestureListener(m_view, m_levelHandler);
+		GestureDetector gestureDetector = new GestureDetector(m_rootView.getContext(), m_editionGestureListener);
+		m_prefs = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
 
 		m_view.build(gestureDetector, savedInstanceState, m_prefs);
 
 		relativeLayout.addView(m_view);
 
-		DrawerLayout drawerLayout = (DrawerLayout) m_rootView
-				.findViewById(R.id.drawer_edit_layout);
+		DrawerLayout drawerLayout = (DrawerLayout) m_rootView.findViewById(R.id.drawer_edit_layout);
 
-		drawerLayout.setDrawerListener(new ActionBarDrawerToggle(getActivity(),
-				drawerLayout, R.drawable.ic_action_collection_dark,
-				R.string.app_name, R.string.app_name) {
-			@Override
-			public void onDrawerOpened(View drawerView) {
-				// nothing to do
-				super.onDrawerOpened(drawerView);
-			}
-		});
+		drawerLayout.setDrawerListener(
+				new ActionBarDrawerToggle(getActivity(), drawerLayout, R.drawable.ic_action_collection_dark,
+				                          R.string.app_name, R.string.app_name) {
 
-		m_drawerList = (ListView) m_rootView
-				.findViewById(R.id.list_edit_slidermenu);
+					@Override
+					public void onDrawerOpened(View drawerView) {
+						// nothing to do
+						super.onDrawerOpened(drawerView);
+					}
+				});
+
+		m_drawerList = (ListView) m_rootView.findViewById(R.id.list_edit_slidermenu);
 
 		OnItemClickListener listener = buildOnItemClickListener();
 
@@ -137,18 +121,17 @@ public class EditionFragment extends Fragment {
 
 		updateDrawer();
 
-		m_vibratorService = (Vibrator) m_view.getContext().getSystemService(
-				Context.VIBRATOR_SERVICE);
+		m_vibratorService = (Vibrator) m_view.getContext().getSystemService(Context.VIBRATOR_SERVICE);
 
 		m_levelHandler.addSelectionRoomListener(new SelectionRoomListener() {
+
 			@Override
 			public void onUnselectRoom(Room room) {
 				if (m_vibratorService != null) {
 					m_vibratorService.vibrate(100);
 				}
 				for (int i = 0; i < m_drawerList.getAdapter().getCount(); i++) {
-					DrawerEditionItem item = (DrawerEditionItem) m_drawerList
-							.getAdapter().getItem(i);
+					DrawerEditionItem item = (DrawerEditionItem) m_drawerList.getAdapter().getItem(i);
 					Room room2 = item.getRoom();
 					if (room2 != null && room.getId().equals(room2.getId())) {
 						m_drawerList.setItemChecked(i, false);
@@ -163,8 +146,7 @@ public class EditionFragment extends Fragment {
 					m_vibratorService.vibrate(100);
 				}
 				for (int i = 0; i < m_drawerList.getAdapter().getCount(); i++) {
-					DrawerEditionItem item = (DrawerEditionItem) m_drawerList
-							.getAdapter().getItem(i);
+					DrawerEditionItem item = (DrawerEditionItem) m_drawerList.getAdapter().getItem(i);
 					Room room2 = item.getRoom();
 					if (room2 != null && room.getId().equals(room2.getId())) {
 						m_drawerList.setItemChecked(i, true);
@@ -179,84 +161,74 @@ public class EditionFragment extends Fragment {
 		return new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				DrawerEditionItem item = (DrawerEditionItem) parent
-						.getItemAtPosition(position);
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				DrawerEditionItem item = (DrawerEditionItem) parent.getItemAtPosition(position);
 				Type type = item.getType();
 				switch (type) {
-				case ADD_CORRIDOR:
-					m_drawerList.setItemChecked(position, false);
-					break;
-				case ADD_ROOM:
-					int title = R.string.action_add;
+					case ADD_CORRIDOR:
+						m_drawerList.setItemChecked(position, false);
+						break;
+					case ADD_ROOM:
+						int title = R.string.action_add;
 
-					DialogFragment dialogFragment = InputDialogFragment
-							.newInstance(title);
-					dialogFragment.setTargetFragment(EditionFragment.this,
-							ADD_NEW_ROOM);
-					dialogFragment.show(
-							getFragmentManager().beginTransaction(),
-							"addDialog");
+						DialogFragment dialogFragment = InputDialogFragment.newInstance(title);
+						dialogFragment.setTargetFragment(EditionFragment.this, ADD_NEW_ROOM);
+						dialogFragment.show(getFragmentManager().beginTransaction(), "addDialog");
 
-					m_drawerList.setItemChecked(position, false);
-					break;
-				case CORRIDOR:
-					m_drawerList.setItemChecked(position, false);
-					break;
-				case ROOM:
-					Room room = item.getRoom();
-					if (room != null) {
-						boolean selectRoom = m_levelHandler.selectRoom(room);
-						m_drawerList.setItemChecked(position, selectRoom);
-					}
-					break;
+						m_drawerList.setItemChecked(position, false);
+						break;
+					case CORRIDOR:
+						m_drawerList.setItemChecked(position, false);
+						break;
+					case ROOM:
+						Room room = item.getRoom();
+						if (room != null) {
+							boolean selectRoom = m_levelHandler.selectRoom(room);
+							m_drawerList.setItemChecked(position, selectRoom);
+						}
+						break;
 				}
 			}
 		};
 	}
 
 	public void updateDrawer() {
-		ArrayList<DrawerEditionItem> drawerItems = new ArrayList<DrawerEditionItem>();
-		drawerItems.add(new DrawerEditionItem(getString(R.string.add_room),
-				DrawerEditionItem.Type.ADD_ROOM));
+		ArrayList<DrawerEditionItem> drawerItems = new ArrayList<>();
+		drawerItems.add(new DrawerEditionItem(getString(R.string.add_room), DrawerEditionItem.Type.ADD_ROOM));
 		for (Room room : m_level.getRooms().values()) {
 			drawerItems.add(new DrawerEditionItem(room));
 		}
-		drawerItems.add(new DrawerEditionItem(getString(R.string.add_corridor),
-				DrawerEditionItem.Type.ADD_CORRIDOR));
+		drawerItems.add(new DrawerEditionItem(getString(R.string.add_corridor), DrawerEditionItem.Type.ADD_CORRIDOR));
 		for (Corridor corridor : m_level.getCorridors().values()) {
 			String title = corridorTitle(corridor);
 			drawerItems.add(new DrawerEditionItem(corridor, title));
 		}
-		DrawerEditionListAdapter adapter = new DrawerEditionListAdapter(
-				getActivity(), this, drawerItems, m_levelHandler, m_view);
+		DrawerEditionListAdapter adapter = new DrawerEditionListAdapter(getActivity(), this, drawerItems,
+		                                                                m_levelHandler, m_view);
 		m_drawerList.setAdapter(adapter);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-		case ADD_NEW_ROOM:
-			if (resultCode == Activity.RESULT_OK) {
-				String title = data.getStringExtra("inputText");
-				Room room = new Room(UUID.randomUUID(), title, new RectF(0, 0,
-						150, 150));
-				m_levelHandler.addRoom(room);
-				updateDrawer();
-				m_levelHandler.selectRoom(room);
-			}
-			break;
-		case ADD_NEW_CORRIDOR:
-			if (resultCode == Activity.RESULT_OK) {
-				String title = data.getStringExtra("inputText");
-				Room room = new Room(UUID.randomUUID(), title, new RectF(0, 0,
-						150, 150));
-				m_levelHandler.addRoom(room);
-				updateDrawer();
-				m_levelHandler.selectRoom(room);
-			}
-			break;
+			case ADD_NEW_ROOM:
+				if (resultCode == Activity.RESULT_OK) {
+					String title = data.getStringExtra("inputText");
+					Room room = new Room(UUID.randomUUID(), title, new RectF(0, 0, 150, 150));
+					m_levelHandler.addRoom(room);
+					updateDrawer();
+					m_levelHandler.selectRoom(room);
+				}
+				break;
+			case ADD_NEW_CORRIDOR:
+				if (resultCode == Activity.RESULT_OK) {
+					String title = data.getStringExtra("inputText");
+					Room room = new Room(UUID.randomUUID(), title, new RectF(0, 0, 150, 150));
+					m_levelHandler.addRoom(room);
+					updateDrawer();
+					m_levelHandler.selectRoom(room);
+				}
+				break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -273,11 +245,11 @@ public class EditionFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_lock:
-			m_callback.onFragmentChange(FragmentType.NAVIGATION);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+			case R.id.action_lock:
+				m_callback.onFragmentChange(FragmentType.NAVIGATION);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -294,5 +266,4 @@ public class EditionFragment extends Fragment {
 		m_view.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}
-
 }

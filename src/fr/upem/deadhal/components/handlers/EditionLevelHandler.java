@@ -1,15 +1,15 @@
 package fr.upem.deadhal.components.handlers;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-
 import android.graphics.Point;
 import android.graphics.RectF;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.view.TouchEvent;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class EditionLevelHandler extends AbstractLevelHandler {
 
@@ -64,7 +64,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 
 	public boolean selectRoomFromCoordinates(float x, float y) {
 		Collection<Room> rooms = m_level.getRooms().values();
-		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
+		LinkedList<Room> reverseRooms = new LinkedList<>(rooms);
 		Collections.reverse(reverseRooms);
 		for (Room room : reverseRooms) {
 			if (m_selectedRoom != null) {

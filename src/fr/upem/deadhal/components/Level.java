@@ -1,17 +1,17 @@
 package fr.upem.deadhal.components;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 public class Level implements Parcelable {
 
-	private String m_title = new String();
-	private Map<UUID, Room> m_rooms = new HashMap<UUID, Room>();
-	private Map<UUID, Corridor> m_corridors = new HashMap<UUID, Corridor>();
+	private String m_title = "";
+	private Map<UUID, Room> m_rooms = new HashMap<>();
+	private Map<UUID, Corridor> m_corridors = new HashMap<>();
 
 	public Level() {
 	}

@@ -1,16 +1,5 @@
 package fr.upem.deadhal.tasks;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
-import org.xmlpull.v1.XmlSerializer;
-
 import android.app.Activity;
 import android.graphics.RectF;
 import android.os.AsyncTask;
@@ -20,6 +9,12 @@ import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.*;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 
@@ -52,7 +47,6 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 					outputStreamWriter.close();
 				} catch (IOException e) {
 					m_error = e.getMessage();
-					return -1;
 				}
 			}
 
@@ -61,7 +55,6 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 					outputStream.close();
 				} catch (IOException e) {
 					m_error = e.getMessage();
-					return -1;
 				}
 			}
 		}
@@ -79,8 +72,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 		xmlSerializer.setOutput(writer);
 
 		xmlSerializer.startDocument("UTF-8", null);
-		xmlSerializer.setFeature(
-				"http://xmlpull.org/v1/doc/features.html#indent-output", true);
+		xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
 
 		xmlSerializer.startTag("", "level");
 		xmlSerializer.attribute("", "title", level.getTitle());
@@ -103,8 +95,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 			xmlSerializer.startTag("", "corridor");
 			xmlSerializer.attribute("", "src", corridor.getSrc().toString());
 			xmlSerializer.attribute("", "dst", corridor.getDst().toString());
-			xmlSerializer.attribute("", "directed",
-					String.valueOf(corridor.isDirected()));
+			xmlSerializer.attribute("", "directed", String.valueOf(corridor.isDirected()));
 			xmlSerializer.endTag("", "corridor");
 		}
 		xmlSerializer.endTag("", "level");
@@ -116,12 +107,10 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 	@Override
 	protected void onPostExecute(Integer result) {
 		if (result == 1) {
-			Toast.makeText(activity, R.string.saved_file, Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(activity, R.string.saved_file, Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(activity, m_error, Toast.LENGTH_LONG).show();
 		}
 		super.onPostExecute(result);
 	}
-
 }

@@ -1,10 +1,5 @@
 package fr.upem.deadhal.fragments;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -13,18 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.*;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.ShareActionProvider;
-import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
@@ -33,17 +19,21 @@ import fr.upem.deadhal.fragments.dialogs.InputDialogFragment;
 import fr.upem.deadhal.tasks.OpenTask;
 import fr.upem.deadhal.utils.Storage;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 public class OpenFragment extends Fragment {
 
 	private DrawerMainListener m_callback;
 	public static final int RENAME_DIALOG = 1;
 	public static final int REMOVE_DIALOG = 2;
 
-	private Level m_level;
 	private int m_selection = -1;
 	private String m_fileName = null;
 	private ArrayAdapter<String> m_arrayAdapter = null;
-	private List<String> m_list = new ArrayList<String>();
+	private List<String> m_list = new ArrayList<>();
 	private ListView m_listView = null;
 
 	public OpenFragment() {
@@ -58,8 +48,7 @@ public class OpenFragment extends Fragment {
 		try {
 			m_callback = (DrawerMainListener) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnDataPass");
+			throw new ClassCastException(activity.toString() + " must implement OnDataPass");
 		}
 	}
 
@@ -85,9 +74,9 @@ public class OpenFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		File file = Storage.openFile(m_fileName);
 		if (file.exists() && file.canRead()) {
-			ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(
-					R.id.action_share).getActionProvider();
-			
+			ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.action_share)
+					.getActionProvider();
+
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
 			intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
@@ -97,35 +86,24 @@ public class OpenFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_open, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fragment_open, container, false);
 
 		getActivity().setTitle(R.string.open);
 
-		if (!Storage.isExternalStorageReadable()) {
-			Toast.makeText(getActivity(),
-					"Erreur: impossible d'accéder a la mémoire externe",
-					Toast.LENGTH_SHORT).show();
-		}
-
-		else {
+		if (Storage.isExternalStorageReadable()) {
 			m_list = Storage.getFilesList();
 			m_listView = (ListView) rootView.findViewById(R.id.listFile);
-			m_arrayAdapter = new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_list_item_activated_1, m_list);
+			m_arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1, m_list);
 			m_listView.setAdapter(m_arrayAdapter);
 			m_listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 			m_listView.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					if (m_selection != position) {
 						m_selection = position;
-						m_fileName = (String) parent
-								.getItemAtPosition(position);
+						m_fileName = (String) parent.getItemAtPosition(position);
 					} else {
 						m_selection = -1;
 						m_fileName = null;
@@ -134,8 +112,10 @@ public class OpenFragment extends Fragment {
 					}
 					getActivity().invalidateOptionsMenu();
 				}
-
 			});
+		} else {
+			Toast.makeText(getActivity(), "Erreur: impossible d'accï¿½der a la mï¿½moire externe", Toast.LENGTH_SHORT)
+					.show();
 		}
 
 		return rootView;
@@ -144,18 +124,18 @@ public class OpenFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_navigation:
-			return open(FragmentType.NAVIGATION);
-		case R.id.action_edition:
-			return open(FragmentType.EDITION);
-		case R.id.action_rename:
-			showRenameDialog();
-			return true;
-		case R.id.action_remove:
-			showRemoveDialog();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+			case R.id.action_navigation:
+				return open(FragmentType.NAVIGATION);
+			case R.id.action_edition:
+				return open(FragmentType.EDITION);
+			case R.id.action_rename:
+				showRenameDialog();
+				return true;
+			case R.id.action_remove:
+				showRemoveDialog();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -169,19 +149,17 @@ public class OpenFragment extends Fragment {
 		openTask.execute(m_file);
 
 		try {
-			m_level = openTask.get();
-			SharedPreferences preferences = getActivity().getSharedPreferences(
-					"pref", Context.MODE_PRIVATE);
+			Level m_level = openTask.get();
+			SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
 			SharedPreferences.Editor ed = preferences.edit();
 			ed.clear();
 			ed.commit();
 
 			m_fileName = null;
 			m_listView.clearChoices();
-			m_callback.onLevelChange(dest, m_level);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
+			m_callback.onLevelChange(m_level);
+			m_callback.onFragmentChange(dest);
+		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
 		return true;
@@ -192,35 +170,32 @@ public class OpenFragment extends Fragment {
 
 		DialogFragment dialogFragment = InputDialogFragment.newInstance(title);
 		dialogFragment.setTargetFragment(this, RENAME_DIALOG);
-		dialogFragment.show(getFragmentManager().beginTransaction(),
-				"renameDialog");
+		dialogFragment.show(getFragmentManager().beginTransaction(), "renameDialog");
 	}
 
 	private void showRemoveDialog() {
 		int title = R.string.action_remove;
 		int message = R.string.remove_warning;
 
-		DialogFragment dialogFragment = ConfirmDialogFragment.newInstance(
-				title, message);
+		DialogFragment dialogFragment = ConfirmDialogFragment.newInstance(title, message);
 		dialogFragment.setTargetFragment(this, REMOVE_DIALOG);
-		dialogFragment.show(getFragmentManager().beginTransaction(),
-				"removeDialog");
+		dialogFragment.show(getFragmentManager().beginTransaction(), "removeDialog");
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-		case RENAME_DIALOG:
-			if (resultCode == Activity.RESULT_OK) {
-				String fileName = data.getStringExtra("inputText");
-				rename(fileName);
-			}
-			break;
-		case REMOVE_DIALOG:
-			if (resultCode == Activity.RESULT_OK) {
-				delete();
-			}
-			break;
+			case RENAME_DIALOG:
+				if (resultCode == Activity.RESULT_OK) {
+					String fileName = data.getStringExtra("inputText");
+					rename(fileName);
+				}
+				break;
+			case REMOVE_DIALOG:
+				if (resultCode == Activity.RESULT_OK) {
+					delete();
+				}
+				break;
 		}
 	}
 
@@ -239,13 +214,11 @@ public class OpenFragment extends Fragment {
 		if (m_file.delete()) {
 			m_callback.onFileNumberChange();
 			m_arrayAdapter.remove(m_fileName);
-			
+
 			clearChoice();
-			Toast.makeText(getActivity(), R.string.deleted_file,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), R.string.deleted_file, Toast.LENGTH_SHORT).show();
 		} else {
-			Toast.makeText(getActivity(), R.string.deleted_file_error,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), R.string.deleted_file_error, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -254,11 +227,11 @@ public class OpenFragment extends Fragment {
 		super.onPause();
 		clearChoice();
 	}
-	
+
 	public void clearChoice() {
 		m_fileName = null;
 		m_listView.clearChoices();
-		getActivity().invalidateOptionsMenu();		
+		getActivity().invalidateOptionsMenu();
 	}
 
 	@Override
@@ -267,5 +240,4 @@ public class OpenFragment extends Fragment {
 		outState.putString("file", m_fileName);
 		outState.putInt("selection", m_selection);
 	}
-
 }

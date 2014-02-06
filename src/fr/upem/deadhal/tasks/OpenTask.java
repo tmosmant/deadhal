@@ -1,21 +1,15 @@
 package fr.upem.deadhal.tasks;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.util.UUID;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.*;
+import java.util.UUID;
 
 public class OpenTask extends AsyncTask<File, Integer, Level> {
 
@@ -47,7 +41,7 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 			inputStream = new FileInputStream(file);
 			inputStreamReader = new InputStreamReader(inputStream);
 
-			int read = 0;
+			int read;
 			byte[] buffer = new byte[1024];
 			StringBuilder stringBuilder = new StringBuilder();
 			while ((read = inputStream.read(buffer)) != -1) {
@@ -55,8 +49,6 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 			}
 
 			return stringBuilder.toString();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -91,13 +83,9 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 			if (eventType == XmlPullParser.START_TAG) {
 				if (xpp.getName().equals("level")) {
 					levelTag(xpp);
-				}
-
-				else if (xpp.getName().equals("room")) {
+				} else if (xpp.getName().equals("room")) {
 					roomTag(xpp);
-				}
-
-				else if (xpp.getName().equals("corridor")) {
+				} else if (xpp.getName().equals("corridor")) {
 					corridorTag(xpp);
 				}
 			}
@@ -127,8 +115,7 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 		UUID corridorId = UUID.randomUUID();
 		UUID src = UUID.fromString(xpp.getAttributeValue(null, "src"));
 		UUID dst = UUID.fromString(xpp.getAttributeValue(null, "dst"));
-		boolean directed = Boolean.valueOf(xpp.getAttributeValue(null,
-				"directed"));
+		boolean directed = Boolean.valueOf(xpp.getAttributeValue(null, "directed"));
 
 		Corridor corridor = new Corridor(corridorId, src, dst, directed);
 		m_level.addCorridor(corridor);
@@ -142,5 +129,4 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 			roomDst.addNeighbor(corridorId, roomSrc.getId());
 		}
 	}
-
 }

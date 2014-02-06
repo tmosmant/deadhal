@@ -1,17 +1,18 @@
 package fr.upem.deadhal.components.handlers;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.view.AbstractView;
 import fr.upem.deadhal.view.TouchEvent;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public abstract class AbstractLevelHandler {
+
 	protected Level m_level;
-	protected List<SelectionRoomListener> selectionRoomListeners = new LinkedList<SelectionRoomListener>();
+	protected List<SelectionRoomListener> selectionRoomListeners = new LinkedList<>();
 	protected AbstractView m_view;
 
 	public AbstractLevelHandler(Level level) {
@@ -53,5 +54,4 @@ public abstract class AbstractLevelHandler {
 			m_view.invalidate();
 		}
 	}
-
 }

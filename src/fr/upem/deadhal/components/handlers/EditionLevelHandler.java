@@ -62,34 +62,33 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		return true;
 	}
 
-	public boolean selectRoomFromCoordinates(float x, float y) {
+	public void selectRoomFromCoordinates(float x, float y) {
+		if (m_selectedRoom != null && m_selectedRoom.getRect().contains(x, y)) {
+			for (SelectionRoomListener listener : selectionRoomListeners) {
+				listener.onUnselectRoom(m_selectedRoom);
+			}
+			m_selectedRoom = null;
+			invalidateView();
+			return;
+		}
 		Collection<Room> rooms = m_level.getRooms().values();
 		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
 		Collections.reverse(reverseRooms);
 		for (Room room : reverseRooms) {
-			if (m_selectedRoom != null) {
-				if (room.getRect().contains(x, y)) {
-					if (room.equals(m_selectedRoom)) {
-						for (SelectionRoomListener listener : selectionRoomListeners) {
-							listener.onUnselectRoom(room);
-						}
-						m_selectedRoom = null;
-						invalidateView();
-						return true;
-					}
-				}
-			} else {
-				if (room.getRect().contains(x, y)) {
+			if (!room.equals(m_selectedRoom) && room.getRect().contains(x, y)) {
+				if (m_selectedRoom != null) {
 					for (SelectionRoomListener listener : selectionRoomListeners) {
-						listener.onSelectRoom(room);
+						listener.onUnselectRoom(m_selectedRoom);
 					}
-					m_selectedRoom = room;
-					invalidateView();
-					return true;
 				}
+				for (SelectionRoomListener listener : selectionRoomListeners) {
+					listener.onSelectRoom(room);
+				}
+				m_selectedRoom = room;
+				invalidateView();
+				return;
 			}
 		}
-		return false;
 	}
 
 	public TouchEvent getProcess(float x, float y) {

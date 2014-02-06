@@ -100,14 +100,14 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 
 	private void roomTag(XmlPullParser xpp) {
 		UUID id = UUID.fromString(xpp.getAttributeValue(null, "id"));
-		String title = xpp.getAttributeValue(null, "title");
+		String name = xpp.getAttributeValue(null, "name");
 		float left = Float.valueOf(xpp.getAttributeValue(null, "left"));
 		float right = Float.valueOf(xpp.getAttributeValue(null, "right"));
 		float top = Float.valueOf(xpp.getAttributeValue(null, "top"));
 		float bottom = Float.valueOf(xpp.getAttributeValue(null, "bottom"));
 		RectF rect = new RectF(left, top, right, bottom);
 
-		Room room = new Room(id, title, rect);
+		Room room = new Room(id, name, rect);
 		m_level.addRoom(room);
 	}
 

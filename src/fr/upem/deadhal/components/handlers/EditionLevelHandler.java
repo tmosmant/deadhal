@@ -1,15 +1,18 @@
 package fr.upem.deadhal.components.handlers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
 import android.graphics.Point;
 import android.graphics.RectF;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.view.TouchEvent;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
 
 public class EditionLevelHandler extends AbstractLevelHandler {
 
@@ -300,6 +303,21 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 
 	public ResizeType getResizeType() {
 		return m_resizeType;
+	}
+
+	public List<Room> getRoomByName() {
+		Collection<Room> collection = m_level.getRooms().values();
+
+		ArrayList<Room> list = new ArrayList<Room>(collection);
+
+		Collections.sort(list, new Comparator<Room>() {
+
+			@Override
+			public int compare(Room lhs, Room rhs) {
+				return lhs.getName().compareTo(rhs.getName());
+			}
+		});
+		return list;
 	}
 
 }

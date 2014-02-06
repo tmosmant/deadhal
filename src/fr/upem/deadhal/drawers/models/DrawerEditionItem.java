@@ -12,7 +12,7 @@ public class DrawerEditionItem {
 
 	public DrawerEditionItem(Room room) {
 		this.m_room = room;
-		this.m_title = room.getTitle();
+		this.m_title = room.getName();
 		this.m_type = Type.ROOM;
 	}
 

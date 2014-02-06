@@ -83,7 +83,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 
 			xmlSerializer.startTag("", "room");
 			xmlSerializer.attribute("", "id", room.getId().toString());
-			xmlSerializer.attribute("", "title", room.getTitle());
+			xmlSerializer.attribute("", "name", room.getName());
 			xmlSerializer.attribute("", "left", String.valueOf(rect.left));
 			xmlSerializer.attribute("", "right", String.valueOf(rect.right));
 			xmlSerializer.attribute("", "top", String.valueOf(rect.top));

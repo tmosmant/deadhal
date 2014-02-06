@@ -37,7 +37,7 @@ public abstract class AbstractDrawable extends Drawable {
 	}
 
 	protected void drawTitle(Canvas canvas, Room room) {
-		String title = room.getTitle();
+		String title = room.getName();
 		RectF rect = room.getRect();
 		if (rect.height() >= 20) {
 			Paint paint = new Paint(Paints.ROOM_TITLE);

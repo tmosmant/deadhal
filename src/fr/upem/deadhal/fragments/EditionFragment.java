@@ -33,6 +33,7 @@ import fr.upem.deadhal.view.EditionView;
 import fr.upem.deadhal.view.listeners.EditionGestureListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class EditionFragment extends Fragment {
@@ -195,7 +196,8 @@ public class EditionFragment extends Fragment {
 	public void updateDrawer() {
 		ArrayList<DrawerEditionItem> drawerItems = new ArrayList<DrawerEditionItem>();
 		drawerItems.add(new DrawerEditionItem(getString(R.string.add_room), DrawerEditionItem.Type.ADD_ROOM));
-		for (Room room : m_level.getRooms().values()) {
+		List<Room> roomByName = m_levelHandler.getRoomByName();
+		for (Room room : roomByName) {
 			drawerItems.add(new DrawerEditionItem(room));
 		}
 		drawerItems.add(new DrawerEditionItem(getString(R.string.add_corridor), DrawerEditionItem.Type.ADD_CORRIDOR));
@@ -213,8 +215,8 @@ public class EditionFragment extends Fragment {
 		switch (requestCode) {
 			case ADD_NEW_ROOM:
 				if (resultCode == Activity.RESULT_OK) {
-					String title = data.getStringExtra("inputText");
-					Room room = new Room(UUID.randomUUID(), title, new RectF(0, 0, 150, 150));
+					String name = data.getStringExtra("inputText");
+					Room room = new Room(UUID.randomUUID(), name, new RectF(0, 0, 150, 150));
 					m_levelHandler.addRoom(room);
 					updateDrawer();
 					m_levelHandler.selectRoom(room);
@@ -236,8 +238,8 @@ public class EditionFragment extends Fragment {
 	private String corridorTitle(Corridor corridor) {
 		UUID src = corridor.getSrc();
 		UUID dst = corridor.getDst();
-		String strSrc = m_level.getRooms().get(src).getTitle();
-		String strDst = m_level.getRooms().get(dst).getTitle();
+		String strSrc = m_level.getRooms().get(src).getName();
+		String strDst = m_level.getRooms().get(dst).getName();
 		String op = (corridor.isDirected()) ? " <-> " : " -> ";
 		return strSrc + op + strDst;
 	}

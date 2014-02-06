@@ -12,20 +12,20 @@ import java.util.UUID;
 public class Room implements Parcelable {
 
 	private UUID id;
-	private String title;
+	private String name;
 	private RectF rect;
 	private Map<UUID, UUID> neighbors = new HashMap<UUID, UUID>();
 
-	public Room(UUID id, String title, RectF rect) {
+	public Room(UUID id, String name, RectF rect) {
 		this.id = id;
-		this.title = title;
+		this.name = name;
 		this.rect = rect;
 	}
 
 	public Room(Parcel source) {
 		ParcelUuid id = source.readParcelable(ParcelUuid.class.getClassLoader());
 		this.id = id.getUuid();
-		this.title = source.readString();
+		this.name = source.readString();
 		float left = source.readFloat();
 		float right = source.readFloat();
 		float top = source.readFloat();
@@ -34,8 +34,8 @@ public class Room implements Parcelable {
 		source.readMap(neighbors, HashMap.class.getClass().getClassLoader());
 	}
 
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
 	public RectF getRect() {
@@ -67,7 +67,7 @@ public class Room implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		ParcelUuid parcelUuid = new ParcelUuid(id);
 		parcelUuid.writeToParcel(dest, flags);
-		dest.writeString(title);
+		dest.writeString(name);
 		dest.writeFloat(rect.left);
 		dest.writeFloat(rect.right);
 		dest.writeFloat(rect.top);
@@ -90,6 +90,6 @@ public class Room implements Parcelable {
 
 	@Override
 	public String toString() {
-		return title;
+		return name;
 	}
 }

@@ -52,7 +52,7 @@ public class Storage {
 	/* List all the files in the deadhal directory */
 	public static List<String> getFilesList() {
 		File directory = getDeadHalDir();
-		List<String> list = new ArrayList<>();
+		List<String> list = new ArrayList<String>();
 
 		if (directory.isDirectory()) {
 			File files[] = directory.listFiles(filter());

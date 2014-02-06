@@ -61,7 +61,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		m_drawerList = (ListView) findViewById(R.id.list_slidermenu);
 
-		m_navDrawerItems = new ArrayList<>();
+		m_navDrawerItems = new ArrayList<DrawerMainItem>();
 
 		// adding nav drawer items to array
 

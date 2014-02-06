@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class AbstractLevelHandler {
 
 	protected Level m_level;
-	protected List<SelectionRoomListener> selectionRoomListeners = new LinkedList<>();
+	protected List<SelectionRoomListener> selectionRoomListeners = new LinkedList<SelectionRoomListener>();
 	protected AbstractView m_view;
 
 	public AbstractLevelHandler(Level level) {

@@ -64,7 +64,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 
 	public boolean selectRoomFromCoordinates(float x, float y) {
 		Collection<Room> rooms = m_level.getRooms().values();
-		LinkedList<Room> reverseRooms = new LinkedList<>(rooms);
+		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
 		Collections.reverse(reverseRooms);
 		for (Room room : reverseRooms) {
 			if (m_selectedRoom != null) {

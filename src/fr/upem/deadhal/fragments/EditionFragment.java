@@ -193,7 +193,7 @@ public class EditionFragment extends Fragment {
 	}
 
 	public void updateDrawer() {
-		ArrayList<DrawerEditionItem> drawerItems = new ArrayList<>();
+		ArrayList<DrawerEditionItem> drawerItems = new ArrayList<DrawerEditionItem>();
 		drawerItems.add(new DrawerEditionItem(getString(R.string.add_room), DrawerEditionItem.Type.ADD_ROOM));
 		for (Room room : m_level.getRooms().values()) {
 			drawerItems.add(new DrawerEditionItem(room));

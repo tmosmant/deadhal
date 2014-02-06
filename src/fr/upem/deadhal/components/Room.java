@@ -14,7 +14,7 @@ public class Room implements Parcelable {
 	private UUID id;
 	private String title;
 	private RectF rect;
-	private Map<UUID, UUID> neighbors = new HashMap<>();
+	private Map<UUID, UUID> neighbors = new HashMap<UUID, UUID>();
 
 	public Room(UUID id, String title, RectF rect) {
 		this.id = id;

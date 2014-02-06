@@ -1,5 +1,7 @@
 package fr.upem.deadhal.fragments;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -23,8 +25,6 @@ import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.fragments.dialogs.ConfirmDialogFragment;
 import fr.upem.deadhal.tasks.SaveTask;
 import fr.upem.deadhal.utils.Storage;
-
-import java.io.File;
 
 public class SaveFragment extends Fragment {
 
@@ -169,4 +169,10 @@ public class SaveFragment extends Fragment {
 		m_callback.onFileNumberChange();
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		m_textViewLevelName.setText("");
+		m_textViewFileName.setText("");
+	}
 }

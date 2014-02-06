@@ -1,5 +1,12 @@
 package fr.upem.deadhal.tasks;
 
+import java.io.*;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
+
+import org.xmlpull.v1.XmlSerializer;
+
 import android.app.Activity;
 import android.graphics.RectF;
 import android.os.AsyncTask;
@@ -9,12 +16,6 @@ import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
-import org.xmlpull.v1.XmlSerializer;
-
-import java.io.*;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
 
 public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 
@@ -22,12 +23,10 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 
 	private String m_error;
 	private File m_file = null;
-	private String m_levelName;
 
-	public SaveTask(Activity activity, File file, String levelName) {
+	public SaveTask(Activity activity, File file) {
 		this.activity = activity;
 		m_file = file;
-		m_levelName = levelName;
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 		xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
 
 		xmlSerializer.startTag("", "level");
-		xmlSerializer.attribute("", "title", m_levelName);
+		xmlSerializer.attribute("", "title", level.getTitle());
 		for (Entry<UUID, Room> entry : rooms.entrySet()) {
 			Room room = entry.getValue();
 			RectF rect = room.getRect();

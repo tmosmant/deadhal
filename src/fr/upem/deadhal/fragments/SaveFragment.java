@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -29,11 +30,11 @@ import fr.upem.deadhal.utils.Storage;
 public class SaveFragment extends Fragment {
 
 	public static final int OVERRIDE_DIALOG = 1;
-	private TextView m_textViewFileName;
-	private TextView m_textViewLevelName;
+	private EditText m_textViewFileName;
+	private EditText m_textViewLevelName;
 	private DrawerMainListener m_callback;
 	private String m_fileName = null;
-	private String m_levelName = null;
+	private String m_levelTitle = null;
 	private Level m_level;
 
 	public SaveFragment() {
@@ -62,16 +63,17 @@ public class SaveFragment extends Fragment {
 		getActivity().setTitle(R.string.save);
 
 		m_level = getArguments().getParcelable("level");
-
-		m_textViewLevelName = (TextView) rootView
-				.findViewById(R.id.entryLevelName);
-		if (m_level != null) {
-			String levelTitle = m_level.getTitle();
-			m_textViewLevelName.setText(levelTitle);
+		if (savedInstanceState != null) {
+			m_level = savedInstanceState.getParcelable("level");
 		}
-		m_textViewLevelName.setOnEditorActionListener(editorActionListener());
 
-		m_textViewFileName = (TextView) rootView
+		String levelTitle = m_level.getTitle();
+		m_textViewLevelName = (EditText) rootView
+				.findViewById(R.id.entryLevelName);
+		m_textViewLevelName.setOnEditorActionListener(editorActionListener());
+		m_textViewLevelName.setText(levelTitle);
+
+		m_textViewFileName = (EditText) rootView
 				.findViewById(R.id.entryFileName);
 		m_textViewFileName.setOnEditorActionListener(editorActionListener());
 
@@ -79,6 +81,11 @@ public class SaveFragment extends Fragment {
 		button.setOnClickListener(saveOnClickListener());
 
 		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
 	}
 
 	private OnEditorActionListener editorActionListener() {
@@ -128,9 +135,9 @@ public class SaveFragment extends Fragment {
 
 	private boolean entryIsValid() {
 		m_fileName = m_textViewFileName.getText().toString();
-		m_levelName = m_textViewLevelName.getText().toString();
+		m_levelTitle = m_textViewLevelName.getText().toString();
 
-		if (m_levelName.isEmpty() || m_fileName.isEmpty()) {
+		if (m_levelTitle.isEmpty() || m_fileName.isEmpty()) {
 			Toast.makeText(getActivity(), R.string.invalid_save_entry,
 					Toast.LENGTH_SHORT).show();
 			return false;
@@ -162,17 +169,17 @@ public class SaveFragment extends Fragment {
 	}
 
 	private void save() {
+		m_level.setTitle(m_levelTitle);
 		File m_file = Storage.createFile(m_fileName);
-		SaveTask saveTask = new SaveTask(getActivity(), m_file, m_levelName);
+		SaveTask saveTask = new SaveTask(getActivity(), m_file);
 		saveTask.execute(m_level);
 		m_textViewFileName.setText("");
 		m_callback.onFileNumberChange();
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause();
-		m_textViewLevelName.setText("");
-		m_textViewFileName.setText("");
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putParcelable("level", m_level);
 	}
 }

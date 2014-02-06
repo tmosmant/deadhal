@@ -1,5 +1,9 @@
 package fr.upem.deadhal.fragments;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -32,10 +36,6 @@ import fr.upem.deadhal.graphics.drawable.EditionLevelDrawable;
 import fr.upem.deadhal.view.EditionView;
 import fr.upem.deadhal.view.listeners.EditionGestureListener;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 public class EditionFragment extends Fragment {
 
 	private static final int ADD_NEW_ROOM = 0;
@@ -43,7 +43,7 @@ public class EditionFragment extends Fragment {
 
 	private DrawerMainListener m_callback;
 
-	private Level m_level;
+	private Level m_level = null;
 	private EditionView m_view;
 	private SharedPreferences m_prefs;
 	private ListView m_drawerList;

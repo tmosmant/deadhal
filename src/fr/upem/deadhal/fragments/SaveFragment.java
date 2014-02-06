@@ -35,7 +35,7 @@ public class SaveFragment extends Fragment {
 	private DrawerMainListener m_callback;
 	private String m_fileName = null;
 	private String m_levelTitle = null;
-	private Level m_level;
+	private Level m_level = null;
 
 	public SaveFragment() {
 	}
@@ -57,6 +57,9 @@ public class SaveFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
+		System.out.println("oncreate savefrag");
+
 		View rootView = inflater.inflate(R.layout.fragment_save, container,
 				false);
 

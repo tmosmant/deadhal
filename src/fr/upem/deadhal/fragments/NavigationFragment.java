@@ -130,8 +130,7 @@ public class NavigationFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.action_unlock:
-				//			m_callback.onLevelChange(FragmentType.EDITION, m_level);
-				m_callback.onLevelChange(m_level);
+			// m_callback.onLevelChange(m_level);
 				m_callback.onFragmentChange(FragmentType.EDITION);
 				return true;
 			case R.id.action_start_navigation:

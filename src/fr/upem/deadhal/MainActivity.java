@@ -1,5 +1,8 @@
 package fr.upem.deadhal;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -26,12 +29,10 @@ import fr.upem.deadhal.drawers.models.DrawerMainItem;
 import fr.upem.deadhal.fragments.*;
 import fr.upem.deadhal.utils.Storage;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 public class MainActivity extends Activity implements DrawerMainListener {
 
 	private Level m_level;
+	private boolean m_newLevel = false;
 
 	private DrawerLayout m_drawerLayout;
 	private ListView m_drawerList;
@@ -176,22 +177,20 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 		switch (fragmentType) {
 		case NAVIGATION:
-			// fragment = m_navigationFragment;
 			fragment = new NavigationFragment();
 			m_menu = R.menu.navigation;
 			break;
 		case EDITION:
-			// fragment = m_editionFragment;
+			System.out.println(m_level.getTitle());
 			fragment = new EditionFragment();
 			m_menu = R.menu.edition;
 			break;
 		case OPEN:
-			// fragment = m_openFragment;
+			System.out.println(m_level.getTitle());
 			fragment = new OpenFragment();
 			m_menu = R.menu.open;
 			break;
 		case SAVE:
-			// fragment = m_saveFragment;
 			fragment = new SaveFragment();
 			m_menu = R.menu.save;
 			break;
@@ -199,16 +198,12 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			break;
 		}
 		if (fragment != null) {
-			// if (!fragment.isAdded()) {
-			Log.v("deadhal", "bundle");
-
 			Bundle bundle = new Bundle();
 			bundle.putParcelable("level", m_level);
 			fragment.setArguments(bundle);
 
 			fragmentManager.beginTransaction()
 					.replace(R.id.frame_container, fragment).commit();
-			// }
 			int index = fragmentType.getIndex();
 
 			m_drawerList.setItemChecked(index, true);
@@ -239,7 +234,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		m_drawerToggle.onConfigurationChanged(newConfig);
 	}
 
-	public void toastNotYetImplemented(MenuItem v) {
+	public void toastNotYetImplemented() {
 		CharSequence text = getString(R.string.not_yet_implemented);
 		int duration = Toast.LENGTH_SHORT;
 
@@ -286,10 +281,14 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 	@Override
 	public void onLevelChange(Level level) {
-		m_level = level;
+		if (!m_newLevel) {
+			m_level = level;
+		} else {
+			m_newLevel = false;
+		}
 	}
 
-	public void toggleDrawerEdition(MenuItem v) {
+	public void toggleDrawerEdition() {
 		DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_edit_layout);
 		boolean drawerOpen = drawerLayout.isDrawerOpen(Gravity.END);
 		if (drawerOpen) {
@@ -320,8 +319,9 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 			switch (position) {
 			case 0:
+				m_newLevel = true;
 				m_level = new Level();
-				displayView(FragmentType.NAVIGATION);
+				displayView(FragmentType.EDITION);
 				break;
 			case 1:
 				displayView(FragmentType.NAVIGATION);

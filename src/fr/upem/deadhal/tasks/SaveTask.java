@@ -22,10 +22,12 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 
 	private String m_error;
 	private File m_file = null;
+	private String m_levelName;
 
-	public SaveTask(Activity activity, File file) {
+	public SaveTask(Activity activity, File file, String levelName) {
 		this.activity = activity;
 		m_file = file;
+		m_levelName = levelName;
 	}
 
 	@Override
@@ -62,7 +64,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 		return 1;
 	}
 
-	public static String CreateXMLString(Level level)
+	private String CreateXMLString(Level level)
 			throws IllegalArgumentException, IllegalStateException, IOException {
 		Map<UUID, Room> rooms = level.getRooms();
 		Map<UUID, Corridor> corridors = level.getCorridors();
@@ -75,7 +77,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 		xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
 
 		xmlSerializer.startTag("", "level");
-		xmlSerializer.attribute("", "title", level.getTitle());
+		xmlSerializer.attribute("", "title", m_levelName);
 		for (Entry<UUID, Room> entry : rooms.entrySet()) {
 			Room room = entry.getValue();
 			RectF rect = room.getRect();

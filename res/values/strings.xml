@@ -20,7 +20,8 @@
     <string name="action_edition">Edition</string>
     <string name="action_rename">Rename</string>
     <string name="yes">Yes</string>
-    <string name="hint">File name</string>
+    <string name="hint_file_name">File name</string>
+    <string name="hint_level_name">Level name</string>
     <string name="save_warning">Overwrite ?</string>
     <string name="remove_warning">Are you sure ?</string>
     <string name="add_room">Add a room&#8230;</string>
@@ -49,7 +50,7 @@
     <string name="deleted_file">File deleted</string>
     <string name="saved_file">File has been saved</string>
     <string name="deleted_file_error">Cannot delete file</string>
-    <string name="enter_filename">Please enter a name for this file</string>
+    <string name="invalid_save_entry">Please enter a name for the file and a name for the level</string>
     <string name="start_navigation">Start navigation</string>
 
 </resources>

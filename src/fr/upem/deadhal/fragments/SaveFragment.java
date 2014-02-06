@@ -1,7 +1,5 @@
 package fr.upem.deadhal.fragments;
 
-import java.io.File;
-
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -26,12 +24,17 @@ import fr.upem.deadhal.fragments.dialogs.ConfirmDialogFragment;
 import fr.upem.deadhal.tasks.SaveTask;
 import fr.upem.deadhal.utils.Storage;
 
+import java.io.File;
+
 public class SaveFragment extends Fragment {
 
-	private TextView m_textView;
+	public static final int OVERRIDE_DIALOG = 1;
+	private TextView m_textViewFileName;
+	private TextView m_textViewLevelName;
 	private DrawerMainListener m_callback;
 	private String m_fileName = null;
-	public static final int OVERRIDE_DIALOG = 1;
+	private String m_levelName = null;
+	private Level m_level;
 
 	public SaveFragment() {
 	}
@@ -58,11 +61,22 @@ public class SaveFragment extends Fragment {
 
 		getActivity().setTitle(R.string.save);
 
-		m_textView = (TextView) rootView.findViewById(R.id.entryFileName);
-		m_textView.setOnEditorActionListener(editorActionListener());
+		m_level = getArguments().getParcelable("level");
+
+		m_textViewLevelName = (TextView) rootView
+				.findViewById(R.id.entryLevelName);
+		if (m_level != null) {
+			String levelTitle = m_level.getTitle();
+			m_textViewLevelName.setText(levelTitle);
+		}
+		m_textViewLevelName.setOnEditorActionListener(editorActionListener());
+
+		m_textViewFileName = (TextView) rootView
+				.findViewById(R.id.entryFileName);
+		m_textViewFileName.setOnEditorActionListener(editorActionListener());
 
 		Button button = (Button) rootView.findViewById(R.id.buttonSave);
-		button.setOnClickListener(saveOnClickListener(rootView));
+		button.setOnClickListener(saveOnClickListener());
 
 		return rootView;
 	}
@@ -75,7 +89,6 @@ public class SaveFragment extends Fragment {
 					KeyEvent event) {
 				if (actionId == EditorInfo.IME_ACTION_DONE) {
 					hideKeyboard();
-					m_fileName = v.getText().toString();
 					if (entryIsValid()) {
 						if (Storage.fileExists(m_fileName)) {
 							showDialog();
@@ -90,15 +103,11 @@ public class SaveFragment extends Fragment {
 		};
 	}
 
-	private OnClickListener saveOnClickListener(final View rootView) {
+	private OnClickListener saveOnClickListener() {
 		return new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				TextView textView = (TextView) rootView
-						.findViewById(R.id.entryFileName);
-				m_fileName = textView.getText().toString();
-
 				if (entryIsValid()) {
 					hideKeyboard();
 					if (Storage.fileExists(m_fileName)) {
@@ -114,15 +123,19 @@ public class SaveFragment extends Fragment {
 	private void hideKeyboard() {
 		InputMethodManager imm = (InputMethodManager) getActivity()
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(m_textView.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(m_textViewFileName.getWindowToken(), 0);
 	}
 
 	private boolean entryIsValid() {
-		if (m_fileName.isEmpty()) {
-			Toast.makeText(getActivity(), R.string.enter_filename,
+		m_fileName = m_textViewFileName.getText().toString();
+		m_levelName = m_textViewLevelName.getText().toString();
+
+		if (m_levelName.isEmpty() || m_fileName.isEmpty()) {
+			Toast.makeText(getActivity(), R.string.invalid_save_entry,
 					Toast.LENGTH_SHORT).show();
 			return false;
 		}
+
 		return true;
 	}
 
@@ -130,8 +143,8 @@ public class SaveFragment extends Fragment {
 		int title = R.string.save;
 		int message = R.string.save_warning;
 
-		DialogFragment dialogFragment = ConfirmDialogFragment.newInstance(title,
-				message);
+		DialogFragment dialogFragment = ConfirmDialogFragment.newInstance(
+				title, message);
 		dialogFragment.setTargetFragment(this, OVERRIDE_DIALOG);
 		dialogFragment.show(getFragmentManager().beginTransaction(), "dialog");
 	}
@@ -141,19 +154,18 @@ public class SaveFragment extends Fragment {
 		switch (requestCode) {
 		case OVERRIDE_DIALOG:
 			if (resultCode == Activity.RESULT_OK) {
-				m_fileName = m_textView.getText().toString();
+				m_fileName = m_textViewFileName.getText().toString();
 				save();
-			} 
+			}
 			break;
 		}
 	}
 
 	private void save() {
-		Level m_level = getArguments().getParcelable("level");
 		File m_file = Storage.createFile(m_fileName);
-		SaveTask saveTask = new SaveTask(getActivity(), m_file);
+		SaveTask saveTask = new SaveTask(getActivity(), m_file, m_levelName);
 		saveTask.execute(m_level);
-		m_textView.setText("");
+		m_textViewFileName.setText("");
 		m_callback.onFileNumberChange();
 	}
 

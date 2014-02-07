@@ -1,5 +1,10 @@
 package fr.upem.deadhal.fragments;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -18,11 +23,6 @@ import fr.upem.deadhal.fragments.dialogs.ConfirmDialogFragment;
 import fr.upem.deadhal.fragments.dialogs.InputDialogFragment;
 import fr.upem.deadhal.tasks.OpenTask;
 import fr.upem.deadhal.utils.Storage;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class OpenFragment extends Fragment {
 
@@ -244,6 +244,7 @@ public class OpenFragment extends Fragment {
 	}
 
 	public void clearChoice() {
+		m_selection = -1;
 		m_fileName = null;
 		m_listView.clearChoices();
 		getActivity().invalidateOptionsMenu();

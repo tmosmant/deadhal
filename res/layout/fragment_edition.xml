@@ -20,15 +20,34 @@
 
     <!-- Listview to display slider menu -->
 
-    <ListView
-        android:id="@+id/list_edit_slidermenu"
+    <RelativeLayout
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="@color/list_background"
-        android:choiceMode="singleChoice"
-        android:divider="@color/list_divider"
-        android:dividerHeight="1dp"
-        android:listSelector="@drawable/list_selector" />
+        android:background="@color/list_background" >
+
+        <EditText
+            android:id="@+id/edit_text_level_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:hint="@string/hint_level_name"
+            android:textColor="@color/list_item_title" />
+
+        <ListView
+            android:id="@+id/list_edit_slidermenu"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/edit_text_level_name"
+            android:choiceMode="singleChoice"
+            android:divider="@color/list_divider"
+            android:dividerHeight="1dp"
+            android:listSelector="@drawable/list_selector" >
+        </ListView>
+    </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

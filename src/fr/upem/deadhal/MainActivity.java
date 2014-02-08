@@ -20,13 +20,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.drawers.adapters.DrawerMainListAdapter;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.drawers.models.DrawerMainItem;
-import fr.upem.deadhal.fragments.*;
+import fr.upem.deadhal.fragments.EditionFragment;
+import fr.upem.deadhal.fragments.FragmentType;
+import fr.upem.deadhal.fragments.NavigationFragment;
+import fr.upem.deadhal.fragments.OpenFragment;
+import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.utils.Storage;
 
 public class MainActivity extends Activity implements DrawerMainListener {
@@ -152,7 +155,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		case R.menu.edition:
 			menu.findItem(R.id.action_list_objects).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_lock).setVisible(!drawerOpen);
-			menu.findItem(R.id.action_undo).setVisible(!drawerOpen);
 			break;
 		case R.menu.open:
 			menu.setGroupVisible(R.id.group_open, !drawerOpen);
@@ -234,14 +236,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		m_drawerToggle.onConfigurationChanged(newConfig);
 	}
 
-	public void toastNotYetImplemented() {
-		CharSequence text = getString(R.string.not_yet_implemented);
-		int duration = Toast.LENGTH_SHORT;
-
-		Toast toast = Toast.makeText(getApplicationContext(), text, duration);
-		toast.show();
-	}
-
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -288,7 +282,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		}
 	}
 
-	public void toggleDrawerEdition() {
+	public void toggleDrawerEdition(MenuItem v) {
 		DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_edit_layout);
 		boolean drawerOpen = drawerLayout.isDrawerOpen(Gravity.END);
 		if (drawerOpen) {

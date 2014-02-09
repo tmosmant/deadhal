@@ -1,16 +1,17 @@
 package fr.upem.deadhal.fragments.dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import fr.upem.deadhal.R;
 
-public class MonoTouchNavigationDialogFragment extends DialogFragment {
+public class NavigationDialogFragment extends DialogFragment {
 
-	public static MonoTouchNavigationDialogFragment newInstance(int title,
-			int message) {
-		MonoTouchNavigationDialogFragment dialogFragment = new MonoTouchNavigationDialogFragment();
+	public static NavigationDialogFragment newInstance(int title, int message) {
+		NavigationDialogFragment dialogFragment = new NavigationDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt("title", title);
 		bundle.putInt("message", message);
@@ -27,33 +28,27 @@ public class MonoTouchNavigationDialogFragment extends DialogFragment {
 				.setTitle(title)
 				.setMessage(message)
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setNegativeButton("Cancel",
+				.setNegativeButton(android.R.string.cancel,
 						new DialogInterface.OnClickListener() {
+
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
 								getTargetFragment().onActivityResult(
-										getTargetRequestCode(), 0,
+										getTargetRequestCode(),
+										Activity.RESULT_CANCELED,
 										getActivity().getIntent());
 							}
 						})
-				.setNeutralButton("Start",
+				.setPositiveButton(R.string.yes,
 						new DialogInterface.OnClickListener() {
+
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
 								getTargetFragment().onActivityResult(
-										getTargetRequestCode(), 1,
-										getActivity().getIntent());
-							}
-						})
-				.setPositiveButton("End",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								getTargetFragment().onActivityResult(
-										getTargetRequestCode(), 2,
+										getTargetRequestCode(),
+										Activity.RESULT_OK,
 										getActivity().getIntent());
 							}
 						}).create();

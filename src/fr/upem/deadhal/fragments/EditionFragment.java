@@ -299,9 +299,6 @@ public class EditionFragment extends Fragment {
 		case R.id.action_lock:
 			m_callback.onFragmentChange(FragmentType.NAVIGATION);
 			return true;
-		case R.id.action_save:
-			m_callback.onFragmentChange(FragmentType.SAVE);
-			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

@@ -6,6 +6,11 @@
             android:showAsAction="ifRoom"
             android:title="@string/action_navigate"/>
     <item
+            android:id="@+id/action_save"
+            android:icon="@drawable/ic_action_save"
+            android:showAsAction="ifRoom"
+            android:title="@string/action_save"/>
+    <item
             android:id="@+id/action_list_objects"
             android:icon="@drawable/ic_action_view_as_list"
             android:onClick="toggleDrawerEdition"

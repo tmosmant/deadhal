@@ -1,17 +1,16 @@
 package fr.upem.deadhal.fragments.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import fr.upem.deadhal.R;
 
-public class NavigationDialogFragment extends DialogFragment {
+public class MonoTouchNavigationDialogFragment extends DialogFragment {
 
-	public static NavigationDialogFragment newInstance(int title, int message) {
-		NavigationDialogFragment dialogFragment = new NavigationDialogFragment();
+	public static MonoTouchNavigationDialogFragment newInstance(int title,
+			int message) {
+		MonoTouchNavigationDialogFragment dialogFragment = new MonoTouchNavigationDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt("title", title);
 		bundle.putInt("message", message);
@@ -28,27 +27,33 @@ public class NavigationDialogFragment extends DialogFragment {
 				.setTitle(title)
 				.setMessage(message)
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setNegativeButton(android.R.string.cancel,
+				.setNegativeButton("Cancel",
 						new DialogInterface.OnClickListener() {
-
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
 								getTargetFragment().onActivityResult(
-										getTargetRequestCode(),
-										Activity.RESULT_CANCELED,
+										getTargetRequestCode(), 0,
 										getActivity().getIntent());
 							}
 						})
-				.setPositiveButton(R.string.yes,
+				.setNeutralButton("Start",
 						new DialogInterface.OnClickListener() {
-
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
 								getTargetFragment().onActivityResult(
-										getTargetRequestCode(),
-										Activity.RESULT_OK,
+										getTargetRequestCode(), 1,
+										getActivity().getIntent());
+							}
+						})
+				.setPositiveButton("End",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								getTargetFragment().onActivityResult(
+										getTargetRequestCode(), 2,
 										getActivity().getIntent());
 							}
 						}).create();

@@ -145,12 +145,16 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		boolean drawerOpen = m_drawerLayout.isDrawerOpen(m_drawerList);
 		switch (m_menu) {
 		case R.menu.navigation:
-			menu.findItem(R.id.action_start_navigation).setVisible(!drawerOpen);
+			menu.findItem(R.id.action_start_navigation_mono_touch).setVisible(
+					!drawerOpen);
+			menu.findItem(R.id.action_start_navigation_multi_touch).setVisible(
+					!drawerOpen);
 			menu.findItem(R.id.action_unlock).setVisible(!drawerOpen);
 			break;
 		case R.menu.edition:
 			menu.findItem(R.id.action_list_objects).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_lock).setVisible(!drawerOpen);
+			menu.findItem(R.id.action_save).setVisible(!drawerOpen);
 			break;
 		case R.menu.open:
 			menu.setGroupVisible(R.id.group_open, !drawerOpen);

@@ -5,46 +5,37 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/entryLevelName"
-            android:singleLine="true"
-            android:imeOptions="actionDone"
-            android:hint="@string/hint_level_name">
-
-        <requestFocus/>
-    </EditText>
-    <EditText
-            android:id="@+id/entryFileName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:imeOptions="actionDone"
-            android:ems="10"
-            android:hint="@string/hint_file_name"/>
     <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <Space
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_weight="0.2"/>
+
+        <EditText
+                android:id="@+id/entryFileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                android:ems="10"
+                android:hint="@string/hint_file_name">
+
+            <requestFocus/>
+        </EditText>
+
         <Button
                 android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/yes" android:layout_weight="0.6"/>
-        <Space
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_weight="0.2"/>
+                android:layout_weight="1"
+                android:text="@string/yes"/>
+
     </LinearLayout>
+
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:gravity="center_vertical" android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center_vertical">
 
         <TextView
                 android:id="@+id/txtLabel"

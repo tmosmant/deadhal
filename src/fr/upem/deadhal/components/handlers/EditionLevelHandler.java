@@ -320,4 +320,9 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		return list;
 	}
 
+	public void unselectRoom() {
+		m_selectedRoom = null;
+		invalidateView();
+	}
+
 }

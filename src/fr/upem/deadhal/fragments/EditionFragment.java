@@ -221,6 +221,7 @@ public class EditionFragment extends Fragment {
 							getFragmentManager().beginTransaction(),
 							"addDialog");
 
+					m_levelHandler.unselectRoom();
 					m_drawerList.setItemChecked(position, false);
 					break;
 				case CORRIDOR:

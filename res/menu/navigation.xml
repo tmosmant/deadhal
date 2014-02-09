@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
+<item
             android:id="@+id/action_unlock"
             android:icon="@drawable/ic_action_secure"
             android:showAsAction="ifRoom"
             android:title="@string/action_edition"/>
     <item
-            android:id="@+id/action_start_navigation"
-        android:icon="@drawable/ic_action_play"
-        android:showAsAction="ifRoom"
-        android:title="@string/start_navigation">
+            android:id="@+id/action_start_navigation_mono_touch"
+            android:icon="@drawable/ic_action_play"
+            android:showAsAction="ifRoom"
+            android:title="@string/start_navigation">
+    </item>
+    <item
+            android:id="@+id/action_start_navigation_multi_touch"
+            android:showAsAction="ifRoom"
+            android:icon="@drawable/ic_action_directions"
+            android:title="@string/start_navigation">
     </item>
 
 </menu>

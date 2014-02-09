@@ -1,14 +1,25 @@
 package fr.upem.deadhal.components;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 public class Level implements Parcelable {
 
+	public static final Parcelable.Creator<Level> CREATOR = new Parcelable.Creator<Level>() {
+		@Override
+		public Level createFromParcel(Parcel source) {
+			return new Level(source);
+		}
+
+		@Override
+		public Level[] newArray(int size) {
+			return new Level[size];
+		}
+	};
 	private String m_title = "";
 	private Map<UUID, Room> m_rooms = new HashMap<UUID, Room>();
 	private Map<UUID, Corridor> m_corridors = new HashMap<UUID, Corridor>();
@@ -69,17 +80,5 @@ public class Level implements Parcelable {
 		dest.writeMap(m_rooms);
 		dest.writeMap(m_corridors);
 	}
-
-	public static final Parcelable.Creator<Level> CREATOR = new Parcelable.Creator<Level>() {
-		@Override
-		public Level createFromParcel(Parcel source) {
-			return new Level(source);
-		}
-
-		@Override
-		public Level[] newArray(int size) {
-			return new Level[size];
-		}
-	};
 
 }

@@ -1,5 +1,7 @@
 package fr.upem.deadhal.fragments;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -18,14 +20,18 @@ import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
-import fr.upem.deadhal.fragments.dialogs.NavigationDialogFragment;
+import fr.upem.deadhal.fragments.dialogs.MonoTouchNavigationDialogFragment;
+import fr.upem.deadhal.fragments.dialogs.MultiTouchNavigationDialogFragment;
 import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
 import fr.upem.deadhal.view.NavigationView;
 import fr.upem.deadhal.view.listeners.NavigationGestureListener;
 
 public class NavigationFragment extends Fragment {
 
-	private static final int NAV_DIALOG = 1;
+	private static final int MONO_TOUCH_NAV_DIALOG = 1;
+	private static final int MULTI_TOUCH_NAV_DIALOG = 2;
+	private static final int RESULT_CODE_ROOM_START = 1;
+	private static final int RESULT_CODE_ROOM_END = 2;
 	private Room m_start = null;
 	private Room m_end = null;
 	private Room m_selected = null;
@@ -110,9 +116,9 @@ public class NavigationFragment extends Fragment {
 		int title = R.string.navigation;
 		int message = R.string.yes;
 
-		DialogFragment dialogFragment = NavigationDialogFragment.newInstance(
-				title, message);
-		dialogFragment.setTargetFragment(this, NAV_DIALOG);
+		DialogFragment dialogFragment = MonoTouchNavigationDialogFragment
+				.newInstance(title, message);
+		dialogFragment.setTargetFragment(this, MONO_TOUCH_NAV_DIALOG);
 		dialogFragment.show(getFragmentManager().beginTransaction(),
 				"navigationDialog");
 	}
@@ -120,11 +126,11 @@ public class NavigationFragment extends Fragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-		case NAV_DIALOG:
-			if (resultCode == 1) {
+		case MONO_TOUCH_NAV_DIALOG:
+			if (resultCode == RESULT_CODE_ROOM_START) {
 				m_start = m_selected;
 				// m_gestureListener.setStart(m_start);
-			} else if (resultCode == 2) {
+			} else if (resultCode == RESULT_CODE_ROOM_END) {
 				m_end = m_selected;
 				// m_gestureListener.setEnd(m_end);
 			} else if (m_selected != null && m_start != null
@@ -135,6 +141,18 @@ public class NavigationFragment extends Fragment {
 					&& m_end.getId().equals(m_selected.getId())) {
 				m_end = null;
 				// m_gestureListener.setEnd(m_end);
+			}
+			break;
+
+		case MULTI_TOUCH_NAV_DIALOG:
+			if (resultCode == RESULT_CODE_ROOM_START) {
+				Room room = data.getParcelableExtra("room");
+				Log.e("room start", room.getName());
+				m_start = room;
+			} else if (resultCode == RESULT_CODE_ROOM_END) {
+				Room room = data.getParcelableExtra("room");
+				Log.e("room end", room.getName());
+				m_end = room;
 			}
 			break;
 		}
@@ -156,10 +174,31 @@ public class NavigationFragment extends Fragment {
 			}
 			return true;
 		case R.id.action_start_navigation_multi_touch:
+			showMultiTouchNavigationDialog();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void showMultiTouchNavigationDialog() {
+		int title = R.string.navigation;
+		int message = R.string.yes;
+
+		ArrayList<Room> rooms = new ArrayList<Room>(m_level.getRooms().values());
+
+		DialogFragment dialogFragmentEnd = MultiTouchNavigationDialogFragment
+				.newInstance(RESULT_CODE_ROOM_END, title, message, rooms);
+		dialogFragmentEnd.setTargetFragment(this, MULTI_TOUCH_NAV_DIALOG);
+		dialogFragmentEnd.show(getFragmentManager().beginTransaction(),
+				"navigationDialog");
+
+		DialogFragment dialogFragmentStart = MultiTouchNavigationDialogFragment
+				.newInstance(RESULT_CODE_ROOM_START, title, message, rooms);
+		dialogFragmentStart.setTargetFragment(this, MULTI_TOUCH_NAV_DIALOG);
+		dialogFragmentStart.show(getFragmentManager().beginTransaction(),
+				"navigationDialog");
+
 	}
 
 	@Override

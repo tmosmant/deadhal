@@ -6,10 +6,11 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-public class NavigationDialogFragment extends DialogFragment {
+public class MonoTouchNavigationDialogFragment extends DialogFragment {
 
-	public static NavigationDialogFragment newInstance(int title, int message) {
-		NavigationDialogFragment dialogFragment = new NavigationDialogFragment();
+	public static MonoTouchNavigationDialogFragment newInstance(int title,
+			int message) {
+		MonoTouchNavigationDialogFragment dialogFragment = new MonoTouchNavigationDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt("title", title);
 		bundle.putInt("message", message);
@@ -46,13 +47,15 @@ public class NavigationDialogFragment extends DialogFragment {
 										getActivity().getIntent());
 							}
 						})
-				.setPositiveButton("End", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						getTargetFragment().onActivityResult(
-								getTargetRequestCode(), 2,
-								getActivity().getIntent());
-					}
-				}).create();
+				.setPositiveButton("End",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								getTargetFragment().onActivityResult(
+										getTargetRequestCode(), 2,
+										getActivity().getIntent());
+							}
+						}).create();
 	}
 }

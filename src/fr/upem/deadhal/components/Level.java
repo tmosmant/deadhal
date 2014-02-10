@@ -37,6 +37,10 @@ public class Level implements Parcelable {
 		source.readMap(m_corridors, HashMap.class.getClass().getClassLoader());
 	}
 
+	public int nbRooms() {
+		return m_rooms.size();
+	}
+
 	public void addRoom(Room room) {
 		m_rooms.put(room.getId(), room);
 	}

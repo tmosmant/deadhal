@@ -20,6 +20,11 @@ import fr.upem.deadhal.components.Room;
  */
 public class NavigationDialogFragment extends DialogFragment {
 
+	private Spinner m_spinnerStart;
+	private int m_spinnerStartPosition = 0;
+	private Spinner m_spinnerEnd;
+	private int m_spinnerEndPosition = 1;
+
 	public static NavigationDialogFragment newInstance(int title,
 			ArrayList<Room> rooms) {
 		NavigationDialogFragment dialogFragment = new NavigationDialogFragment();
@@ -28,6 +33,16 @@ public class NavigationDialogFragment extends DialogFragment {
 		bundle.putParcelableArrayList("rooms", rooms);
 		dialogFragment.setArguments(bundle);
 		return dialogFragment;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		if (savedInstanceState != null) {
+			m_spinnerStartPosition = savedInstanceState.getInt("startPosition");
+			m_spinnerEndPosition = savedInstanceState.getInt("endPosition");
+		}
 	}
 
 	@Override
@@ -43,21 +58,21 @@ public class NavigationDialogFragment extends DialogFragment {
 		TextView textViewStart = new TextView(getActivity());
 		textViewStart.setText("Start");
 
-		final Spinner spinnerStart = new Spinner(getActivity(),
-				Spinner.MODE_DIALOG);
-		spinnerStart.setAdapter(arrayAdapter);
+		m_spinnerStart = new Spinner(getActivity(), Spinner.MODE_DIALOG);
+		m_spinnerStart.setAdapter(arrayAdapter);
+		m_spinnerStart.setSelection(m_spinnerStartPosition);
 
 		TextView textViewEnd = new TextView(getActivity());
 		textViewEnd.setText("End");
 
-		final Spinner spinnerEnd = new Spinner(getActivity(),
-				Spinner.MODE_DIALOG);
-		spinnerEnd.setAdapter(arrayAdapter);
+		m_spinnerEnd = new Spinner(getActivity(), Spinner.MODE_DIALOG);
+		m_spinnerEnd.setAdapter(arrayAdapter);
+		m_spinnerEnd.setSelection(m_spinnerEndPosition);
 
 		linearLayout.addView(textViewStart);
-		linearLayout.addView(spinnerStart);
+		linearLayout.addView(m_spinnerStart);
 		linearLayout.addView(textViewEnd);
-		linearLayout.addView(spinnerEnd);
+		linearLayout.addView(m_spinnerEnd);
 
 		return new AlertDialog.Builder(getActivity())
 				.setTitle(title)
@@ -69,12 +84,13 @@ public class NavigationDialogFragment extends DialogFragment {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								Room start = (Room) spinnerStart
+								Room start = (Room) m_spinnerStart
 										.getSelectedItem();
-								Room end = (Room) spinnerEnd.getSelectedItem();
+								Room end = (Room) m_spinnerEnd
+					.getSelectedItem();
 
 								Intent data = new Intent();
-								data.putExtra("start", start);
+	data.putExtra("start", start);
 								data.putExtra("end", end);
 								getTargetFragment().onActivityResult(
 										getTargetRequestCode(),
@@ -83,4 +99,11 @@ public class NavigationDialogFragment extends DialogFragment {
 						}).create();
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("startPosition",
+				m_spinnerStart.getSelectedItemPosition());
+		outState.putInt("endPosition", m_spinnerEnd.getSelectedItemPosition());
+	}
 }

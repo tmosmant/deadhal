@@ -1,6 +1,8 @@
 package fr.upem.deadhal.fragments;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -136,7 +138,12 @@ public class NavigationFragment extends Fragment {
 			m_callback.onFragmentChange(FragmentType.EDITION);
 			return true;
 		case R.id.action_start_navigation:
-			showNavigationDialog();
+			if (m_level.nbRooms() >= 2) {
+				showNavigationDialog();
+			} else {
+				Toast.makeText(getActivity(), "Pas assez de salle !",
+						Toast.LENGTH_LONG).show();
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -147,6 +154,13 @@ public class NavigationFragment extends Fragment {
 		int title = R.string.navigation;
 
 		ArrayList<Room> rooms = new ArrayList<Room>(m_level.getRooms().values());
+		Collections.sort(rooms, new Comparator<Room>() {
+
+			@Override
+			public int compare(Room lhs, Room rhs) {
+				return lhs.getName().compareTo(rhs.getName());
+			}
+		});
 
 		DialogFragment dialogFragmentEnd = NavigationDialogFragment
 				.newInstance(title, rooms);

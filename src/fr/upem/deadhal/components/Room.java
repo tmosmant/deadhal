@@ -1,16 +1,28 @@
 package fr.upem.deadhal.components;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.ParcelUuid;
 import android.os.Parcelable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 public class Room implements Parcelable {
 
+	public static final Parcelable.Creator<Room> CREATOR = new Parcelable.Creator<Room>() {
+
+		@Override
+		public Room createFromParcel(Parcel source) {
+			return new Room(source);
+		}
+
+		@Override
+		public Room[] newArray(int size) {
+			return new Room[size];
+		}
+	};
 	private UUID id;
 	private String name;
 	private RectF rect;
@@ -23,7 +35,8 @@ public class Room implements Parcelable {
 	}
 
 	public Room(Parcel source) {
-		ParcelUuid id = source.readParcelable(ParcelUuid.class.getClassLoader());
+		ParcelUuid id = source
+				.readParcelable(ParcelUuid.class.getClassLoader());
 		this.id = id.getUuid();
 		this.name = source.readString();
 		float left = source.readFloat();
@@ -75,21 +88,27 @@ public class Room implements Parcelable {
 		dest.writeMap(neighbors);
 	}
 
-	public static final Parcelable.Creator<Room> CREATOR = new Parcelable.Creator<Room>() {
-
-		@Override
-		public Room createFromParcel(Parcel source) {
-			return new Room(source);
-		}
-
-		@Override
-		public Room[] newArray(int size) {
-			return new Room[size];
-		}
-	};
-
 	@Override
 	public String toString() {
 		return name;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Room)) {
+			return false;
+		}
+
+		Room room = (Room) o;
+		return id.equals(room.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
 }

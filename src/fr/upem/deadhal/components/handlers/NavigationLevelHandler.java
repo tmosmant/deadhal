@@ -17,12 +17,12 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		return m_roomStart;
 	}
 
-	public Room getRoomEnd() {
-		return m_roomEnd;
-	}
-
 	public void setRoomStart(Room room) {
 		m_roomStart = room;
+	}
+
+	public Room getRoomEnd() {
+		return m_roomEnd;
 	}
 
 	public void setRoomEnd(Room room) {

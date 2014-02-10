@@ -87,5 +87,9 @@ public class Corridor implements Parcelable {
 			return new Corridor[size];
 		}
 	};
+	
+	public float computeWeight() {
+		return 1;
+	}
 
 }

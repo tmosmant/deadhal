@@ -3,6 +3,9 @@ package fr.upem.deadhal.fragments;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -12,7 +15,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
+import android.view.GestureDetector;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +31,7 @@ import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.fragments.dialogs.NavigationDialogFragment;
 import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
+import fr.upem.deadhal.tasks.ShortestPathTask;
 import fr.upem.deadhal.view.NavigationView;
 import fr.upem.deadhal.view.listeners.NavigationGestureListener;
 
@@ -124,7 +132,25 @@ public class NavigationFragment extends Fragment {
 					Log.e("end", m_end.getName());
 					m_levelHandler.setRoomStart(m_start);
 					m_levelHandler.setRoomEnd(m_end);
-					// START DIJKSTRA !
+					ShortestPathTask spt = new ShortestPathTask(
+							m_start.getId(), m_end.getId());
+					spt.execute(m_level);
+					try {
+						List<UUID> listCoridors = spt.get();
+						if (listCoridors == null) {
+							Toast.makeText(getActivity(), "Il n'existe pas de chemin.",
+									Toast.LENGTH_LONG).show();
+						}
+						else {
+							Toast.makeText(getActivity(), listCoridors.toString(),
+									Toast.LENGTH_LONG).show();
+							//Afficher le chemin a partir de la liste des UUID des Corridors
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			break;

@@ -1,5 +1,6 @@
 package fr.upem.deadhal;
 
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -25,7 +26,11 @@ import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.drawers.adapters.DrawerMainListAdapter;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.drawers.models.DrawerMainItem;
-import fr.upem.deadhal.fragments.*;
+import fr.upem.deadhal.fragments.EditionFragment;
+import fr.upem.deadhal.fragments.FragmentType;
+import fr.upem.deadhal.fragments.NavigationFragment;
+import fr.upem.deadhal.fragments.OpenFragment;
+import fr.upem.deadhal.fragments.SaveFragment;
 import fr.upem.deadhal.utils.Storage;
 
 public class MainActivity extends Activity implements DrawerMainListener {

@@ -15,9 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import fr.upem.deadhal.components.Room;
 
-/**
- * Created by michael on 09/02/14.
- */
 public class NavigationDialogFragment extends DialogFragment {
 
 	private Spinner m_spinnerStart;
@@ -87,10 +84,10 @@ public class NavigationDialogFragment extends DialogFragment {
 								Room start = (Room) m_spinnerStart
 										.getSelectedItem();
 								Room end = (Room) m_spinnerEnd
-					.getSelectedItem();
+										.getSelectedItem();
 
 								Intent data = new Intent();
-	data.putExtra("start", start);
+								data.putExtra("start", start);
 								data.putExtra("end", end);
 								getTargetFragment().onActivityResult(
 										getTargetRequestCode(),

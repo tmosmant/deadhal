@@ -1,10 +1,6 @@
 package fr.upem.deadhal.fragments;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
@@ -15,11 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,9 +30,6 @@ import fr.upem.deadhal.view.listeners.NavigationGestureListener;
 public class NavigationFragment extends Fragment {
 
 	private static final int NAV_DIALOG = 1;
-	private Room m_start = null;
-	private Room m_end = null;
-	private Room m_selected = null;
 
 	private Level m_level = null;
 	private DrawerMainListener m_callback;
@@ -121,19 +110,20 @@ public class NavigationFragment extends Fragment {
 		switch (requestCode) {
 		case NAV_DIALOG:
 			if (resultCode == Activity.RESULT_OK) {
-				m_start = data.getParcelableExtra("start");
-				m_end = data.getParcelableExtra("end");
+				Room start = data.getParcelableExtra("start");
+				Room end = data.getParcelableExtra("end");
 
-				if (m_start.equals(m_end)) {
+				if (start.equals(end)) {
 					Toast.makeText(getActivity(), "Depart = Arrive !",
 							Toast.LENGTH_LONG).show();
 				} else {
-					Log.e("start", m_start.getName());
-					Log.e("end", m_end.getName());
-					m_levelHandler.setRoomStart(m_start);
-					m_levelHandler.setRoomEnd(m_end);
+					Log.e("start", start.getName());
+					Log.e("end", end.getName());
+					m_levelHandler.setRoomStart(start);
+					m_levelHandler.setRoomEnd(end);
 					ShortestPathTask spt = new ShortestPathTask(
-							m_start.getId(), m_end.getId());
+start.getId(),
+							end.getId());
 					spt.execute(m_level);
 					try {
 						List<UUID> listCoridors = spt.get();

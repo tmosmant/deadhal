@@ -15,10 +15,19 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.*;
+import android.view.GestureDetector;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
@@ -254,7 +263,7 @@ public class EditionFragment extends Fragment {
 			drawerItems.add(new DrawerEditionItem(corridor, title));
 		}
 		DrawerEditionListAdapter adapter = new DrawerEditionListAdapter(
-				getActivity(), this, drawerItems, m_levelHandler, m_view);
+				getActivity(), drawerItems, m_levelHandler, m_view);
 		m_drawerList.setAdapter(adapter);
 	}
 

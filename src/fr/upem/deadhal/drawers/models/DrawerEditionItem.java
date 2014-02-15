@@ -11,24 +11,24 @@ public class DrawerEditionItem {
 	private Type m_type;
 
 	public DrawerEditionItem(Room room) {
-		this.m_room = room;
-		this.m_title = room.getName();
-		this.m_type = Type.ROOM;
+		m_room = room;
+		m_title = room.getName();
+		m_type = Type.ROOM;
 	}
 
 	public DrawerEditionItem(String title, Type type) {
-		this.m_title = title;
-		this.m_type = type;
+		m_title = title;
+		m_type = type;
 	}
 
 	public DrawerEditionItem(Corridor corridor, String title) {
-		this.m_corridor = corridor;
-		this.m_title = title;
-		this.m_type = Type.CORRIDOR;
+		m_corridor = corridor;
+		m_title = title;
+		m_type = Type.CORRIDOR;
 	}
 
 	public String getTitle() {
-		return this.m_title;
+		return m_title;
 	}
 
 	public boolean isSuperTitle() {

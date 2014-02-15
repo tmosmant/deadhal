@@ -8,29 +8,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import fr.upem.deadhal.R;
-import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
+import fr.upem.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.deadhal.drawers.models.DrawerEditionItem;
-import fr.upem.deadhal.fragments.EditionFragment;
 import fr.upem.deadhal.view.AbstractView;
 
 public class DrawerEditionListAdapter extends BaseAdapter {
 
 	private Context m_context;
 	private ArrayList<DrawerEditionItem> m_navDrawerItems;
-	private EditionFragment m_editionFragment;
-	private AbstractLevelHandler m_levelHandler;
+	private EditionLevelHandler m_levelHandler;
 	private AbstractView m_view;
 
 	public DrawerEditionListAdapter(Context context,
-			EditionFragment editionFragment,
 			ArrayList<DrawerEditionItem> navDrawerItems,
-			AbstractLevelHandler levelHandler, AbstractView view) {
+			EditionLevelHandler levelHandler, AbstractView view) {
 		m_context = context;
-		m_editionFragment = editionFragment;
 		m_navDrawerItems = navDrawerItems;
 		m_levelHandler = levelHandler;
 		m_view = view;
@@ -52,7 +50,8 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView,
+			final ViewGroup parent) {
 		if (convertView == null) {
 			LayoutInflater mInflater = (LayoutInflater) m_context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -61,16 +60,20 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 		}
 
 		TextView superTitle = (TextView) convertView
-				.findViewById(R.id.superTitle);
-		TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
-		ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
+				.findViewById(R.id.list_adapter_edition_drawer_super_title);
+		TextView txtTitle = (TextView) convertView
+				.findViewById(R.id.list_adapter_edition_drawer_title);
+		ImageView imgIcon = (ImageView) convertView
+				.findViewById(R.id.list_adapter_edition_drawer_icon);
 
 		final DrawerEditionItem item = m_navDrawerItems.get(position);
 
 		if (item.isSuperTitle()) {
 			superTitle.setText(item.getTitle());
+			txtTitle.setText("");
 			imgIcon.setVisibility(View.GONE);
 		} else {
+			superTitle.setText("");
 			txtTitle.setText(item.getTitle());
 			imgIcon.setImageResource(R.drawable.ic_action_remove_dark);
 			imgIcon.setOnClickListener(new OnClickListener() {
@@ -80,17 +83,49 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 					case CORRIDOR:
 						break;
 					case ROOM:
-						m_levelHandler.removeRoom(item.getRoom());
+						removeItem(position, parent, item);
 					default:
 						break;
 					}
-					m_editionFragment.updateDrawer();
-					m_view.invalidate();
 				}
+
 			});
+			imgIcon.setVisibility(View.VISIBLE);
 		}
 
 		return convertView;
 	}
 
+	private void removeItem(final int position, final ViewGroup parent,
+			final DrawerEditionItem item) {
+		ListView drawerList = (ListView) parent;
+		int checkedItemPosition = drawerList.getCheckedItemPosition();
+		DrawerEditionItem itemToCheck = null;
+		if (checkedItemPosition != AdapterView.INVALID_POSITION
+				&& checkedItemPosition != position) {
+			itemToCheck = m_navDrawerItems.get(checkedItemPosition);
+		}
+
+		m_levelHandler.removeRoom(item.getRoom());
+		m_navDrawerItems.remove(position);
+
+		m_view.invalidate();
+
+		DrawerEditionListAdapter.this.notifyDataSetChanged();
+
+		if (itemToCheck == null) {
+			m_levelHandler.unselectRoom();
+			drawerList.clearChoices();
+		} else {
+			for (int i = 0; i < m_navDrawerItems.size(); i++) {
+				if (itemToCheck == m_navDrawerItems.get(i)) {
+					drawerList.setItemChecked(i, true);
+					return;
+				}
+			}
+			drawerList.clearChoices();
+			m_levelHandler.unselectRoom();
+		}
+
+	}
 }

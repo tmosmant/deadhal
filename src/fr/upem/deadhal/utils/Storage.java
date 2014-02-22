@@ -1,15 +1,15 @@
 package fr.upem.deadhal.utils;
 
-import android.annotation.SuppressLint;
-import android.os.Environment;
-import android.util.Log;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+
+import android.annotation.SuppressLint;
+import android.os.Environment;
+import android.util.Log;
 
 public class Storage {
 
@@ -50,20 +50,33 @@ public class Storage {
 	}
 
 	/* List all the files in the deadhal directory */
-	public static List<String> getFilesList() {
+	// public static List<String> getFilesList() {
+	// File directory = getDeadHalDir();
+	// List<String> list = new ArrayList<String>();
+	//
+	// if (directory.isDirectory()) {
+	// File files[] = directory.listFiles(filter());
+	// for (File file : files) {
+	// String name = file.getName();
+	// name = name.replace(FILE_EXTENSION, "");
+	// list.add(name);
+	// }
+	// Collections.sort(list);
+	// }
+	// return list;
+	// }
+
+	/* List all the files in the deadhal directory */
+	public static ArrayList<File> getFilesList() {
+		ArrayList<File> fileList = null;
 		File directory = getDeadHalDir();
-		List<String> list = new ArrayList<String>();
 
 		if (directory.isDirectory()) {
 			File files[] = directory.listFiles(filter());
-			for (File file : files) {
-				String name = file.getName();
-				name = name.replace(FILE_EXTENSION, "");
-				list.add(name);
-			}
-			Collections.sort(list);
+			fileList = new ArrayList<File>(Arrays.asList(files));
+			Collections.sort(fileList);
 		}
-		return list;
+		return fileList;
 	}
 
 	/* Return true if the file exists */
@@ -91,9 +104,8 @@ public class Storage {
 	}
 
 	/* Rename a file */
-	public static boolean renameFile(String src, String dst) {
-		File from = openFile(src);
-		File to = openFile(dst);
+	public static boolean renameFile(File from, String newName) {
+		File to = openFile(newName);
 		return from.renameTo(to);
 	}
 

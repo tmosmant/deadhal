@@ -1,30 +1,22 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<?xml version="1.0" encoding="utf-8"?>
 
-    <item
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
         android:id="@+id/action_share"
-        android:actionProviderClass="android.widget.ShareActionProvider"
         android:icon="@drawable/ic_action_share"
-        android:showAsAction="ifRoom"
+        android:showAsAction="ifRoom|withText"
         android:title="@string/action_share"/>
 
-    <group
-        android:id="@+id/group_open"
-        android:enabled="true"
-        android:menuCategory="container"
-        android:showAsAction="ifRoom"
-        android:visible="true" >
-        <item
-            android:id="@+id/action_navigation"
-            android:title="@string/action_navigate"/>
-        <item
-            android:id="@+id/action_edition"
-            android:title="@string/action_edition"/>
-        <item
+    <item
             android:id="@+id/action_rename"
-            android:title="@string/action_rename"/>
-        <item
-            android:id="@+id/action_remove"
-            android:title="@string/action_remove"/>
-    </group>
+            android:showAsAction="ifRoom|withText"
+            android:title="@string/action_rename"
+            android:icon="@drawable/ic_action_edit"/>
 
+    <item
+            android:id="@+id/action_delete"
+            android:orderInCategory="100"
+            android:showAsAction="ifRoom|withText"
+            android:title="@string/action_delete"
+            android:icon="@drawable/ic_action_discard"/>
 </menu>

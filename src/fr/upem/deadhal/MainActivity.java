@@ -1,6 +1,5 @@
 package fr.upem.deadhal;
 
-
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -26,11 +25,7 @@ import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.drawers.adapters.DrawerMainListAdapter;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.drawers.models.DrawerMainItem;
-import fr.upem.deadhal.fragments.EditionFragment;
-import fr.upem.deadhal.fragments.FragmentType;
-import fr.upem.deadhal.fragments.NavigationFragment;
-import fr.upem.deadhal.fragments.OpenFragment;
-import fr.upem.deadhal.fragments.SaveFragment;
+import fr.upem.deadhal.fragments.*;
 import fr.upem.deadhal.utils.Storage;
 
 public class MainActivity extends Activity implements DrawerMainListener {
@@ -157,10 +152,10 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			menu.findItem(R.id.action_list_objects).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_lock).setVisible(!drawerOpen);
 			break;
-		case R.menu.open:
-			menu.setGroupVisible(R.id.group_open, !drawerOpen);
-			menu.findItem(R.id.action_share).setEnabled(!drawerOpen);
-			break;
+		// case R.menu.open:
+		// menu.setGroupVisible(R.id.group_open, !drawerOpen);
+		// menu.findItem(R.id.action_share).setEnabled(!drawerOpen);
+		// break;
 		case R.menu.save:
 			break;
 		default:
@@ -184,14 +179,12 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			m_menu = R.menu.navigation;
 			break;
 		case EDITION:
-			System.out.println(m_level.getTitle());
 			fragment = new EditionFragment();
 			m_menu = R.menu.edition;
 			break;
 		case OPEN:
-			System.out.println(m_level.getTitle());
 			fragment = new OpenFragment();
-			m_menu = R.menu.open;
+			m_menu = R.menu.save;
 			break;
 		case SAVE:
 			fragment = new SaveFragment();

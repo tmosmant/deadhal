@@ -2,7 +2,7 @@ package fr.upem.deadhal.fragments;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
@@ -11,33 +11,34 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
-import android.widget.*;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
+import fr.upem.deadhal.fragments.adapter.FileAdapter;
 import fr.upem.deadhal.fragments.dialogs.ConfirmDialogFragment;
 import fr.upem.deadhal.fragments.dialogs.InputDialogFragment;
 import fr.upem.deadhal.tasks.OpenTask;
 import fr.upem.deadhal.utils.Storage;
 
-public class OpenFragment extends Fragment {
+public class OpenFragment extends Fragment implements
+		AdapterView.OnItemClickListener {
+
+	private static final int RENAME_DIALOG = 1;
+	private static final int REMOVE_DIALOG = 2;
+
+	private File m_selectedFile;
 
 	private DrawerMainListener m_callback;
-	public static final int RENAME_DIALOG = 1;
-	public static final int REMOVE_DIALOG = 2;
-
-	private int m_selection = -1;
-	private String m_fileName = null;
-	private ArrayAdapter<String> m_arrayAdapter = null;
-	private List<String> m_list = new ArrayList<String>();
-	private ListView m_listView = null;
-
-	public OpenFragment() {
-	}
+	private FileAdapter m_filesAdapter;
+	private ActionMode m_actionMode;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -56,104 +57,75 @@ public class OpenFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ArrayList<File> files = Storage.getFilesList();
+		m_filesAdapter = new FileAdapter(getActivity(), R.layout.list_file,
+				files);
 		if (savedInstanceState != null) {
-			m_fileName = savedInstanceState.getString("file");
-			m_selection = savedInstanceState.getInt("selection");
-		}
-		setHasOptionsMenu(true);
-	}
-
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-		boolean isActive = m_fileName != null;
-		menu.setGroupVisible(R.id.group_open, isActive);
-		menu.findItem(R.id.action_share).setVisible(isActive);
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		File file = Storage.openFile(m_fileName);
-		if (file.exists() && file.canRead()) {
-			ShareActionProvider shareActionProvider = (ShareActionProvider) menu
-					.findItem(R.id.action_share).getActionProvider();
-
-			Intent intent = new Intent(Intent.ACTION_SEND);
-			intent.setType("text/plain");
-			intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-			intent.putExtra(Intent.EXTRA_SUBJECT, "Share " + file.getName());
-			shareActionProvider.setShareIntent(intent);
+			int position = savedInstanceState.getInt("position");
+			onClick(position);
 		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_open, container,
+		View rootView = inflater.inflate(R.layout.fragmen_open_best, container,
 				false);
 
 		getActivity().setTitle(R.string.open);
 
-		if (Storage.isExternalStorageReadable()) {
-			m_list = Storage.getFilesList();
-			m_listView = (ListView) rootView.findViewById(R.id.listFile);
-			m_arrayAdapter = new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_list_item_activated_1, m_list);
-			m_listView.setAdapter(m_arrayAdapter);
-			m_listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-			m_listView.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					if (m_selection != position) {
-						m_selection = position;
-						m_fileName = (String) parent
-								.getItemAtPosition(position);
-					} else {
-						m_selection = -1;
-						m_fileName = null;
-						m_listView.clearChoices();
-						m_listView.bringToFront();
-					}
-					getActivity().invalidateOptionsMenu();
-				}
-			});
-		} else {
-			Toast.makeText(getActivity(),
-					"Erreur: impossible d'acc�der a la m�moire externe",
-					Toast.LENGTH_SHORT).show();
-		}
+		ListView m_listView = (ListView) rootView.findViewById(R.id.list_file);
+		m_listView.setAdapter(m_filesAdapter);
+		m_listView.setOnItemClickListener(this);
 
 		return rootView;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_navigation:
-			return open(FragmentType.NAVIGATION);
-		case R.id.action_edition:
-			return open(FragmentType.EDITION);
-		case R.id.action_rename:
-			showRenameDialog();
-			return true;
-		case R.id.action_remove:
-			showRemoveDialog();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		onClick(position);
+	}
+
+	private void onClick(int position) {
+		m_filesAdapter.toggleSelection(position);
+		m_selectedFile = m_filesAdapter.getItem(position);
+		boolean hasCheckedItem = m_filesAdapter.hasCheckedItem();
+
+		if (hasCheckedItem && m_actionMode == null) {
+			// there are some selected items, start the actionMode
+			m_actionMode = getActivity().startActionMode(
+					new ActionModeCallback());
+		} else if (!hasCheckedItem && m_actionMode != null) {
+			// there no selected items, finish the actionMode
+			m_actionMode.finish();
+		}
+
+		if (m_actionMode != null) {
+			m_actionMode.setTitle(m_selectedFile.getName());
+
+			int doneButtonId = Resources.getSystem().getIdentifier(
+					"action_mode_close_button", "id", "android");
+			LinearLayout layout = (LinearLayout) getActivity().findViewById(
+					doneButtonId);
+			layout.setOnClickListener(buildDoneClickListener(m_selectedFile));
 		}
 	}
 
-	private boolean open(FragmentType dest) {
-		File m_file = Storage.openFile(m_fileName);
-		if (m_file == null) {
-			return false;
-		}
+	private View.OnClickListener buildDoneClickListener(final File file) {
+		return new View.OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				m_actionMode.finish();
+				open(file);
+			}
+		};
+	}
+
+	private boolean open(File file) {
 		OpenTask openTask = new OpenTask();
-		openTask.execute(m_file);
+		openTask.execute(file);
 
 		try {
 			Level m_level = openTask.get();
@@ -163,10 +135,8 @@ public class OpenFragment extends Fragment {
 			ed.clear();
 			ed.commit();
 
-			m_fileName = null;
-			m_listView.clearChoices();
 			m_callback.onLevelChange(m_level);
-			m_callback.onFragmentChange(dest);
+			m_callback.onFragmentChange(FragmentType.NAVIGATION);
 		} catch (InterruptedException e) {
 			return false;
 		} catch (ExecutionException e) {
@@ -184,6 +154,20 @@ public class OpenFragment extends Fragment {
 				"renameDialog");
 	}
 
+	private void rename(String fileName) {
+		m_actionMode.finish();
+		m_filesAdapter.remove(m_selectedFile);
+		Storage.renameFile(m_selectedFile, fileName);
+		m_filesAdapter.add(Storage.openFile(fileName));
+		m_filesAdapter.sort(new Comparator<File>() {
+
+			@Override
+			public int compare(File lhs, File rhs) {
+				return lhs.getName().compareTo(rhs.getName());
+			}
+		});
+	}
+
 	private void showRemoveDialog() {
 		int title = R.string.action_remove;
 		int message = R.string.remove_warning;
@@ -193,6 +177,29 @@ public class OpenFragment extends Fragment {
 		dialogFragment.setTargetFragment(this, REMOVE_DIALOG);
 		dialogFragment.show(getFragmentManager().beginTransaction(),
 				"removeDialog");
+	}
+
+	private void delete(File file) {
+		if (file.delete()) {
+			m_actionMode.finish();
+			m_callback.onFileNumberChange();
+			m_filesAdapter.remove(m_selectedFile);
+
+			Toast.makeText(getActivity(), R.string.deleted_file,
+					Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(getActivity(), R.string.deleted_file_error,
+					Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	private void share() {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(m_selectedFile));
+		intent.putExtra(Intent.EXTRA_SUBJECT,
+				"Share " + m_selectedFile.getName());
+		startActivity(intent);
 	}
 
 	@Override
@@ -206,54 +213,63 @@ public class OpenFragment extends Fragment {
 			break;
 		case REMOVE_DIALOG:
 			if (resultCode == Activity.RESULT_OK) {
-				delete();
+				delete(m_selectedFile);
 			}
 			break;
-		}
-	}
-
-	private void rename(String fileName) {
-		Storage.renameFile(m_fileName, fileName);
-		m_arrayAdapter.remove(m_fileName);
-		m_arrayAdapter.add(fileName);
-		m_listView.clearChoices();
-
-		m_fileName = null;
-		m_list = Storage.getFilesList();
-	}
-
-	private void delete() {
-		File m_file = Storage.openFile(m_fileName);
-		if (m_file.delete()) {
-			m_callback.onFileNumberChange();
-			m_arrayAdapter.remove(m_fileName);
-
-			clearChoice();
-			Toast.makeText(getActivity(), R.string.deleted_file,
-					Toast.LENGTH_SHORT).show();
-		} else {
-			Toast.makeText(getActivity(), R.string.deleted_file_error,
-					Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		clearChoice();
-	}
-
-	public void clearChoice() {
-		m_selection = -1;
-		m_fileName = null;
-		m_listView.clearChoices();
-		getActivity().invalidateOptionsMenu();
+		if (m_actionMode != null) {
+			m_actionMode.finish();
+		}
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString("file", m_fileName);
-		outState.putInt("selection", m_selection);
+		outState.putInt("position", m_filesAdapter.getSelectedId());
+	}
+
+	private class ActionModeCallback implements ActionMode.Callback {
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			// inflate contextual menu
+			mode.getMenuInflater().inflate(R.menu.open, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.action_delete:
+				showRemoveDialog();
+				return true;
+
+			case R.id.action_share:
+				share();
+				m_filesAdapter.removeSelection();
+				return true;
+
+			case R.id.action_rename:
+				showRenameDialog();
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			m_actionMode = null;
+		}
 	}
 }

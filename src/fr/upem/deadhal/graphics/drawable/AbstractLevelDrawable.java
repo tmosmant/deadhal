@@ -66,10 +66,14 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		drawTitle(canvas, room);
 	}
 
-	protected void drawCorridor(Canvas canvas, Corridor corridor) {
+	protected void drawCorridor(Canvas canvas, Corridor corridor, Paint paint) {
 		Room start = m_levelHandler.getLevel().getRooms()
 				.get(corridor.getSrc());
 		Room end = m_levelHandler.getLevel().getRooms().get(corridor.getDst());
+		if (RectF.intersects(start.getRect(), end.getRect())) {
+			corridor.setWeight(0.0);
+			return;
+		}
 		RectF rectStart = start.getRect();
 		RectF rectEnd = end.getRect();
 		PointF centerStart = new PointF(rectStart.centerX(),
@@ -77,11 +81,20 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		PointF centerEnd = new PointF(rectEnd.centerX(), rectEnd.centerY());
 		PointF pStart = computeIntersection(centerStart, centerEnd, rectStart);
 		PointF pEnd = computeIntersection(centerStart, centerEnd, rectEnd);
+		corridor.setWeight(length(pStart, pEnd));
 		if (corridor.isDirected()) {
-			drawArrow(canvas, pStart, pEnd);
+			drawArrow(canvas, pStart, pEnd, paint);
 		} else {
-			canvas.drawLine(pStart.x, pStart.y, pEnd.x, pEnd.y, Paints.CORRIDOR);
+			canvas.drawLine(pStart.x, pStart.y, pEnd.x, pEnd.y, paint);
 		}
+	}
+
+	protected void drawCorridor(Canvas canvas, Corridor corridor) {
+		drawCorridor(canvas, corridor, Paints.CORRIDOR);
+	}
+
+	private double length(PointF a, PointF b) {
+		return Math.sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 	}
 
 	private PointF computeIntersection(PointF start, PointF end, RectF rect) {
@@ -143,7 +156,8 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		return new PointF(p0_x + (t * s10_x), p0_y + (t * s10_y));
 	}
 
-	private void drawArrow(Canvas canvas, PointF startPoint, PointF endPoint) {
+	private void drawArrow(Canvas canvas, PointF startPoint, PointF endPoint,
+			Paint paint) {
 		Path path = new Path();
 		path.moveTo(startPoint.x, startPoint.y);
 		path.lineTo(endPoint.x, endPoint.y);
@@ -168,7 +182,7 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		path.moveTo(point_x_1, point_y_1);
 		path.lineTo(point_x_2, point_y_2);
 		path.lineTo(point_x_3, point_y_3);
-		canvas.drawPath(path, Paints.CORRIDOR);
+		canvas.drawPath(path, paint);
 	}
 
 }

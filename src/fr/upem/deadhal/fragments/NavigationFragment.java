@@ -1,6 +1,10 @@
 package fr.upem.deadhal.fragments;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
@@ -10,8 +14,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.*;
+import android.view.GestureDetector;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +41,7 @@ public class NavigationFragment extends Fragment {
 	private Level m_level = null;
 	private DrawerMainListener m_callback;
 	private SharedPreferences m_prefs = null;
-	private NavigationView m_navigationView = null;
+	private NavigationView m_view = null;
 	private NavigationLevelHandler m_levelHandler = null;
 
 	@Override
@@ -78,18 +85,18 @@ public class NavigationFragment extends Fragment {
 		NavigationLevelDrawable levelDrawable = new NavigationLevelDrawable(
 				m_levelHandler);
 
-		m_navigationView = new NavigationView(rootView.getContext(),
-				m_levelHandler, levelDrawable);
+		m_view = new NavigationView(rootView.getContext(), m_levelHandler,
+				levelDrawable);
 
 		NavigationGestureListener m_gestureListener = new NavigationGestureListener(
-				m_navigationView, m_levelHandler);
+				m_view, m_levelHandler);
 
 		m_prefs = getActivity().getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
 		GestureDetector gestureDetector = new GestureDetector(
 				rootView.getContext(), m_gestureListener);
-		m_navigationView.build(gestureDetector, savedInstanceState, m_prefs);
-		relativeLayout.addView(m_navigationView);
+		m_view.build(gestureDetector, savedInstanceState, m_prefs);
+		relativeLayout.addView(m_view);
 
 		m_levelHandler.addSelectionRoomListener(new SelectionRoomListener() {
 
@@ -114,27 +121,26 @@ public class NavigationFragment extends Fragment {
 				Room end = data.getParcelableExtra("end");
 
 				if (start.equals(end)) {
-					Toast.makeText(getActivity(), "Depart = Arrive !",
+					Toast.makeText(getActivity(), R.string.start_end,
 							Toast.LENGTH_LONG).show();
 				} else {
-					Log.e("start", start.getName());
-					Log.e("end", end.getName());
 					m_levelHandler.setRoomStart(start);
 					m_levelHandler.setRoomEnd(end);
-					ShortestPathTask spt = new ShortestPathTask(
-start.getId(),
+					ShortestPathTask spt = new ShortestPathTask(start.getId(),
 							end.getId());
 					spt.execute(m_level);
 					try {
 						List<UUID> listCoridors = spt.get();
 						if (listCoridors == null) {
-							Toast.makeText(getActivity(), "Il n'existe pas de chemin.",
+							Toast.makeText(getActivity(),
+									R.string.no_path_found, Toast.LENGTH_LONG)
+									.show();
+						} else {
+							Toast.makeText(getActivity(),
+									R.string.follow_the_green_path,
 									Toast.LENGTH_LONG).show();
-						}
-						else {
-							Toast.makeText(getActivity(), listCoridors.toString(),
-									Toast.LENGTH_LONG).show();
-							//Afficher le chemin a partir de la liste des UUID des Corridors
+							m_levelHandler.setShortestPath(listCoridors);
+							m_view.refresh();
 						}
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -187,13 +193,13 @@ start.getId(),
 
 	@Override
 	public void onPause() {
-		m_navigationView.saveMatrix(m_prefs);
+		m_view.saveMatrix(m_prefs);
 		super.onPause();
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		m_navigationView.saveMatrix(outState);
+		m_view.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}
 }

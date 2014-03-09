@@ -12,6 +12,7 @@ public class Corridor implements Parcelable {
 	private UUID src;
 	private UUID dst;
 	private boolean directed;
+	private double m_weight;
 
 	public Corridor(UUID id, UUID src, UUID dst, boolean directed) {
 		this.id = id;
@@ -87,9 +88,12 @@ public class Corridor implements Parcelable {
 			return new Corridor[size];
 		}
 	};
-	
-	public float computeWeight() {
-		return 1;
+
+	public void setWeight(double weight) {
+		m_weight = weight;
 	}
 
+	public double getWeight() {
+		return m_weight;
+	}
 }

@@ -8,15 +8,15 @@ import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 
 public class ShortestPathTask extends AsyncTask<Level, Integer, List<UUID>> {
-	
+
 	private UUID m_start;
 	private UUID m_finish;
-	
+
 	public ShortestPathTask(UUID start, UUID finish) {
 		this.m_start = start;
 		this.m_finish = finish;
 	}
-	
+
 	@Override
 	protected List<UUID> doInBackground(Level... params) {
 		Level m_level = params[0];
@@ -24,8 +24,8 @@ public class ShortestPathTask extends AsyncTask<Level, Integer, List<UUID>> {
 	}
 
 	private List<UUID> dijkstra(Level level) {
-		float startFloat = 0;
-		Map<UUID, Float> dijkstraMap = initMap(level);
+		Double startFloat = 0.0;
+		Map<UUID, Double> dijkstraMap = initMap(level);
 		Map<UUID, UUID> corridorsRoom = new HashMap<UUID, UUID>();
 
 		dijkstraMap.put(m_start, startFloat);
@@ -35,7 +35,7 @@ public class ShortestPathTask extends AsyncTask<Level, Integer, List<UUID>> {
 		checkRoom.remove(lastRoom.getId());
 		while (lastRoom != null) {
 			for (UUID id : lastRoom.getNeighbors().keySet()) {
-				float weight = level.getCorridors().get(id).computeWeight();
+				double weight = level.getCorridors().get(id).getWeight();
 				if (dijkstraMap.get(lastRoom.getNeighbors().get(id)) < 0.0
 						|| dijkstraMap.get(lastRoom.getNeighbors().get(id)) > weight
 								+ dijkstraMap.get(lastRoom.getId())) {
@@ -44,7 +44,7 @@ public class ShortestPathTask extends AsyncTask<Level, Integer, List<UUID>> {
 					corridorsRoom.put(lastRoom.getNeighbors().get(id), id);
 				}
 			}
-			UUID id = lighter(dijkstraMap,					checkRoom);
+			UUID id = lighter(dijkstraMap, checkRoom);
 			if (id == null) {
 				lastRoom = null;
 			} else {
@@ -55,9 +55,9 @@ public class ShortestPathTask extends AsyncTask<Level, Integer, List<UUID>> {
 		return parcours(level, m_start, m_finish, corridorsRoom);
 	}
 
-	private Map<UUID, Float> initMap(Level level) {
-		float initFloat = -1;
-		Map<UUID, Float> hm = new HashMap<UUID, Float>();
+	private Map<UUID, Double> initMap(Level level) {
+		Double initFloat = -1.0;
+		Map<UUID, Double> hm = new HashMap<UUID, Double>();
 		for (UUID id : level.getRooms().keySet()) {
 			hm.put(id, initFloat);
 		}
@@ -65,7 +65,7 @@ public class ShortestPathTask extends AsyncTask<Level, Integer, List<UUID>> {
 	}
 
 	private List<UUID> parcours(Level level, UUID start, UUID finish,
-		Map<UUID, UUID> corridorsRoom) {
+			Map<UUID, UUID> corridorsRoom) {
 		List<UUID> listCorridor = new LinkedList<UUID>();
 		while (!finish.equals(start)) {
 			if (!corridorsRoom.containsKey(finish)) {
@@ -84,9 +84,9 @@ public class ShortestPathTask extends AsyncTask<Level, Integer, List<UUID>> {
 		return listCorridor;
 	}
 
-	private UUID lighter(Map<UUID, Float> hm, List<UUID> al) {
+	private UUID lighter(Map<UUID, Double> hm, List<UUID> al) {
 		UUID room = null;
-		float min = -1;
+		Double min = -1.0;
 		if (al.size() > 0) {
 			for (UUID id : al) {
 				if (hm.get(id) != -1.0 && (hm.get(id) < min || min == -1.0)) {

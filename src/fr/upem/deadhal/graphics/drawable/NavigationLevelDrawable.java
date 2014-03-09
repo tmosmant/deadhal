@@ -42,6 +42,12 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 				drawCorridor(canvas, corridor, Paints.CORRIDOR);
 			}
 		}
+		Room centaurRoom = m_navigationLevelHandler.getCentaurRoom();
+		if (centaurRoom != null) {
+			canvas.drawCircle(centaurRoom.getRect().centerX(), centaurRoom
+					.getRect().centerY(), 30, Paints.ROOM_SELECTED_POINT);
+
+		}
 	}
 
 	private void drawRoomStart(Canvas canvas, Room room) {

@@ -11,12 +11,12 @@ public class EditionGestureListener extends
 		GestureDetector.SimpleOnGestureListener {
 
 	private AbstractView m_view;
-	private EditionLevelHandler m_levelHander;
+	private EditionLevelHandler m_levelHandler;
 
 	public EditionGestureListener(AbstractView view,
 			EditionLevelHandler levelHandler) {
 		m_view = view;
-		m_levelHander = levelHandler;
+		m_levelHandler = levelHandler;
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class EditionGestureListener extends
 
 		inverse.mapPoints(pts);
 		if (e.getPointerCount() == 1) {
-			m_levelHander.selectRoomFromCoordinates(pts[0], pts[1]);
+			m_levelHandler.selectRoomFromCoordinates(pts[0], pts[1]);
 			m_view.setMode(TouchEvent.NONE);
 		}
 		super.onLongPress(e);

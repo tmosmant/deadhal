@@ -88,6 +88,8 @@ public class NavigationFragment extends Fragment {
 		m_view = new NavigationView(rootView.getContext(), m_levelHandler,
 				levelDrawable);
 
+		m_levelHandler.setView(m_view);
+		
 		NavigationGestureListener m_gestureListener = new NavigationGestureListener(
 				m_view, m_levelHandler);
 
@@ -130,6 +132,7 @@ public class NavigationFragment extends Fragment {
 							end.getId());
 					spt.execute(m_level);
 					try {
+						System.out.println("on passe ici");
 						List<UUID> listCoridors = spt.get();
 						if (listCoridors == null) {
 							Toast.makeText(getActivity(),
@@ -163,7 +166,7 @@ public class NavigationFragment extends Fragment {
 			if (m_level.nbRooms() >= 2) {
 				showNavigationDialog();
 			} else {
-				Toast.makeText(getActivity(), "Pas assez de salle !",
+				Toast.makeText(getActivity(), R.string.need_at_least_2_rooms,
 						Toast.LENGTH_LONG).show();
 			}
 			return true;
@@ -194,11 +197,13 @@ public class NavigationFragment extends Fragment {
 	@Override
 	public void onPause() {
 		m_view.saveMatrix(m_prefs);
+		m_callback.onLevelChange(m_level);
 		super.onPause();
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		outState.putParcelable("level", m_level);
 		m_view.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
 	}

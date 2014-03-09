@@ -1,5 +1,7 @@
 package fr.upem.deadhal.components.handlers;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +20,10 @@ public abstract class AbstractLevelHandler {
 
 	public AbstractLevelHandler(Level level) {
 		m_level = level;
+	}
+
+	public AbstractView getView() {
+		return m_view;
 	}
 
 	public void setView(AbstractView view) {
@@ -68,5 +74,17 @@ public abstract class AbstractLevelHandler {
 		if (m_view != null) {
 			m_view.refresh();
 		}
+	}
+
+	public Room getRoomFromCoordinates(float x, float y) {
+		Collection<Room> rooms = m_level.getRooms().values();
+		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
+		Collections.reverse(reverseRooms);
+		for (Room room : reverseRooms) {
+			if (room.getRect().contains(x, y)) {
+				return room;
+			}
+		}
+		return null;
 	}
 }

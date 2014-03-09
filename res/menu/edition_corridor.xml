@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/action_directed_corridors"
+        android:icon="@drawable/ic_action_repeat"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_directed"/>
+    <item
+        android:id="@+id/action_end_corridors"
+        android:icon="@drawable/ic_action_accept"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_accept"/>
+
+</menu>

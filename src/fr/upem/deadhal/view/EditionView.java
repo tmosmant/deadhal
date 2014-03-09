@@ -2,7 +2,6 @@ package fr.upem.deadhal.view;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
 import fr.upem.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.deadhal.graphics.drawable.EditionLevelDrawable;
@@ -11,16 +10,8 @@ public class EditionView extends AbstractView {
 
 	private EditionLevelHandler m_levelHandler;
 
-	public EditionView(Context context) {
+	private EditionView(Context context) {
 		super(context);
-	}
-
-	public EditionView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
-	public EditionView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
 	}
 
 	public EditionView(Context context, EditionLevelHandler levelHandler,

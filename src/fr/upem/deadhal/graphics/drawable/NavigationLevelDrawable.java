@@ -4,11 +4,13 @@ import java.util.Collection;
 
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import fr.upem.deadhal.components.Corridor;
+import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.deadhal.graphics.Paints;
 
-public class NavigationLevelDrawable extends AbstractDrawable {
+public class NavigationLevelDrawable extends AbstractLevelDrawable {
 
 	private NavigationLevelHandler m_navigationLevelHandler;
 
@@ -19,8 +21,8 @@ public class NavigationLevelDrawable extends AbstractDrawable {
 
 	@Override
 	public void draw(Canvas canvas) {
-		Collection<Room> rooms = m_navigationLevelHandler.getLevel().getRooms()
-				.values();
+		Level level = m_navigationLevelHandler.getLevel();
+		Collection<Room> rooms = level.getRooms().values();
 		for (Room room : rooms) {
 			drawRoom(canvas, room);
 		}
@@ -31,6 +33,13 @@ public class NavigationLevelDrawable extends AbstractDrawable {
 		}
 		if (roomEnd != null) {
 			drawRoomEnd(canvas, roomEnd);
+		}
+		for (Corridor corridor : level.getCorridors().values()) {
+			if (corridor.isDirected()) {
+				drawDirectedCorridor(canvas, corridor);
+			} else {
+				drawCorridor(canvas, corridor);
+			}
 		}
 	}
 

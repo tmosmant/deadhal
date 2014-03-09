@@ -11,6 +11,7 @@ public class Paints {
 	public final static Paint ROOM_SELECTED_BACKGROUND_ERROR = new Paint();
 	public final static Paint ROOM_SELECTED_BORDER = new Paint();
 	public final static Paint ROOM_SELECTED_POINT = new Paint();
+	public final static Paint CORRIDOR = new Paint();
 
 	public final static Paint ROOM_TITLE = new Paint();
 
@@ -18,11 +19,13 @@ public class Paints {
 		ROOM_BACKGROUND.setColor(Colors.BLUE);
 		ROOM_BACKGROUND.setStyle(Paint.Style.FILL);
 		ROOM_BACKGROUND.setAntiAlias(true);
+		ROOM_BACKGROUND.setAlpha(255);
 
 		ROOM_BORDER.setColor(Colors.BLACK);
 		ROOM_BORDER.setStyle(Paint.Style.STROKE);
 		ROOM_BORDER.setStrokeWidth(3);
 		ROOM_BORDER.setAntiAlias(true);
+		ROOM_BORDER.setAlpha(255);
 
 		ROOM_SELECTED_BORDER.setColor(Colors.GREY);
 		ROOM_SELECTED_BORDER.setStyle(Paint.Style.STROKE);
@@ -50,6 +53,12 @@ public class Paints {
 		ROOM_TITLE.setTextAlign(Align.CENTER);
 		ROOM_TITLE.setAntiAlias(true);
 		ROOM_TITLE.setAlpha(255);
+
+		CORRIDOR.setColor(Colors.BLACK);
+		CORRIDOR.setStyle(Paint.Style.FILL_AND_STROKE);
+		CORRIDOR.setStrokeWidth(3);
+		CORRIDOR.setAntiAlias(true);
+		CORRIDOR.setAlpha(255);
 	}
 
 	public static void setAntiAlias(boolean aa) {
@@ -60,6 +69,7 @@ public class Paints {
 		ROOM_SELECTED_BACKGROUND_ERROR.setAntiAlias(aa);
 		ROOM_SELECTED_POINT.setAntiAlias(aa);
 		ROOM_TITLE.setAntiAlias(aa);
+		CORRIDOR.setAntiAlias(aa);
 	}
 
 	private Paints() {

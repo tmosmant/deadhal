@@ -6,11 +6,13 @@ import java.util.UUID;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -30,6 +32,8 @@ import fr.upem.deadhal.utils.Storage;
 
 public class MainActivity extends Activity implements DrawerMainListener {
 
+	private Vibrator m_vibratorService;
+
 	private Level m_level;
 	private boolean m_newLevel = false;
 
@@ -48,6 +52,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		setContentView(R.layout.activity_main);
 		m_level = buildSampleLevel();
 		buildDrawer(savedInstanceState);
+		m_vibratorService = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 	}
 
 	private void buildDrawer(Bundle savedInstanceState) {
@@ -152,11 +157,10 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			menu.findItem(R.id.action_list_objects).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_lock).setVisible(!drawerOpen);
 			break;
-		// case R.menu.open:
-		// menu.setGroupVisible(R.id.group_open, !drawerOpen);
-		// menu.findItem(R.id.action_share).setEnabled(!drawerOpen);
-		// break;
 		case R.menu.save:
+			break;
+		case R.menu.edition_corridor:
+			menu.findItem(R.id.action_end_corridors).setVisible(!drawerOpen);
 			break;
 		default:
 			break;
@@ -165,10 +169,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		return super.onPrepareOptionsMenu(menu);
 	}
 
-	/**
-	 * Diplaying fragment view for selected nav drawer list item
-	 */
-	private void displayView(FragmentType fragmentType) {
+	public void displayView(FragmentType fragmentType) {
 		// update the main content by switching fragments
 		FragmentManager fragmentManager = getFragmentManager();
 		Fragment fragment = null;
@@ -189,6 +190,10 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		case SAVE:
 			fragment = new SaveFragment();
 			m_menu = R.menu.save;
+			break;
+		case EDITION_CORRIDOR:
+			fragment = new EditionCorridorFragment();
+			m_menu = R.menu.edition_corridor;
 			break;
 		default:
 			break;
@@ -322,5 +327,9 @@ public class MainActivity extends Activity implements DrawerMainListener {
 				break;
 			}
 		}
+	}
+
+	public Vibrator getVibratorService() {
+		return m_vibratorService;
 	}
 }

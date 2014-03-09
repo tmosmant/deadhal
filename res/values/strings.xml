@@ -5,6 +5,7 @@
     <string name="file">File</string>
     <string name="edition">Edition</string>
     <string name="navigation">Navigation</string>
+    <string name="corridors">Add corridors</string>
     <string name="open">Open</string>
     <string name="save">Save</string>
     <string name="not_yet_implemented">Not yet implemented.</string>
@@ -29,6 +30,7 @@
     <string name="add_corridor">Add a corridor&#8230;</string>
     <string name="action_list_objects">Open the objects list</string>
     <string name="action_add">Name for the new room :</string>
+    <string name="action_directed">Directed</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">

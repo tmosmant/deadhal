@@ -3,13 +3,14 @@ package fr.upem.deadhal.graphics.drawable;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.deadhal.components.handlers.ResizeType;
 import fr.upem.deadhal.graphics.Paints;
 
-public class EditionLevelDrawable extends AbstractDrawable {
+public class EditionLevelDrawable extends AbstractLevelDrawable {
 
 	private EditionLevelHandler m_levelHandler;
 
@@ -20,6 +21,8 @@ public class EditionLevelDrawable extends AbstractDrawable {
 
 	@Override
 	public void draw(Canvas canvas) {
+		boolean superposing = false;
+
 		Level level = m_levelHandler.getLevel();
 		Room selectedRoom = m_levelHandler.getSelectedRoom();
 		for (Room room : level.getRooms().values()) {
@@ -32,13 +35,22 @@ public class EditionLevelDrawable extends AbstractDrawable {
 				if (!room.equals(selectedRoom)) {
 					if (RectF
 							.intersects(room.getRect(), selectedRoom.getRect())) {
-						drawRoomSelectedError(canvas, selectedRoom);
-						return;
+						superposing = true;
 					}
 				}
 			}
 
 			drawRoomSelected(canvas, selectedRoom);
+		}
+		if (superposing) {
+			drawRoomSelectedError(canvas, selectedRoom);
+		}
+		for (Corridor corridor : level.getCorridors().values()) {
+			if (corridor.isDirected()) {
+				drawDirectedCorridor(canvas, corridor);
+			} else {
+				drawCorridor(canvas, corridor);
+			}
 		}
 	}
 

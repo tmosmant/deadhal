@@ -2,18 +2,22 @@ package fr.upem.deadhal.view;
 
 import android.content.Context;
 import android.view.MotionEvent;
-import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
-import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
+import fr.upem.deadhal.components.handlers.EditionCorridorLevelHandler;
+import fr.upem.deadhal.graphics.drawable.EditionCorridorLevelDrawable;
 
-public class NavigationView extends AbstractView {
+public class EditionCorridorView extends AbstractView {
 
-	private NavigationView(Context context) {
+	private EditionCorridorLevelHandler m_levelHandler;
+
+	private EditionCorridorView(Context context) {
 		super(context);
 	}
 
-	public NavigationView(Context context, AbstractLevelHandler levelHandler,
-			NavigationLevelDrawable drawable) {
+	public EditionCorridorView(Context context,
+			EditionCorridorLevelHandler levelHandler,
+			EditionCorridorLevelDrawable drawable) {
 		super(context, levelHandler, drawable);
+		m_levelHandler = levelHandler;
 	}
 
 	@Override
@@ -37,8 +41,7 @@ public class NavigationView extends AbstractView {
 				drag(event);
 				break;
 			case NONE:
-				break;
-			case RESIZE_ROOM:
+				getProcess(event);
 				break;
 			case ZOOM:
 				zoom(event);
@@ -48,17 +51,24 @@ public class NavigationView extends AbstractView {
 			}
 			break;
 		}
-
 		refresh();
-
 		return true;
 	}
 
 	private void getProcess(MotionEvent event) {
+		m_matrix.invert(m_savedInverseMatrix);
+		float[] pts = { event.getX(), event.getY() };
+		m_savedInverseMatrix.mapPoints(pts);
+
+		if (m_mode == TouchEvent.NONE) {
+			m_levelHandler.getProcess(pts[0], pts[1]);
+		}
 		m_mode = TouchEvent.DRAG;
-		m_savedMatrix.set(m_matrix);
-		m_start.set(event.getX(), event.getY());
+
+		if (m_mode == TouchEvent.DRAG) {
+			m_savedMatrix.set(m_matrix);
+			m_start.set(event.getX(), event.getY());
+		}
 		m_lastEvent = null;
 	}
-
 }

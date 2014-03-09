@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import fr.upem.deadhal.MainActivity;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
@@ -59,6 +60,7 @@ public class EditionFragment extends Fragment {
 	private EditText m_levelTitleEditText;
 	private EditionLevelHandler m_levelHandler;
 	private Vibrator m_vibratorService;
+	private DrawerLayout m_drawerLayout;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -120,12 +122,13 @@ public class EditionFragment extends Fragment {
 
 		relativeLayout.addView(m_view);
 
-		DrawerLayout drawerLayout = (DrawerLayout) m_rootView
+		m_drawerLayout = (DrawerLayout) m_rootView
 				.findViewById(R.id.drawer_edit_layout);
 
-		drawerLayout.setDrawerListener(new ActionBarDrawerToggle(getActivity(),
-				drawerLayout, R.drawable.ic_action_collection_dark,
-				R.string.app_name, R.string.app_name) {
+		m_drawerLayout.setDrawerListener(new ActionBarDrawerToggle(
+				getActivity(), m_drawerLayout,
+				R.drawable.ic_action_collection_dark, R.string.app_name,
+				R.string.app_name) {
 
 			@Override
 			public void onDrawerOpened(View drawerView) {
@@ -218,6 +221,13 @@ public class EditionFragment extends Fragment {
 				switch (type) {
 				case ADD_CORRIDOR:
 					m_drawerList.setItemChecked(position, false);
+
+					m_drawerLayout.closeDrawers();
+
+					MainActivity activity = (MainActivity) getActivity();
+					activity.displayView(FragmentType.EDITION_CORRIDOR);
+					m_levelHandler.unselectRoom();
+
 					break;
 				case ADD_ROOM:
 					int title = R.string.action_add;
@@ -260,10 +270,12 @@ public class EditionFragment extends Fragment {
 				DrawerEditionItem.Type.ADD_CORRIDOR));
 		for (Corridor corridor : m_level.getCorridors().values()) {
 			String title = corridorTitle(corridor);
+			System.out.println(title);
+
 			drawerItems.add(new DrawerEditionItem(corridor, title));
 		}
 		DrawerEditionListAdapter adapter = new DrawerEditionListAdapter(
-				getActivity(), drawerItems, m_levelHandler, m_view);
+				getActivity(), drawerItems, m_levelHandler, m_view, this);
 		m_drawerList.setAdapter(adapter);
 	}
 
@@ -299,7 +311,7 @@ public class EditionFragment extends Fragment {
 		UUID dst = corridor.getDst();
 		String strSrc = m_level.getRooms().get(src).getName();
 		String strDst = m_level.getRooms().get(dst).getName();
-		String op = (corridor.isDirected()) ? " <-> " : " -> ";
+		String op = (corridor.isDirected()) ? " -> " : " <-> ";
 		return strSrc + op + strDst;
 	}
 

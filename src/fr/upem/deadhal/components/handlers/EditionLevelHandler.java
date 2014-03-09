@@ -47,7 +47,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 						m_selectedRoom.getId()));
 			}
 			m_selectedRoom = null;
-			invalidateView();
+			refreshView();
 			return false;
 		} else if (m_selectedRoom != null) {
 			for (SelectionRoomListener listener : selectionRoomListeners) {
@@ -61,7 +61,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 			}
 		}
 		m_selectedRoom = room;
-		invalidateView();
+		refreshView();
 		return true;
 	}
 
@@ -71,7 +71,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 				listener.onUnselectRoom(m_selectedRoom);
 			}
 			m_selectedRoom = null;
-			invalidateView();
+			refreshView();
 			return;
 		}
 		Collection<Room> rooms = m_level.getRooms().values();
@@ -88,7 +88,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 					listener.onSelectRoom(room);
 				}
 				m_selectedRoom = room;
-				invalidateView();
+				refreshView();
 				return;
 			}
 		}
@@ -289,14 +289,14 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 				m_selectedRoom.getRect().right += dx;
 				return m_minNone;
 			}
-			return m_minY;
+			return m_minX;
 		case RESIZE_ROOM_BOTTOM:
 			if (m_selectedRoom.getRect().bottom + dy > m_selectedRoom.getRect().top
 					+ MIN_MARGIN) {
 				m_selectedRoom.getRect().bottom += dy;
 				return m_minNone;
 			}
-			return m_minX;
+			return m_minY;
 		}
 		return m_minBoth;
 	}
@@ -322,7 +322,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 
 	public void unselectRoom() {
 		m_selectedRoom = null;
-		invalidateView();
+		refreshView();
 	}
 
 }

@@ -6,18 +6,17 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import fr.upem.deadhal.components.handlers.AbstractLevelHandler;
 import fr.upem.deadhal.graphics.Paints;
-import fr.upem.deadhal.graphics.drawable.AbstractDrawable;
+import fr.upem.deadhal.graphics.drawable.AbstractLevelDrawable;
 
 public abstract class AbstractView extends View {
 
 	// private Drawable m_drawable;
-	private AbstractDrawable m_levelDrawable;
+	private AbstractLevelDrawable m_levelDrawable;
 	protected GestureDetector m_gestureDetector;
 	protected AbstractLevelHandler m_levelHandler;
 
@@ -39,20 +38,12 @@ public abstract class AbstractView extends View {
 
 	protected boolean m_antiAlias = true;
 
-	public AbstractView(Context context) {
+	protected AbstractView(Context context) {
 		super(context);
 	}
 
-	public AbstractView(Context context, AttributeSet attrs) {
-		this(context, attrs, 0);
-	}
-
-	public AbstractView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
-
 	public AbstractView(Context context, AbstractLevelHandler levelHandler,
-			AbstractDrawable drawable) {
+			AbstractLevelDrawable drawable) {
 		super(context);
 		m_levelHandler = levelHandler;
 		m_levelDrawable = drawable;

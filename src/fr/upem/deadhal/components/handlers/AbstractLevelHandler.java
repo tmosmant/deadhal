@@ -1,13 +1,14 @@
 package fr.upem.deadhal.components.handlers;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.view.AbstractView;
 import fr.upem.deadhal.view.TouchEvent;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public abstract class AbstractLevelHandler {
 
@@ -33,12 +34,27 @@ public abstract class AbstractLevelHandler {
 
 	public void addRoom(Room room) {
 		getLevel().addRoom(room);
-		invalidateView();
+		refreshView();
 	}
 
 	public void removeRoom(Room room) {
+		for (Corridor corridor : m_level.getCorridors().values()) {
+			if (room.getId().equals(corridor.getSrc())
+					|| room.getId().equals(corridor.getDst())) {
+				m_level.removeCorridor(corridor);
+				System.out.println("corridor removed");
+			}
+		}
 		getLevel().removeRoom(room);
-		invalidateView();
+		refreshView();
+	}
+
+	public void addCorridor(Corridor corridor) {
+		m_level.addCorridor(corridor);
+	}
+
+	public void removeCorridor(Corridor corridor) {
+		m_level.removeCorridor(corridor);
 	}
 
 	public Level getLevel() {
@@ -49,9 +65,9 @@ public abstract class AbstractLevelHandler {
 
 	public abstract void endProcess();
 
-	protected void invalidateView() {
+	protected void refreshView() {
 		if (m_view != null) {
-			m_view.invalidate();
+			m_view.refresh();
 		}
 	}
 }

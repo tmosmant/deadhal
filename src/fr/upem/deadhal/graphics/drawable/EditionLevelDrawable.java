@@ -46,11 +46,7 @@ public class EditionLevelDrawable extends AbstractLevelDrawable {
 			drawRoomSelectedError(canvas, selectedRoom);
 		}
 		for (Corridor corridor : level.getCorridors().values()) {
-			if (corridor.isDirected()) {
-				drawDirectedCorridor(canvas, corridor);
-			} else {
-				drawCorridor(canvas, corridor);
-			}
+			drawCorridor(canvas, corridor);
 		}
 	}
 

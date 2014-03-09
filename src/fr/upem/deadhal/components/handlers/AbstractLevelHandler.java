@@ -42,7 +42,6 @@ public abstract class AbstractLevelHandler {
 			if (room.getId().equals(corridor.getSrc())
 					|| room.getId().equals(corridor.getDst())) {
 				m_level.removeCorridor(corridor);
-				System.out.println("corridor removed");
 			}
 		}
 		getLevel().removeRoom(room);

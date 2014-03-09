@@ -55,8 +55,6 @@ public class SaveFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		System.out.println("oncreate savefrag");
-
 		View rootView = inflater.inflate(R.layout.fragment_save, container,
 				false);
 

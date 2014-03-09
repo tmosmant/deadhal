@@ -35,11 +35,7 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 			drawRoomEnd(canvas, roomEnd);
 		}
 		for (Corridor corridor : level.getCorridors().values()) {
-			if (corridor.isDirected()) {
-				drawDirectedCorridor(canvas, corridor);
-			} else {
-				drawCorridor(canvas, corridor);
-			}
+			drawCorridor(canvas, corridor);
 		}
 	}
 

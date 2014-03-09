@@ -77,21 +77,11 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		PointF centerEnd = new PointF(rectEnd.centerX(), rectEnd.centerY());
 		PointF pStart = computeIntersection(centerStart, centerEnd, rectStart);
 		PointF pEnd = computeIntersection(centerStart, centerEnd, rectEnd);
-		canvas.drawLine(pStart.x, pStart.y, pEnd.x, pEnd.y, Paints.CORRIDOR);
-	}
-
-	protected void drawDirectedCorridor(Canvas canvas, Corridor corridor) {
-		Room start = m_levelHandler.getLevel().getRooms()
-				.get(corridor.getSrc());
-		Room end = m_levelHandler.getLevel().getRooms().get(corridor.getDst());
-		RectF rectStart = start.getRect();
-		RectF rectEnd = end.getRect();
-		PointF centerStart = new PointF(rectStart.centerX(),
-				rectStart.centerY());
-		PointF centerEnd = new PointF(rectEnd.centerX(), rectEnd.centerY());
-		PointF pStart = computeIntersection(centerStart, centerEnd, rectStart);
-		PointF pEnd = computeIntersection(centerStart, centerEnd, rectEnd);
-		drawArrow(canvas, pStart, pEnd);
+		if (corridor.isDirected()) {
+			drawArrow(canvas, pStart, pEnd);
+		} else {
+			canvas.drawLine(pStart.x, pStart.y, pEnd.x, pEnd.y, Paints.CORRIDOR);
+		}
 	}
 
 	private PointF computeIntersection(PointF start, PointF end, RectF rect) {
@@ -129,7 +119,6 @@ public abstract class AbstractLevelDrawable extends Drawable {
 
 		denom = s10_x * s32_y - s32_x * s10_y;
 		if (denom == 0) {
-			System.out.println("1");
 			return null;
 		}
 		boolean denomPositive = denom > 0;
@@ -138,19 +127,16 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		s02_y = p0_y - p2_y;
 		s_numer = s10_x * s02_y - s10_y * s02_x;
 		if ((s_numer <= 0) == denomPositive) {
-			System.out.println("2");
 			return null;
 		}
 
 		t_numer = s32_x * s02_y - s32_y * s02_x;
 		if ((t_numer < 0) == denomPositive) {
-			System.out.println("3");
 			return null;
 		}
 
 		if (((s_numer > denom) == denomPositive)
 				|| ((t_numer > denom) == denomPositive)) {
-			System.out.println("4");
 			return null;
 		}
 		t = t_numer / denom;

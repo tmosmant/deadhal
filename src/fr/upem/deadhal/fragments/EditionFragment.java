@@ -270,7 +270,6 @@ public class EditionFragment extends Fragment {
 				DrawerEditionItem.Type.ADD_CORRIDOR));
 		for (Corridor corridor : m_level.getCorridors().values()) {
 			String title = corridorTitle(corridor);
-			System.out.println(title);
 
 			drawerItems.add(new DrawerEditionItem(corridor, title));
 		}

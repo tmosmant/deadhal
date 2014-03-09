@@ -244,6 +244,7 @@ public class EditionFragment extends Fragment {
 					m_drawerList.setItemChecked(position, false);
 					break;
 				case CORRIDOR:
+					m_levelHandler.unselectRoom();
 					m_drawerList.setItemChecked(position, false);
 					break;
 				case ROOM:
@@ -268,7 +269,7 @@ public class EditionFragment extends Fragment {
 		}
 		drawerItems.add(new DrawerEditionItem(getString(R.string.add_corridor),
 				DrawerEditionItem.Type.ADD_CORRIDOR));
-		for (Corridor corridor : m_level.getCorridors().values()) {
+		for (Corridor corridor : m_levelHandler.getCorridorBySrc()) {
 			String title = corridorTitle(corridor);
 
 			drawerItems.add(new DrawerEditionItem(corridor, title));

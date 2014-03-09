@@ -9,6 +9,7 @@ import java.util.List;
 
 import android.graphics.Point;
 import android.graphics.RectF;
+import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
@@ -315,6 +316,23 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 			@Override
 			public int compare(Room lhs, Room rhs) {
 				return lhs.getName().compareTo(rhs.getName());
+			}
+		});
+		return list;
+	}
+
+	public List<Corridor> getCorridorBySrc() {
+		Collection<Corridor> collection = m_level.getCorridors().values();
+
+		ArrayList<Corridor> list = new ArrayList<Corridor>(collection);
+
+		Collections.sort(list, new Comparator<Corridor>() {
+
+			@Override
+			public int compare(Corridor lhs, Corridor rhs) {
+				Room roomL = m_level.getRooms().get(lhs.getSrc());
+				Room roomR = m_level.getRooms().get(rhs.getSrc());
+				return roomL.getName().compareTo(roomR.getName());
 			}
 		});
 		return list;

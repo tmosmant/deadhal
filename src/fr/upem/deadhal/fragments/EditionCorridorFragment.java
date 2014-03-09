@@ -101,7 +101,7 @@ public class EditionCorridorFragment extends Fragment {
 				m_levelHandler.setDirected(false);
 				item.setIcon(R.drawable.ic_action_repeat);
 			} else {
-				item.setIcon(R.drawable.ic_action_undo);
+				item.setIcon(R.drawable.ic_action_reply);
 				m_levelHandler.setDirected(true);
 			}
 			return true;

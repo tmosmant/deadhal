@@ -85,7 +85,8 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		if (corridor.isDirected()) {
 			drawArrow(canvas, pStart, pEnd, paint);
 		} else {
-			canvas.drawLine(pStart.x, pStart.y, pEnd.x, pEnd.y, paint);
+			drawArrow(canvas, pStart, pEnd, paint);
+			drawArrow(canvas, pEnd, pStart, paint);
 		}
 	}
 

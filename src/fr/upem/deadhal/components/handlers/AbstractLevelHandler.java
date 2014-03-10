@@ -77,14 +77,19 @@ public abstract class AbstractLevelHandler {
 	}
 
 	public Room getRoomFromCoordinates(float x, float y) {
-		Collection<Room> rooms = m_level.getRooms().values();
-		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
-		Collections.reverse(reverseRooms);
+		List<Room> reverseRooms = reverseRooms();
 		for (Room room : reverseRooms) {
 			if (room.getRect().contains(x, y)) {
 				return room;
 			}
 		}
 		return null;
+	}
+	
+	protected List<Room> reverseRooms() {
+		Collection<Room> rooms = m_level.getRooms().values();
+		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
+		Collections.reverse(reverseRooms);
+		return reverseRooms;
 	}
 }

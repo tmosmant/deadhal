@@ -1,11 +1,9 @@
 package fr.upem.deadhal.components.handlers;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+
 import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
@@ -58,16 +56,16 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void selectRoomFromCoordinates(float x, float y) {
-		if (m_localisationRoom != null && m_localisationRoom.getRect().contains(x, y)) {
+		if (m_localisationRoom != null
+				&& m_localisationRoom.getRect().contains(x, y)) {
 			m_localisationRoom = null;
 			refreshView();
 			return;
 		}
-		Collection<Room> rooms = m_level.getRooms().values();
-		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
-		Collections.reverse(reverseRooms);
+		List<Room> reverseRooms = reverseRooms();
 		for (Room room : reverseRooms) {
-			if (!room.equals(m_localisationRoom) && room.getRect().contains(x, y)) {
+			if (!room.equals(m_localisationRoom)
+					&& room.getRect().contains(x, y)) {
 				m_localisationRoom = room;
 				refreshView();
 				return;
@@ -79,8 +77,8 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		return m_localisationRoom;
 	}
 
-	public void setCentaurRoom(Room m_centaurRoom) {
-		this.m_localisationRoom = m_centaurRoom;
+	public void setLocalisationRoom(Room localisationRoom) {
+		m_localisationRoom = localisationRoom;
 	}
 
 	public void moveMinotaur(float x, float y) {

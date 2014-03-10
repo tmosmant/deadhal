@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
 import android.graphics.Point;
@@ -75,9 +74,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 			refreshView();
 			return;
 		}
-		Collection<Room> rooms = m_level.getRooms().values();
-		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
-		Collections.reverse(reverseRooms);
+		List<Room> reverseRooms = reverseRooms();
 		for (Room room : reverseRooms) {
 			if (!room.equals(m_selectedRoom) && room.getRect().contains(x, y)) {
 				if (m_selectedRoom != null) {

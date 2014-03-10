@@ -1,10 +1,9 @@
 package fr.upem.deadhal.components.handlers;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
+import android.widget.Toast;
 import fr.upem.deadhal.MainActivity;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
@@ -50,20 +49,42 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 
 		if (m_start == null) {
 			m_start = room;
+		} else if (m_start.equals(room)) {
+			Toast.makeText(activity,
+					"Corridors are only available between two rooms.",
+					Toast.LENGTH_SHORT).show();
+			m_start = null;
+		} else if (corridorBetween(m_start, room)) {
+			Toast.makeText(activity,
+					"There is already a corridor between those rooms.",
+					Toast.LENGTH_SHORT).show();
+			m_start = null;
 		} else {
 			m_end = room;
 			Corridor corridor = new Corridor(UUID.randomUUID(),
 					m_start.getId(), m_end.getId(), m_directed);
 			m_level.addCorridor(corridor);
-			m_view.invalidate();
 			m_start = m_end = null;
 		}
+		refreshView();
+	}
+
+	private boolean corridorBetween(Room start, Room end) {
+		for (Corridor corridor : m_level.getCorridors().values()) {
+			if (corridor.getSrc().equals(start.getId())
+					&& corridor.getDst().equals(end.getId())) {
+				return true;
+			}
+			if (corridor.getDst().equals(start.getId())
+					&& corridor.getSrc().equals(end.getId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void selectRoomFromCoordinates(float x, float y) {
-		Collection<Room> rooms = m_level.getRooms().values();
-		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
-		Collections.reverse(reverseRooms);
+		List<Room> reverseRooms = reverseRooms();
 		for (Room room : reverseRooms) {
 			if (room.getRect().contains(x, y)) {
 				setRoom(room);

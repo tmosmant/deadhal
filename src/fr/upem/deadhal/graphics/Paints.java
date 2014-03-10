@@ -13,6 +13,7 @@ public class Paints {
 	public final static Paint ROOM_SELECTED_POINT = new Paint();
 	public final static Paint CORRIDOR = new Paint();
 	public final static Paint CORRIDOR_HIGHLIGHT = new Paint();
+	public final static Paint LOCALISATION = new Paint();
 
 	public final static Paint ROOM_TITLE = new Paint();
 
@@ -60,12 +61,16 @@ public class Paints {
 		CORRIDOR.setStrokeWidth(3);
 		CORRIDOR.setAntiAlias(true);
 		CORRIDOR.setAlpha(255);
-		
+
 		CORRIDOR_HIGHLIGHT.setColor(Colors.GREEN);
 		CORRIDOR_HIGHLIGHT.setStyle(Paint.Style.FILL_AND_STROKE);
 		CORRIDOR_HIGHLIGHT.setStrokeWidth(5);
 		CORRIDOR_HIGHLIGHT.setAntiAlias(true);
 		CORRIDOR_HIGHLIGHT.setAlpha(255);
+
+		LOCALISATION.setColor(Colors.BLACK);
+		LOCALISATION.setAntiAlias(true);
+		LOCALISATION.setAlpha(255);
 	}
 
 	public static void setAntiAlias(boolean aa) {
@@ -78,6 +83,7 @@ public class Paints {
 		ROOM_TITLE.setAntiAlias(aa);
 		CORRIDOR.setAntiAlias(aa);
 		CORRIDOR_HIGHLIGHT.setAntiAlias(aa);
+		LOCALISATION.setAntiAlias(aa);
 	}
 
 	private Paints() {

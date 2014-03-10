@@ -17,7 +17,7 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 
 	private Room m_roomStart;
 	private Room m_roomEnd;
-	private Room m_centaurRoom;
+	private Room m_localisationRoom;
 	private List<UUID> m_shortestPath = new ArrayList<UUID>();
 
 	public NavigationLevelHandler(Level level) {
@@ -58,8 +58,8 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void selectRoomFromCoordinates(float x, float y) {
-		if (m_centaurRoom != null && m_centaurRoom.getRect().contains(x, y)) {
-			m_centaurRoom = null;
+		if (m_localisationRoom != null && m_localisationRoom.getRect().contains(x, y)) {
+			m_localisationRoom = null;
 			refreshView();
 			return;
 		}
@@ -67,37 +67,37 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
 		Collections.reverse(reverseRooms);
 		for (Room room : reverseRooms) {
-			if (!room.equals(m_centaurRoom) && room.getRect().contains(x, y)) {
-				m_centaurRoom = room;
+			if (!room.equals(m_localisationRoom) && room.getRect().contains(x, y)) {
+				m_localisationRoom = room;
 				refreshView();
 				return;
 			}
 		}
 	}
 
-	public Room getCentaurRoom() {
-		return m_centaurRoom;
+	public Room getLocalisationRoom() {
+		return m_localisationRoom;
 	}
 
 	public void setCentaurRoom(Room m_centaurRoom) {
-		this.m_centaurRoom = m_centaurRoom;
+		this.m_localisationRoom = m_centaurRoom;
 	}
 
 	public void moveMinotaur(float x, float y) {
 		Room room = getRoomFromCoordinates(x, y);
-		if (room != null && m_centaurRoom != null
-				&& !room.equals(m_centaurRoom)) {
+		if (room != null && m_localisationRoom != null
+				&& !room.equals(m_localisationRoom)) {
 			for (Corridor corridor : m_level.getCorridors().values()) {
-				if (corridor.getSrc().equals(m_centaurRoom.getId())
+				if (corridor.getSrc().equals(m_localisationRoom.getId())
 						&& corridor.getDst().equals(room.getId())) {
-					m_centaurRoom = room;
+					m_localisationRoom = room;
 					m_view.refresh();
 					return;
 				}
 				if (!corridor.isDirected()) {
-					if (corridor.getDst().equals(m_centaurRoom.getId())
+					if (corridor.getDst().equals(m_localisationRoom.getId())
 							&& corridor.getSrc().equals(room.getId())) {
-						m_centaurRoom = room;
+						m_localisationRoom = room;
 						m_view.refresh();
 						return;
 					}

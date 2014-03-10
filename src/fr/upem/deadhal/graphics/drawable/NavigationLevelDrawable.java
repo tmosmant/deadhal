@@ -2,8 +2,11 @@ package fr.upem.deadhal.graphics.drawable;
 
 import java.util.Collection;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
@@ -13,6 +16,7 @@ import fr.upem.deadhal.graphics.Paints;
 public class NavigationLevelDrawable extends AbstractLevelDrawable {
 
 	private NavigationLevelHandler m_navigationLevelHandler;
+	private Bitmap m_localisationBitmap;
 
 	public NavigationLevelDrawable(NavigationLevelHandler levelHandler) {
 		super(levelHandler);
@@ -34,6 +38,8 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 		if (roomEnd != null) {
 			drawRoomEnd(canvas, roomEnd);
 		}
+		drawLocalisation(canvas);
+
 		for (Corridor corridor : level.getCorridors().values()) {
 			if (m_navigationLevelHandler.getShortestPath().contains(
 					corridor.getId())) {
@@ -42,12 +48,27 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 				drawCorridor(canvas, corridor, Paints.CORRIDOR);
 			}
 		}
-		Room centaurRoom = m_navigationLevelHandler.getCentaurRoom();
-		if (centaurRoom != null) {
-			canvas.drawCircle(centaurRoom.getRect().centerX(), centaurRoom
-					.getRect().centerY(), 30, Paints.ROOM_SELECTED_POINT);
+	}
 
+	public void drawLocalisation(Canvas canvas) {
+		Room localisationRoom = m_navigationLevelHandler.getLocalisationRoom();
+		if (localisationRoom != null) {
+			canvas.drawBitmap(localisationBitmap(), localisationRoom.getRect()
+					.centerX() - localisationBitmap().getWidth() / 2,
+					localisationRoom.getRect().centerY()
+							- localisationBitmap().getHeight() / 2,
+					Paints.LOCALISATION);
 		}
+	}
+
+	private Bitmap localisationBitmap() {
+		// no need to synchronized, this isn't static
+		if (m_localisationBitmap == null) {
+			m_localisationBitmap = BitmapFactory.decodeResource(
+					m_navigationLevelHandler.getView().getResources(),
+					R.drawable.ic_action_location_found);
+		}
+		return m_localisationBitmap;
 	}
 
 	private void drawRoomStart(Canvas canvas, Room room) {

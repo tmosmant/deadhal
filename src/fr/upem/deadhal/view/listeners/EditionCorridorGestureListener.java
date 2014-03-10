@@ -1,6 +1,5 @@
 package fr.upem.deadhal.view.listeners;
 
-import android.graphics.Matrix;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import fr.upem.deadhal.components.handlers.EditionCorridorLevelHandler;
@@ -21,16 +20,7 @@ public class EditionCorridorGestureListener extends
 
 	@Override
 	public void onLongPress(MotionEvent e) {
-		Matrix inverse = new Matrix();
-
-		m_view.getMatrix().invert(inverse);
-
-		float[] pts = new float[2];
-
-		pts[0] = e.getX(0);
-		pts[1] = e.getY(0);
-
-		inverse.mapPoints(pts);
+		float[] pts = m_view.convertCoordinates(e);
 		if (e.getPointerCount() == 1) {
 			m_levelHander.selectRoomFromCoordinates(pts[0], pts[1]);
 			m_view.setMode(TouchEvent.NONE);

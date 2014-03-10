@@ -13,10 +13,15 @@ import fr.upem.deadhal.view.TouchEvent;
 
 public class NavigationLevelHandler extends AbstractLevelHandler {
 
+	private static final int SHORT_DELAY = 2000;
+
 	private Room m_roomStart;
 	private Room m_roomEnd;
 	private Room m_localisationRoom;
 	private List<UUID> m_shortestPath = new ArrayList<UUID>();
+	private float m_localisationX;
+	private float m_localisationY;
+	private long m_timestampError = 0;
 
 	public NavigationLevelHandler(Level level) {
 		super(level);
@@ -67,10 +72,16 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 			if (!room.equals(m_localisationRoom)
 					&& room.getRect().contains(x, y)) {
 				m_localisationRoom = room;
-				refreshView();
+				handleMove(x, y);
 				return;
 			}
 		}
+	}
+
+	private void handleMove(float x, float y) {
+		m_localisationX = x;
+		m_localisationY = y;
+		refreshView();
 	}
 
 	public Room getLocalisationRoom() {
@@ -83,28 +94,53 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 
 	public boolean moveMinotaur(float x, float y) {
 		Room room = getRoomFromCoordinates(x, y);
-		if (room != null && m_localisationRoom != null
-				&& !room.equals(m_localisationRoom)) {
-			for (Corridor corridor : m_level.getCorridors().values()) {
-				if (corridor.getSrc().equals(m_localisationRoom.getId())
-						&& corridor.getDst().equals(room.getId())) {
-					m_localisationRoom = room;
-					m_view.refresh();
-					return true;
-				}
-				if (!corridor.isDirected()) {
-					if (corridor.getDst().equals(m_localisationRoom.getId())
-							&& corridor.getSrc().equals(room.getId())) {
+		if (room != null && m_localisationRoom != null) {
+			if (room.equals(m_localisationRoom)) {
+				handleMove(x, y);
+				return true;
+			} else {
+				for (Corridor corridor : m_level.getCorridors().values()) {
+					if (corridor.getSrc().equals(m_localisationRoom.getId())
+							&& corridor.getDst().equals(room.getId())) {
 						m_localisationRoom = room;
-						m_view.refresh();
+						handleMove(x, y);
 						return true;
 					}
+					if (!corridor.isDirected()) {
+						if (corridor.getDst()
+								.equals(m_localisationRoom.getId())
+								&& corridor.getSrc().equals(room.getId())) {
+							m_localisationRoom = room;
+							handleMove(x, y);
+							return true;
+						}
+					}
+				}
+				if (mustPrintError()) {
+					Toast.makeText(m_view.getContext(),
+							R.string.this_move_isn_t_possible,
+							Toast.LENGTH_SHORT).show();
 				}
 			}
-			Toast.makeText(m_view.getContext(),
-					R.string.this_move_isn_t_possible, Toast.LENGTH_SHORT)
-					.show();
 		}
 		return false;
+	}
+
+	private boolean mustPrintError() {
+		long currentTimeMillis = System.currentTimeMillis();
+		if (m_timestampError == 0
+				|| m_timestampError + SHORT_DELAY < currentTimeMillis) {
+			m_timestampError = currentTimeMillis;
+			return true;
+		}
+		return false;
+	}
+
+	public float getLocalisationX() {
+		return m_localisationX;
+	}
+
+	public float getLocalisationY() {
+		return m_localisationY;
 	}
 }

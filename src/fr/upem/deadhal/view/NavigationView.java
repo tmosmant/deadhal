@@ -1,7 +1,6 @@
 package fr.upem.deadhal.view;
 
 import android.content.Context;
-import android.graphics.Matrix;
 import android.view.MotionEvent;
 import fr.upem.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
@@ -27,27 +26,11 @@ public class NavigationView extends AbstractView {
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN:
 
-			if (event.getPointerCount() == 1) {
-				Matrix inverse = new Matrix();
-
-				m_matrix.invert(inverse);
-
-				float[] pts = new float[2];
-
-				pts[0] = event.getX(0);
-				pts[1] = event.getY(0);
-
-				inverse.mapPoints(pts);
-				if (m_levelHandler.moveMinotaur(pts[0], pts[1])) {
-					setMode(TouchEvent.NONE);
-					return true;
-				}
+			if (!move(event)) {
+				getProcess(event);
 			}
-			getProcess(event);
-
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
-
 			initZoom(event);
 			break;
 		case MotionEvent.ACTION_UP:
@@ -55,26 +38,40 @@ public class NavigationView extends AbstractView {
 			cancel();
 			break;
 		case MotionEvent.ACTION_MOVE:
-			switch (m_mode) {
-			case DRAG:
-				drag(event);
-				break;
-			case NONE:
-				break;
-			case RESIZE_ROOM:
-				break;
-			case ZOOM:
-				zoom(event);
-				break;
-			default:
-				break;
+			if (!move(event)) {
+				switch (m_mode) {
+				case DRAG:
+					drag(event);
+					break;
+				case NONE:
+					break;
+				case RESIZE_ROOM:
+					break;
+				case ZOOM:
+					zoom(event);
+					break;
+				default:
+					break;
+				}
 			}
 			break;
+
 		}
 
 		refresh();
 
 		return true;
+	}
+
+	private boolean move(MotionEvent event) {
+		if (event.getPointerCount() == 1) {
+			float[] pts = convertCoordinates(event);
+			if (m_levelHandler.moveMinotaur(pts[0], pts[1])) {
+				setMode(TouchEvent.NONE);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void getProcess(MotionEvent event) {

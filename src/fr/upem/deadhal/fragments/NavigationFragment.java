@@ -199,7 +199,7 @@ public class NavigationFragment extends Fragment {
 		});
 
 		DialogFragment dialogFragmentEnd = NavigationDialogFragment
-				.newInstance(title, rooms);
+				.newInstance(title, m_levelHandler, rooms);
 		dialogFragmentEnd.setTargetFragment(this, NAV_DIALOG);
 		dialogFragmentEnd.show(getFragmentManager().beginTransaction(),
 				"navigationDialog");

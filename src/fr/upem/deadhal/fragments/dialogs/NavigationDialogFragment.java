@@ -1,6 +1,7 @@
 package fr.upem.deadhal.fragments.dialogs;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.components.handlers.NavigationLevelHandler;
 
 public class NavigationDialogFragment extends DialogFragment {
 
@@ -21,9 +23,11 @@ public class NavigationDialogFragment extends DialogFragment {
 	private int m_spinnerStartPosition = 0;
 	private Spinner m_spinnerEnd;
 	private int m_spinnerEndPosition = 1;
+	private static NavigationLevelHandler m_levelHandler;
 
 	public static NavigationDialogFragment newInstance(int title,
-			ArrayList<Room> rooms) {
+			NavigationLevelHandler levelHandler, ArrayList<Room> rooms) {
+		NavigationDialogFragment.m_levelHandler = levelHandler;
 		NavigationDialogFragment dialogFragment = new NavigationDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt("title", title);
@@ -57,6 +61,8 @@ public class NavigationDialogFragment extends DialogFragment {
 
 		m_spinnerStart = new Spinner(getActivity(), Spinner.MODE_DIALOG);
 		m_spinnerStart.setAdapter(arrayAdapter);
+		Room localisationRoom = m_levelHandler.getLocalisationRoom();
+		m_spinnerStartPosition = rooms.lastIndexOf(localisationRoom);
 		m_spinnerStart.setSelection(m_spinnerStartPosition);
 
 		TextView textViewEnd = new TextView(getActivity());
@@ -64,6 +70,10 @@ public class NavigationDialogFragment extends DialogFragment {
 
 		m_spinnerEnd = new Spinner(getActivity(), Spinner.MODE_DIALOG);
 		m_spinnerEnd.setAdapter(arrayAdapter);
+		Random rand = new Random();
+		do {
+			m_spinnerEndPosition = rand.nextInt(rooms.size());
+		} while (m_spinnerStartPosition == m_spinnerEndPosition);
 		m_spinnerEnd.setSelection(m_spinnerEndPosition);
 
 		linearLayout.addView(textViewStart);

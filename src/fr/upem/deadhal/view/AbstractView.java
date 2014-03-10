@@ -236,4 +236,18 @@ public abstract class AbstractView extends View {
 		m_lastEvent = null;
 		m_levelHandler.endProcess();
 	}
+	
+	public float[] convertCoordinates(MotionEvent event) {
+		Matrix inverse = new Matrix();
+
+		m_matrix.invert(inverse);
+
+		float[] pts = new float[2];
+
+		pts[0] = event.getX(0);
+		pts[1] = event.getY(0);
+
+		inverse.mapPoints(pts);
+		return pts;
+	}
 }

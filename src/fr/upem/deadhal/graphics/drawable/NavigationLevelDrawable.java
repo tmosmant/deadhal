@@ -15,23 +15,23 @@ import fr.upem.deadhal.graphics.Paints;
 
 public class NavigationLevelDrawable extends AbstractLevelDrawable {
 
-	private NavigationLevelHandler m_navigationLevelHandler;
+	private NavigationLevelHandler m_levelHandler;
 	private Bitmap m_localisationBitmap;
 
 	public NavigationLevelDrawable(NavigationLevelHandler levelHandler) {
 		super(levelHandler);
-		m_navigationLevelHandler = levelHandler;
+		m_levelHandler = levelHandler;
 	}
 
 	@Override
 	public void draw(Canvas canvas) {
-		Level level = m_navigationLevelHandler.getLevel();
+		Level level = m_levelHandler.getLevel();
 		Collection<Room> rooms = level.getRooms().values();
 		for (Room room : rooms) {
 			drawRoom(canvas, room);
 		}
-		Room roomStart = m_navigationLevelHandler.getRoomStart();
-		Room roomEnd = m_navigationLevelHandler.getRoomEnd();
+		Room roomStart = m_levelHandler.getRoomStart();
+		Room roomEnd = m_levelHandler.getRoomEnd();
 		if (roomStart != null) {
 			drawRoomStart(canvas, roomStart);
 		}
@@ -41,7 +41,7 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 		drawLocalisation(canvas);
 
 		for (Corridor corridor : level.getCorridors().values()) {
-			if (m_navigationLevelHandler.getShortestPath().contains(
+			if (m_levelHandler.getShortestPath().contains(
 					corridor.getId())) {
 				drawCorridor(canvas, corridor, Paints.CORRIDOR_HIGHLIGHT);
 			} else {
@@ -51,11 +51,10 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 	}
 
 	public void drawLocalisation(Canvas canvas) {
-		Room localisationRoom = m_navigationLevelHandler.getLocalisationRoom();
+		Room localisationRoom = m_levelHandler.getLocalisationRoom();
 		if (localisationRoom != null) {
-			canvas.drawBitmap(localisationBitmap(), localisationRoom.getRect()
-					.centerX() - localisationBitmap().getWidth() / 2,
-					localisationRoom.getRect().centerY()
+			canvas.drawBitmap(localisationBitmap(), m_levelHandler.getLocalisationX() - localisationBitmap().getWidth() / 2,
+					m_levelHandler.getLocalisationY()
 							- localisationBitmap().getHeight() / 2,
 					Paints.LOCALISATION);
 		}
@@ -65,7 +64,7 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 		// no need to synchronize, this isn't static
 		if (m_localisationBitmap == null) {
 			m_localisationBitmap = BitmapFactory.decodeResource(
-					m_navigationLevelHandler.getView().getResources(),
+					m_levelHandler.getView().getResources(),
 					R.drawable.ic_action_location_found);
 		}
 		return m_localisationBitmap;

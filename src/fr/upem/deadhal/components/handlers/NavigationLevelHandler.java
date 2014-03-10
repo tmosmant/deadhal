@@ -81,7 +81,7 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		m_localisationRoom = localisationRoom;
 	}
 
-	public void moveMinotaur(float x, float y) {
+	public boolean moveMinotaur(float x, float y) {
 		Room room = getRoomFromCoordinates(x, y);
 		if (room != null && m_localisationRoom != null
 				&& !room.equals(m_localisationRoom)) {
@@ -90,14 +90,14 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 						&& corridor.getDst().equals(room.getId())) {
 					m_localisationRoom = room;
 					m_view.refresh();
-					return;
+					return true;
 				}
 				if (!corridor.isDirected()) {
 					if (corridor.getDst().equals(m_localisationRoom.getId())
 							&& corridor.getSrc().equals(room.getId())) {
 						m_localisationRoom = room;
 						m_view.refresh();
-						return;
+						return true;
 					}
 				}
 			}
@@ -105,5 +105,6 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 					R.string.this_move_isn_t_possible, Toast.LENGTH_SHORT)
 					.show();
 		}
+		return false;
 	}
 }

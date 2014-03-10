@@ -62,7 +62,7 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 	}
 
 	private Bitmap localisationBitmap() {
-		// no need to synchronized, this isn't static
+		// no need to synchronize, this isn't static
 		if (m_localisationBitmap == null) {
 			m_localisationBitmap = BitmapFactory.decodeResource(
 					m_navigationLevelHandler.getView().getResources(),
@@ -77,7 +77,7 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 		RectF rect = room.getRect();
 		RectF rectB = new RectF(rect.left + borderSize, rect.top + borderSize,
 				rect.right - borderSize, rect.bottom - borderSize);
-		canvas.drawRect(rect, Paints.CORRIDOR_HIGHLIGHT);
+		canvas.drawRect(rect, Paints.ROOM_START_BACKGROUND);
 		canvas.drawRect(rectB, Paints.ROOM_SELECTED_BORDER);
 		drawTitle(canvas, room);
 	}
@@ -88,7 +88,7 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 		RectF rect = room.getRect();
 		RectF rectB = new RectF(rect.left + borderSize, rect.top + borderSize,
 				rect.right - borderSize, rect.bottom - borderSize);
-		canvas.drawRect(rect, Paints.ROOM_SELECTED_BACKGROUND_ERROR);
+		canvas.drawRect(rect, Paints.ROOM_END_BACKGROUND);
 		canvas.drawRect(rectB, Paints.ROOM_SELECTED_BORDER);
 		drawTitle(canvas, room);
 	}

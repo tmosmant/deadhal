@@ -89,7 +89,7 @@ public class NavigationFragment extends Fragment {
 				levelDrawable);
 
 		m_levelHandler.setView(m_view);
-		
+
 		NavigationGestureListener m_gestureListener = new NavigationGestureListener(
 				m_view, m_levelHandler);
 
@@ -121,24 +121,29 @@ public class NavigationFragment extends Fragment {
 			if (resultCode == Activity.RESULT_OK) {
 				Room start = data.getParcelableExtra("start");
 				Room end = data.getParcelableExtra("end");
-
+				System.out.println(start.getName());
+				System.out.println(end.getName());
+				System.out.println(m_level.getCorridors().size());
+				System.out.println(m_levelHandler.getLevel().getCorridors()
+						.size());
 				if (start.equals(end)) {
 					Toast.makeText(getActivity(), R.string.start_end,
 							Toast.LENGTH_LONG).show();
 				} else {
-					m_levelHandler.setRoomStart(start);
-					m_levelHandler.setRoomEnd(end);
+					m_levelHandler.setRoomStart(null);
+					m_levelHandler.setRoomEnd(null);
 					ShortestPathTask spt = new ShortestPathTask(start.getId(),
 							end.getId());
-					spt.execute(m_level);
+					spt.execute(m_levelHandler.getLevel());
 					try {
-						System.out.println("on passe ici");
 						List<UUID> listCoridors = spt.get();
 						if (listCoridors == null) {
 							Toast.makeText(getActivity(),
 									R.string.no_path_found, Toast.LENGTH_LONG)
 									.show();
 						} else {
+							m_levelHandler.setRoomStart(start);
+							m_levelHandler.setRoomEnd(end);
 							Toast.makeText(getActivity(),
 									R.string.follow_the_green_path,
 									Toast.LENGTH_LONG).show();
@@ -146,8 +151,14 @@ public class NavigationFragment extends Fragment {
 							m_view.refresh();
 						}
 					} catch (InterruptedException e) {
+						Toast.makeText(getActivity(),
+								"An error occured : " + e.getMessage(),
+								Toast.LENGTH_LONG).show();
 						e.printStackTrace();
 					} catch (ExecutionException e) {
+						Toast.makeText(getActivity(),
+								"An error occured : " + e.getMessage(),
+								Toast.LENGTH_LONG).show();
 						e.printStackTrace();
 					}
 				}

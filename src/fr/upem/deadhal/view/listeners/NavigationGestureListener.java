@@ -38,29 +38,29 @@ public class NavigationGestureListener extends
 
 		super.onLongPress(e);
 	}
-
-	@Override
-	public boolean onSingleTapConfirmed(MotionEvent e) {
-		Matrix inverse = new Matrix();
-
-		m_view.getMatrix().invert(inverse);
-
-		float[] pts = new float[2];
-
-		pts[0] = e.getX(0);
-		pts[1] = e.getY(0);
-
-		inverse.mapPoints(pts);
-		if (e.getPointerCount() == 1) {
-
-			m_levelHandler.moveMinotaur(pts[0], pts[1]);
-
-			m_view.setMode(TouchEvent.NONE);
-			return true;
-		}
-
-		return super.onSingleTapConfirmed(e);
-	}
+//
+//	@Override
+//	public boolean onSingleTapConfirmed(MotionEvent e) {
+//		Matrix inverse = new Matrix();
+//
+//		m_view.getMatrix().invert(inverse);
+//
+//		float[] pts = new float[2];
+//
+//		pts[0] = e.getX(0);
+//		pts[1] = e.getY(0);
+//
+//		inverse.mapPoints(pts);
+//		if (e.getPointerCount() == 1) {
+//
+//			m_levelHandler.moveMinotaur(pts[0], pts[1]);
+//
+//			m_view.setMode(TouchEvent.NONE);
+//			return true;
+//		}
+//
+//		return super.onSingleTapConfirmed(e);
+//	}
 
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {

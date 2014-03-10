@@ -3,6 +3,7 @@ package fr.upem.deadhal.fragments;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -132,6 +133,7 @@ public class NavigationFragment extends Fragment {
 				} else {
 					m_levelHandler.setRoomStart(null);
 					m_levelHandler.setRoomEnd(null);
+					m_levelHandler.setShortestPath(new LinkedList<UUID>());
 					ShortestPathTask spt = new ShortestPathTask(start.getId(),
 							end.getId());
 					spt.execute(m_levelHandler.getLevel());
@@ -152,12 +154,12 @@ public class NavigationFragment extends Fragment {
 						}
 					} catch (InterruptedException e) {
 						Toast.makeText(getActivity(),
-								"An error occured : " + e.getMessage(),
+								R.string.an_error_occured + e.getMessage(),
 								Toast.LENGTH_LONG).show();
 						e.printStackTrace();
 					} catch (ExecutionException e) {
 						Toast.makeText(getActivity(),
-								"An error occured : " + e.getMessage(),
+								R.string.an_error_occured + e.getMessage(),
 								Toast.LENGTH_LONG).show();
 						e.printStackTrace();
 					}

@@ -60,5 +60,6 @@
     <string name="start_end">Start = end !</string>
     <string name="need_at_least_2_rooms">Need at least 2 rooms !</string>
     <string name="this_move_isn_t_possible">This move isn\'t possible !</string>
+    <string name="an_error_occured">"An error occured : "</string>
 
 </resources>

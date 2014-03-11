@@ -49,7 +49,7 @@ public class Level implements Parcelable {
 					.getSerializable("corridors");
 		} catch (Exception e) {
 			// handle an exception thrown on samsung devices
-			m_title = new String();
+			m_title = "";
 		}
 
 	}
@@ -109,7 +109,6 @@ public class Level implements Parcelable {
 		Bundle bundle = new Bundle(ConcurrentHashMap.class.getClassLoader());
 		bundle.putSerializable("rooms", m_rooms);
 		bundle.putSerializable("corridors", m_corridors);
-		dest.writeBundle(bundle);
 		dest.writeBundle(bundle);
 	}
 

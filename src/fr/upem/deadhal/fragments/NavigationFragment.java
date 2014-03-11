@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import fr.upem.deadhal.R;
+import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.handlers.NavigationLevelHandler;
@@ -122,11 +123,6 @@ public class NavigationFragment extends Fragment {
 			if (resultCode == Activity.RESULT_OK) {
 				Room start = data.getParcelableExtra("start");
 				Room end = data.getParcelableExtra("end");
-				System.out.println(start.getName());
-				System.out.println(end.getName());
-				System.out.println(m_level.getCorridors().size());
-				System.out.println(m_levelHandler.getLevel().getCorridors()
-						.size());
 				if (start.equals(end)) {
 					Toast.makeText(getActivity(), R.string.start_end,
 							Toast.LENGTH_LONG).show();
@@ -134,9 +130,20 @@ public class NavigationFragment extends Fragment {
 					m_levelHandler.setRoomStart(null);
 					m_levelHandler.setRoomEnd(null);
 					m_levelHandler.setShortestPath(new LinkedList<UUID>());
+
+					System.out.println(m_level.getCorridors().size());
+					for (Corridor c : m_level.getCorridors().values()) {
+						System.out.println(c.getId());
+						System.out.println(c.getSrc());
+						System.out.println(c.getDst());
+					}
+					
+					System.out.println(start.getId());
+					System.out.println(end.getId());
+
 					ShortestPathTask spt = new ShortestPathTask(start.getId(),
 							end.getId());
-					spt.execute(m_levelHandler.getLevel());
+					spt.execute(m_level);
 					try {
 						List<UUID> listCoridors = spt.get();
 						if (listCoridors == null) {
@@ -150,7 +157,6 @@ public class NavigationFragment extends Fragment {
 									R.string.follow_the_green_path,
 									Toast.LENGTH_LONG).show();
 							m_levelHandler.setShortestPath(listCoridors);
-							m_view.refresh();
 						}
 					} catch (InterruptedException e) {
 						Toast.makeText(getActivity(),
@@ -162,6 +168,8 @@ public class NavigationFragment extends Fragment {
 								R.string.an_error_occured + e.getMessage(),
 								Toast.LENGTH_LONG).show();
 						e.printStackTrace();
+					} finally {
+						m_view.refresh();
 					}
 				}
 			}

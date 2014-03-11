@@ -13,14 +13,14 @@ public class ShortestPathTask extends AsyncTask<Level, Integer, List<UUID>> {
 	private UUID m_finish;
 
 	public ShortestPathTask(UUID start, UUID finish) {
-		this.m_start = start;
-		this.m_finish = finish;
+		m_start = start;
+		m_finish = finish;
 	}
 
 	@Override
 	protected List<UUID> doInBackground(Level... params) {
-		Level m_level = params[0];
-		return dijkstra(m_level);
+		Level level = params[0];
+		return dijkstra(level);
 	}
 
 	private List<UUID> dijkstra(Level level) {

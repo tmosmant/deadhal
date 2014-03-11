@@ -94,6 +94,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 			Corridor corridor = entry.getValue();
 
 			xmlSerializer.startTag("", "corridor");
+			xmlSerializer.attribute("", "id", corridor.getId().toString());
 			xmlSerializer.attribute("", "src", corridor.getSrc().toString());
 			xmlSerializer.attribute("", "dst", corridor.getDst().toString());
 			xmlSerializer.attribute("", "directed", String.valueOf(corridor.isDirected()));

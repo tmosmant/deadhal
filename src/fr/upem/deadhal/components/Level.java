@@ -48,6 +48,14 @@ public class Level implements Parcelable {
 
 	public void addCorridor(Corridor corridor) {
 		m_corridors.put(corridor.getId(), corridor);
+		Room roomSrc = m_rooms.get(corridor.getSrc());
+		Room roomDst = m_rooms.get(corridor.getDst());
+		if (corridor.isDirected()) {
+			roomSrc.addNeighbor(corridor.getId(), roomDst.getId());
+		} else {
+			roomSrc.addNeighbor(corridor.getId(), roomDst.getId());
+			roomDst.addNeighbor(corridor.getId(), roomSrc.getId());
+		}
 	}
 
 	public void removeRoom(Room room) {

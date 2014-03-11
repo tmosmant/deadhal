@@ -11,23 +11,18 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.drawers.adapters.DrawerMainListAdapter;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.drawers.models.DrawerMainItem;
-import fr.upem.deadhal.fragments.EditionCorridorFragment;
-import fr.upem.deadhal.fragments.EditionFragment;
-import fr.upem.deadhal.fragments.FragmentType;
-import fr.upem.deadhal.fragments.NavigationFragment;
-import fr.upem.deadhal.fragments.OpenFragment;
-import fr.upem.deadhal.fragments.SaveFragment;
+import fr.upem.deadhal.fragments.*;
 import fr.upem.deadhal.utils.Storage;
 
 public class MainActivity extends Activity implements DrawerMainListener {
@@ -184,11 +179,23 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			m_menu = R.menu.edition;
 			break;
 		case OPEN:
-			fragment = new OpenFragment();
+			if (Storage.isExternalStorageReadable()) {
+				fragment = new OpenFragment();
+			} else {
+				fragment = null;
+				Toast.makeText(getApplicationContext(), R.string.error_memory,
+						Toast.LENGTH_LONG).show();
+			}
 			m_menu = R.menu.save;
 			break;
 		case SAVE:
-			fragment = new SaveFragment();
+			if (Storage.isExternalStorageWritable()) {
+				fragment = new SaveFragment();
+			} else {
+				fragment = null;
+				Toast.makeText(getApplicationContext(), R.string.error_memory,
+						Toast.LENGTH_LONG).show();
+			}
 			m_menu = R.menu.save;
 			break;
 		case EDITION_CORRIDOR:
@@ -209,11 +216,8 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 			m_drawerList.setItemChecked(index, true);
 			m_drawerList.setSelection(index);
-			m_drawerLayout.closeDrawer(m_drawerList);
-		} else {
-			// error in creating fragment
-			Log.e("MainActivity", "Error in creating fragment");
 		}
+		m_drawerLayout.closeDrawer(m_drawerList);
 	}
 
 	/**

@@ -37,7 +37,7 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 			drawSelectedRoom(canvas, roomStart, Paints.ROOM_START_BACKGROUND);
 		}
 		if (roomEnd != null) {
-			drawSelectedRoom(canvas, roomStart, Paints.ROOM_END_BACKGROUND);
+			drawSelectedRoom(canvas, roomEnd, Paints.ROOM_END_BACKGROUND);
 		}
 		drawLocalisation(canvas);
 

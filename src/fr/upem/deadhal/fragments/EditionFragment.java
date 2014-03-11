@@ -134,6 +134,8 @@ public class EditionFragment extends Fragment {
 				super.onDrawerOpened(drawerView);
 			}
 		});
+		
+		m_drawerLayout.closeDrawers();
 
 		m_levelTitleEditText = (EditText) m_rootView
 				.findViewById(R.id.edit_text_level_name);

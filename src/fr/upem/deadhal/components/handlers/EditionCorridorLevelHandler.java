@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import android.widget.Toast;
-import fr.upem.deadhal.MainActivity;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
@@ -44,18 +43,17 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 	}
 
 	private void setRoom(Room room) {
-		MainActivity activity = (MainActivity) m_view.getContext();
-		activity.getVibratorService().vibrate(100);
+		m_view.getVibrator().vibrate(100);
 
 		if (m_start == null) {
 			m_start = room;
 		} else if (m_start.equals(room)) {
-			Toast.makeText(activity,
+			Toast.makeText(m_view.getContext(),
 					"Corridors are only available between two rooms.",
 					Toast.LENGTH_SHORT).show();
 			m_start = null;
 		} else if (corridorBetween(m_start, room)) {
-			Toast.makeText(activity,
+			Toast.makeText(m_view.getContext(),
 					"There is already a corridor between those rooms.",
 					Toast.LENGTH_SHORT).show();
 			m_start = null;

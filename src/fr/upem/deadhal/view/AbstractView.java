@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,6 +38,9 @@ public abstract class AbstractView extends View {
 	protected float[] m_lastEvent = null;
 
 	protected boolean m_antiAlias = true;
+
+	private Vibrator m_vibrator = (Vibrator) getContext().getSystemService(
+			Context.VIBRATOR_SERVICE);
 
 	protected AbstractView(Context context) {
 		super(context);
@@ -132,8 +136,9 @@ public abstract class AbstractView extends View {
 
 	/**
 	 * Calculate the degree to be rotated by.
-	 *
-	 * @param event evenement
+	 * 
+	 * @param event
+	 *            evenement
 	 * @return Degrees
 	 */
 	protected float rotation(MotionEvent event) {
@@ -236,7 +241,7 @@ public abstract class AbstractView extends View {
 		m_lastEvent = null;
 		m_levelHandler.endProcess();
 	}
-	
+
 	public float[] convertCoordinates(MotionEvent event) {
 		Matrix inverse = new Matrix();
 
@@ -249,5 +254,9 @@ public abstract class AbstractView extends View {
 
 		inverse.mapPoints(pts);
 		return pts;
+	}
+
+	public Vibrator getVibrator() {
+		return m_vibrator;
 	}
 }

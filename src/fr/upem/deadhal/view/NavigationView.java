@@ -67,7 +67,7 @@ public class NavigationView extends AbstractView {
 		if (event.getPointerCount() == 1) {
 			float[] pts = convertCoordinates(event);
 			if (m_mode == TouchEvent.NONE
-					&& (m_levelHandler.moveMinotaur(pts[0], pts[1]) || m_levelHandler
+					&& (m_levelHandler.move(pts[0], pts[1]) || m_levelHandler
 							.getRoomFromCoordinates(pts[0], pts[1]) != null)) {
 				setMode(TouchEvent.NONE);
 				return true;

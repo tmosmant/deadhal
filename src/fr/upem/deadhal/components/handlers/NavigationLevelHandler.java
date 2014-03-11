@@ -65,6 +65,7 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 				&& m_localisationRoom.getRect().contains(x, y)) {
 			m_localisationRoom = null;
 			refreshView();
+			m_view.getVibrator().vibrate(100);
 			return;
 		}
 		List<Room> reverseRooms = reverseRooms();
@@ -73,6 +74,7 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 					&& room.getRect().contains(x, y)) {
 				m_localisationRoom = room;
 				handleMove(x, y);
+				m_view.getVibrator().vibrate(100);
 				return;
 			}
 		}
@@ -92,7 +94,7 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		m_localisationRoom = localisationRoom;
 	}
 
-	public boolean moveMinotaur(float x, float y) {
+	public boolean move(float x, float y) {
 		Room room = getRoomFromCoordinates(x, y);
 		if (room != null && m_localisationRoom != null) {
 			if (room.equals(m_localisationRoom)) {
@@ -104,6 +106,7 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 							&& corridor.getDst().equals(room.getId())) {
 						m_localisationRoom = room;
 						handleMove(x, y);
+						m_view.getVibrator().vibrate(100);
 						return true;
 					}
 					if (!corridor.isDirected()) {
@@ -112,6 +115,7 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 								&& corridor.getSrc().equals(room.getId())) {
 							m_localisationRoom = room;
 							handleMove(x, y);
+							m_view.getVibrator().vibrate(100);
 							return true;
 						}
 					}

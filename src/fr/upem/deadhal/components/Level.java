@@ -1,10 +1,10 @@
 package fr.upem.deadhal.components;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -22,8 +22,8 @@ public class Level implements Parcelable {
 		}
 	};
 	private String m_title = "";
-	private Map<UUID, Room> m_rooms = new ConcurrentHashMap<UUID, Room>();
-	private Map<UUID, Corridor> m_corridors = new ConcurrentHashMap<UUID, Corridor>();
+	private ConcurrentHashMap<UUID, Room> m_rooms = new ConcurrentHashMap<UUID, Room>();
+	private ConcurrentHashMap<UUID, Corridor> m_corridors = new ConcurrentHashMap<UUID, Corridor>();
 
 	public Level() {
 	}
@@ -34,8 +34,12 @@ public class Level implements Parcelable {
 
 	public Level(Parcel source) {
 		this.m_title = source.readString();
-		source.readMap(m_rooms, HashMap.class.getClass().getClassLoader());
-		source.readMap(m_corridors, HashMap.class.getClass().getClassLoader());
+
+		Bundle bundle = source.readBundle(ClassLoader.getSystemClassLoader());
+		m_rooms = (ConcurrentHashMap<UUID, Room>) bundle
+				.getSerializable("rooms");
+		m_corridors = (ConcurrentHashMap<UUID, Corridor>) bundle
+				.getSerializable("corridors");
 	}
 
 	public int nbRooms() {
@@ -90,8 +94,11 @@ public class Level implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(m_title);
-		dest.writeMap(m_rooms);
-		dest.writeMap(m_corridors);
+
+		Bundle bundle = new Bundle(ClassLoader.getSystemClassLoader());
+		bundle.putSerializable("rooms", m_rooms);
+		bundle.putSerializable("corridors", m_corridors);
+		dest.writeBundle(bundle);
 	}
 
 }

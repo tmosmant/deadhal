@@ -26,20 +26,32 @@ public class Level implements Parcelable {
 	private ConcurrentHashMap<UUID, Corridor> m_corridors = new ConcurrentHashMap<UUID, Corridor>();
 
 	public Level() {
+
 	}
 
 	public Level(String title) {
-		this.m_title = title;
+		m_title = title;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Level(Parcel source) {
-		this.m_title = source.readString();
+		m_title = source.readString();
 
-		Bundle bundle = source.readBundle(ClassLoader.getSystemClassLoader());
-		m_rooms = (ConcurrentHashMap<UUID, Room>) bundle
-				.getSerializable("rooms");
-		m_corridors = (ConcurrentHashMap<UUID, Corridor>) bundle
-				.getSerializable("corridors");
+		m_rooms = new ConcurrentHashMap<UUID, Room>();
+		m_corridors = new ConcurrentHashMap<UUID, Corridor>();
+
+		Bundle bundle = source.readBundle(ConcurrentHashMap.class
+				.getClassLoader());
+		try {
+			m_rooms = (ConcurrentHashMap<UUID, Room>) bundle
+					.getSerializable("rooms");
+			m_corridors = (ConcurrentHashMap<UUID, Corridor>) bundle
+					.getSerializable("corridors");
+		} catch (Exception e) {
+			// handle an exception thrown on samsung devices
+			m_title = new String();
+		}
+
 	}
 
 	public int nbRooms() {
@@ -94,10 +106,10 @@ public class Level implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(m_title);
-
-		Bundle bundle = new Bundle(ClassLoader.getSystemClassLoader());
+		Bundle bundle = new Bundle(ConcurrentHashMap.class.getClassLoader());
 		bundle.putSerializable("rooms", m_rooms);
 		bundle.putSerializable("corridors", m_corridors);
+		dest.writeBundle(bundle);
 		dest.writeBundle(bundle);
 	}
 

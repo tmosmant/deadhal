@@ -43,7 +43,7 @@ public class Room implements Parcelable {
 		float right = source.readFloat();
 		float top = source.readFloat();
 		float bottom = source.readFloat();
-		rect = new RectF(left, top, right, bottom);
+		this.rect = new RectF(left, top, right, bottom);
 		source.readMap(neighbors, HashMap.class.getClass().getClassLoader());
 	}
 

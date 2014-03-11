@@ -1,7 +1,6 @@
 package fr.upem.deadhal;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -9,7 +8,6 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -21,7 +19,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import fr.upem.deadhal.components.Level;
-import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.drawers.adapters.DrawerMainListAdapter;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.drawers.models.DrawerMainItem;
@@ -51,7 +48,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		m_level = buildSampleLevel();
+		m_level = new Level();
 		buildDrawer(savedInstanceState);
 	}
 
@@ -119,6 +116,10 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		if (savedInstanceState == null) {
 			// on first time display view for edition item
 			displayView(FragmentType.NAVIGATION);
+		}
+
+		if (m_level == null || m_level.getRooms().size() == 0) {
+			m_drawerLayout.openDrawer(Gravity.LEFT);
 		}
 	}
 
@@ -248,19 +249,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		invalidateOptionsMenu();
 	}
 
-	private Level buildSampleLevel() {
-		Level level = new Level("Copernic, 3rd floor.");
-		level.addRoom(new Room(UUID.randomUUID(), "3B117", new RectF(0, 0, 120,
-				120)));
-		level.addRoom(new Room(UUID.randomUUID(), "3B113", new RectF(150, 0,
-				270, 120)));
-		level.addRoom(new Room(UUID.randomUUID(), "3B116", new RectF(0, 150,
-				120, 270)));
-		level.addRoom(new Room(UUID.randomUUID(), "3B112", new RectF(150, 150,
-				270, 270)));
-		return level;
-	}
-
 	@Override
 	public void onFileNumberChange() {
 		m_navDrawerItems.get(2).setCount(String.valueOf(Storage.getNbFiles()));
@@ -314,7 +302,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			case 0:
 				m_newLevel = true;
 				m_level = new Level();
-				displayView(FragmentType.EDITION);
+				displayView(FragmentType.NAVIGATION);
 				break;
 			case 1:
 				displayView(FragmentType.NAVIGATION);

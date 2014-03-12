@@ -1,15 +1,21 @@
 package fr.upem.deadhal.tasks;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.util.UUID;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.*;
-import java.util.UUID;
 
 public class OpenTask extends AsyncTask<File, Integer, Level> {
 
@@ -106,8 +112,15 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 		float top = Float.valueOf(xpp.getAttributeValue(null, "top"));
 		float bottom = Float.valueOf(xpp.getAttributeValue(null, "bottom"));
 		RectF rect = new RectF(left, top, right, bottom);
-
-		Room room = new Room(id, name, rect);
+		float pts[] = new float[9];
+		String strMatrix = xpp.getAttributeValue(null, "matrix");
+		String[] strMatrixSplit = strMatrix.split(",");
+		for (int i = 0; i < 9; i++) {
+			pts[i] = Float.valueOf(strMatrixSplit[i]);
+		}
+		Matrix matrix = new Matrix();
+		matrix.setValues(pts);
+		Room room = new Room(id, name, rect, matrix);
 		m_level.addRoom(room);
 	}
 
@@ -115,7 +128,8 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 		UUID corridorId = UUID.fromString(xpp.getAttributeValue(null, "id"));
 		UUID src = UUID.fromString(xpp.getAttributeValue(null, "src"));
 		UUID dst = UUID.fromString(xpp.getAttributeValue(null, "dst"));
-		boolean directed = Boolean.valueOf(xpp.getAttributeValue(null, "directed"));
+		boolean directed = Boolean.valueOf(xpp.getAttributeValue(null,
+				"directed"));
 
 		Corridor corridor = new Corridor(corridorId, src, dst, directed);
 		m_level.addCorridor(corridor);

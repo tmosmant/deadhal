@@ -114,7 +114,7 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 		RectF rect = new RectF(left, top, right, bottom);
 		float pts[] = new float[9];
 		String strMatrix = xpp.getAttributeValue(null, "matrix");
-		String[] strMatrixSplit = strMatrix.split(",");
+		String[] strMatrixSplit = strMatrix.split(":");
 		for (int i = 0; i < 9; i++) {
 			pts[i] = Float.valueOf(strMatrixSplit[i]);
 		}

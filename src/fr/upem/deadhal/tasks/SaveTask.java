@@ -95,7 +95,7 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 			for (int i = 0; i < 9; i++) {
 				strMatrix += pts[i];
 				if (i < 8) {
-					strMatrix += ",";
+					strMatrix += ":";
 				}
 			}
 			xmlSerializer.attribute("", "matrix", strMatrix);

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.RectF;
 import fr.upem.deadhal.components.Corridor;
@@ -97,6 +98,13 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 
 		int radius = 20;
 
+		Matrix inverse = new Matrix();
+		m_selectedRoom.getMatrix().invert(inverse);
+		float[] pts = { x, y };
+		inverse.mapPoints(pts);
+		x = pts[0];
+		y = pts[1];
+
 		RectF leftTop = new RectF(m_selectedRoom.getRect().left - radius,
 				m_selectedRoom.getRect().top - radius,
 				m_selectedRoom.getRect().left + radius,
@@ -153,7 +161,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		} else if (bottom.contains(x, y)) {
 			mode = TouchEvent.RESIZE_ROOM;
 			m_resizeType = ResizeType.RESIZE_ROOM_BOTTOM;
-		} else if (m_selectedRoom.getRect().contains(x, y)) {
+		} else if (m_selectedRoom.getRect().contains(pts[0], pts[1])) {
 			mode = TouchEvent.DRAG_ROOM;
 			m_resizeType = null;
 		}
@@ -166,10 +174,18 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void translateSelectedRoom(float dx, float dy) {
-		m_selectedRoom.getRect().left += dx;
-		m_selectedRoom.getRect().top += dy;
-		m_selectedRoom.getRect().right += dx;
-		m_selectedRoom.getRect().bottom += dy;
+		// Matrix inverse = new Matrix();
+		// m_selectedRoom.getMatrix().invert(inverse);
+		RectF rect = m_selectedRoom.getRect();
+
+		// float pts[] = { rect.left = dx, rect.top = dy, rect.right = dx,
+		// rect.bottom = dy };
+
+		// inverse.mapPoints(pts);
+		rect.left += dx;
+		rect.top += dy;
+		rect.right += dx;
+		rect.bottom += dy;
 	}
 
 	private final static Point m_minNone = new Point(1, 1);
@@ -178,120 +194,115 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	private final static Point m_minBoth = new Point(0, 0);
 
 	public Point resizeSelectedRoom(float dx, float dy) {
+		
+		Matrix inverse = new Matrix();
+		m_selectedRoom.getMatrix().invert(inverse);
+		
+		RectF rect = m_selectedRoom.getRect();
+		RectF rectCopy = new RectF(rect);
+		inverse.mapRect(rectCopy);
+		
+		
+		
+		
+//		float[] pts1 = { dx, dy };
+//		inverse.mapPoints(pts);
+		
+		
 		switch (m_resizeType) {
 		case RESIZE_ROOM_LEFT_TOP:
-			if (m_selectedRoom.getRect().left + dx >= m_selectedRoom.getRect().right
+			if (rectCopy.left + dx >= rectCopy.right
 					- MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy < m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().top += dy;
+					&& rectCopy.top + dy < rectCopy.bottom - MIN_MARGIN) {
+				rect.top += dy;
 				return m_minX;
-			} else if (m_selectedRoom.getRect().left + dx < m_selectedRoom
-					.getRect().right - MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy >= m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().left += dx;
+			} else if (rectCopy.left + dx < rectCopy.right - MIN_MARGIN
+					&& rectCopy.top + dy >= rectCopy.bottom - MIN_MARGIN) {
+				rect.left += dx;
 				return m_minY;
-			} else if (m_selectedRoom.getRect().left + dx < m_selectedRoom
-					.getRect().right - MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy < m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().left += dx;
-				m_selectedRoom.getRect().top += dy;
+			} else if (rectCopy.left + dx < rectCopy.right - MIN_MARGIN
+					&& rectCopy.top + dy < rectCopy.bottom - MIN_MARGIN) {
+				rect.left += dx;
+				rect.top += dy;
 				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_RIGHT_TOP:
-			if (m_selectedRoom.getRect().right + dx <= m_selectedRoom.getRect().left
+			if (rectCopy.right + dx <= rectCopy.left
 					+ MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy < m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().top += dy;
+					&& rectCopy.top + dy < rectCopy.bottom - MIN_MARGIN) {
+				rect.top += dy;
 				return m_minX;
-			} else if (m_selectedRoom.getRect().right + dx > m_selectedRoom
-					.getRect().left + MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy >= m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().right += dx;
+			} else if (rectCopy.right + dx > rectCopy.left + MIN_MARGIN
+					&& rectCopy.top + dy >= rectCopy.bottom - MIN_MARGIN) {
+				rect.right += dx;
 				return m_minY;
-			} else if (m_selectedRoom.getRect().right + dx > m_selectedRoom
-					.getRect().left + MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy < m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().right += dx;
-				m_selectedRoom.getRect().top += dy;
+			} else if (rectCopy.right + dx > rectCopy.left + MIN_MARGIN
+					&& rectCopy.top + dy < rectCopy.bottom - MIN_MARGIN) {
+				rect.right += dx;
+				rect.top += dy;
 				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_LEFT_BOTTOM:
-			if (m_selectedRoom.getRect().left + dx >= m_selectedRoom.getRect().right
+			if (rectCopy.left + dx >= rectCopy.right
 					- MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy > m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().bottom += dy;
+					&& rectCopy.bottom + dy > rectCopy.top + MIN_MARGIN) {
+				rect.bottom += dy;
 				return m_minX;
-			} else if (m_selectedRoom.getRect().left + dx < m_selectedRoom
-					.getRect().right - MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy <= m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().left += dx;
+			} else if (rectCopy.left + dx < rectCopy.right - MIN_MARGIN
+					&& rectCopy.bottom + dy <= rectCopy.top + MIN_MARGIN) {
+				rect.left += dx;
 				return m_minY;
-			} else if (m_selectedRoom.getRect().left + dx < m_selectedRoom
-					.getRect().right - MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy > m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().left += dx;
-				m_selectedRoom.getRect().bottom += dy;
+			} else if (rectCopy.left + dx < rectCopy.right - MIN_MARGIN
+					&& rectCopy.bottom + dy > rectCopy.top + MIN_MARGIN) {
+				rect.left += dx;
+				rect.bottom += dy;
 				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_RIGHT_BOTTOM:
-			if (m_selectedRoom.getRect().right + dx <= m_selectedRoom.getRect().left
+			if (rectCopy.right + dx <= rectCopy.left
 					+ MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy > m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().bottom += dy;
+					&& rectCopy.bottom + dy > rectCopy.top + MIN_MARGIN) {
+				rect.bottom += dy;
 				return m_minX;
-			} else if (m_selectedRoom.getRect().right + dx > m_selectedRoom
-					.getRect().left + MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy <= m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().right += dx;
+			} else if (rectCopy.right + dx > rectCopy.left + MIN_MARGIN
+					&& rectCopy.bottom + dy <= rectCopy.top + MIN_MARGIN) {
+				rect.right += dx;
 				return m_minY;
-			} else if (m_selectedRoom.getRect().right + dx > m_selectedRoom
-					.getRect().left + MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy > m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().right += dx;
-				m_selectedRoom.getRect().bottom += dy;
+			} else if (rectCopy.right + dx > rectCopy.left + MIN_MARGIN
+					&& rectCopy.bottom + dy > rectCopy.top + MIN_MARGIN) {
+				rect.right += dx;
+				rect.bottom += dy;
 				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_LEFT:
-			if (m_selectedRoom.getRect().left + dx < m_selectedRoom.getRect().right
+			if (rectCopy.left + dx < rectCopy.right
 					- MIN_MARGIN) {
-				m_selectedRoom.getRect().left += dx;
+				rect.left += dx;
 				return m_minNone;
 			}
 			return m_minX;
 		case RESIZE_ROOM_TOP:
-			if (m_selectedRoom.getRect().top + dy < m_selectedRoom.getRect().bottom
+			if (rectCopy.top + dy < rectCopy.bottom
 					- MIN_MARGIN) {
-				m_selectedRoom.getRect().top += dy;
+				rect.top += dy;
 				return m_minNone;
 			}
 			return m_minY;
 		case RESIZE_ROOM_RIGHT:
-			if (m_selectedRoom.getRect().right + dx > m_selectedRoom.getRect().left
+			if (rectCopy.right + dx > rectCopy.left
 					+ MIN_MARGIN) {
-				m_selectedRoom.getRect().right += dx;
+				rect.right += dx;
 				return m_minNone;
 			}
 			return m_minX;
 		case RESIZE_ROOM_BOTTOM:
-			if (m_selectedRoom.getRect().bottom + dy > m_selectedRoom.getRect().top
+			if (rectCopy.bottom + dy > rectCopy.top
 					+ MIN_MARGIN) {
-				m_selectedRoom.getRect().bottom += dy;
+				rect.bottom += dy;
 				return m_minNone;
 			}
 			return m_minY;

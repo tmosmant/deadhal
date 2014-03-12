@@ -57,13 +57,21 @@ public abstract class AbstractLevelDrawable extends Drawable {
 	}
 
 	protected void drawRoom(Canvas canvas, Room room) {
+
 		float borderSize = (float) 1.5;
 		RectF rect = room.getRect();
 		RectF rectB = new RectF(rect.left + borderSize, rect.top + borderSize,
 				rect.right - borderSize, rect.bottom - borderSize);
 		canvas.drawRect(rect, Paints.ROOM_BACKGROUND);
 		canvas.drawRect(rectB, Paints.ROOM_BORDER);
+
+		canvas.save();
+		canvas.concat(room.getMatrix());
+
+		canvas.drawRect(rect, Paints.ROOM_BACKGROUND);
+		canvas.drawRect(rectB, Paints.ROOM_BORDER);
 		drawTitle(canvas, room);
+		canvas.restore();
 	}
 
 	protected void drawCorridor(Canvas canvas, Corridor corridor, Paint paint) {

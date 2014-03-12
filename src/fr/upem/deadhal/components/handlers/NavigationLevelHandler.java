@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import android.graphics.Matrix;
 import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
@@ -61,23 +62,57 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void selectRoomFromCoordinates(float x, float y) {
-		if (m_localisationRoom != null
-				&& m_localisationRoom.getRect().contains(x, y)) {
+
+		Room room = getRoomFromCoordinates(x, y);
+		if (room != null && room.equals(m_localisationRoom)) {
 			m_localisationRoom = null;
-			refreshView();
 			m_view.getVibrator().vibrate(100);
-			return;
 		}
+		else if (room != null) {
+			m_localisationRoom = room;
+			m_view.getVibrator().vibrate(100);
+		}
+		
+		// if (m_localisationRoom != null
+		// && m_localisationRoom.getRect().contains(x, y)) {
+		// m_localisationRoom = null;
+		// refreshView();
+		// m_view.getVibrator().vibrate(100);
+		// return;
+		// }
+//		List<Room> reverseRooms = reverseRooms();
+//		for (Room room : reverseRooms) {
+//			if (!room.equals(m_localisationRoom)) {
+//				RectF rectF = new RectF();
+//				room.matrix.mapRect(rectF, room.getRect());
+//				float[] pts = { x, y };
+//				room.matrix.mapPoints(pts);
+//				if (rectF.contains(pts[0], pts[1])) {
+//					m_localisationRoom = room;
+//					handleMove(x, y);
+//					m_view.getVibrator().vibrate(100);
+//					return;
+//				}
+//			}
+//		}
+	}
+	
+	@Override
+	public Room getRoomFromCoordinates(float x, float y) {
 		List<Room> reverseRooms = reverseRooms();
 		for (Room room : reverseRooms) {
-			if (!room.equals(m_localisationRoom)
-					&& room.getRect().contains(x, y)) {
+			Matrix inverse = new Matrix();
+			room.getMatrix().invert(inverse);
+			float[] pts = { x, y };
+			inverse.mapPoints(pts);
+			if (room.getRect().contains(pts[0], pts[1])) {
 				m_localisationRoom = room;
-				handleMove(x, y);
-				m_view.getVibrator().vibrate(100);
-				return;
+				m_localisationX = x;
+				m_localisationY = y;
+				return room;
 			}
 		}
+		return null;
 	}
 
 	private void handleMove(float x, float y) {

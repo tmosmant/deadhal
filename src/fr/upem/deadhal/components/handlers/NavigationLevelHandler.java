@@ -1,15 +1,15 @@
 package fr.upem.deadhal.components.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.view.TouchEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class NavigationLevelHandler extends AbstractLevelHandler {
 
@@ -61,14 +61,22 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void selectRoomFromCoordinates(float x, float y) {
-		Room room = getRoomFromCoordinates(x, y);
-		if (room != null && room.equals(m_localisationRoom)) {
+		if (m_localisationRoom != null
+				&& m_localisationRoom.getRect().contains(x, y)) {
 			m_localisationRoom = null;
+			refreshView();
 			m_view.getVibrator().vibrate(100);
-		} else if (room != null) {
-			handleMove(x, y);
-			m_localisationRoom = room;
-			m_view.getVibrator().vibrate(100);
+			return;
+		}
+		List<Room> reverseRooms = reverseRooms();
+		for (Room room : reverseRooms) {
+			if (!room.equals(m_localisationRoom)
+					&& room.getRect().contains(x, y)) {
+				m_localisationRoom = room;
+				handleMove(x, y);
+				m_view.getVibrator().vibrate(100);
+				return;
+			}
 		}
 	}
 
@@ -139,5 +147,4 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	public float getLocalisationY() {
 		return m_localisationY;
 	}
-
 }

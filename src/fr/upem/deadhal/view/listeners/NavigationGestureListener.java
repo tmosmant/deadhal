@@ -31,7 +31,7 @@ public class NavigationGestureListener extends
 
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
-		m_view.reset();
+//		m_view.reset();
 		return super.onDoubleTap(e);
 	}
 

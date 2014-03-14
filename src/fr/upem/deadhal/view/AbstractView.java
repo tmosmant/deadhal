@@ -205,8 +205,6 @@ public abstract class AbstractView extends View {
 		if (m_lastEvent != null && event.getPointerCount() >= 2) {
 			m_newRotation = rotation(event);
 			float r = m_newRotation - m_distance;
-			float[] values = new float[9];
-			m_matrix.getValues(values);
 
 			float xc = m_middle.x;
 			float yc = m_middle.y;
@@ -243,14 +241,22 @@ public abstract class AbstractView extends View {
 	}
 
 	public float[] convertCoordinates(MotionEvent event) {
+		return convertCoordinates(event, 0);
+	}
+	
+	public float[] convertCoordinates(MotionEvent event, int pointerIndex) {
+		return convertCoordinates(event.getX(pointerIndex), event.getY(pointerIndex));
+	}
+
+	public float[] convertCoordinates(float x, float y) {
 		Matrix inverse = new Matrix();
 
 		m_matrix.invert(inverse);
 
 		float[] pts = new float[2];
 
-		pts[0] = event.getX(0);
-		pts[1] = event.getY(0);
+		pts[0] = x;
+		pts[1] = y;
 
 		inverse.mapPoints(pts);
 		return pts;

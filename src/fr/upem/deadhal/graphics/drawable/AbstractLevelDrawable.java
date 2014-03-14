@@ -2,6 +2,7 @@ package fr.upem.deadhal.graphics.drawable;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
@@ -57,13 +58,21 @@ public abstract class AbstractLevelDrawable extends Drawable {
 	}
 
 	protected void drawRoom(Canvas canvas, Room room) {
+
 		float borderSize = (float) 1.5;
 		RectF rect = room.getRect();
 		RectF rectB = new RectF(rect.left + borderSize, rect.top + borderSize,
 				rect.right - borderSize, rect.bottom - borderSize);
 		canvas.drawRect(rect, Paints.ROOM_BACKGROUND);
 		canvas.drawRect(rectB, Paints.ROOM_BORDER);
+
+		canvas.save();
+		canvas.concat(room.getMatrix());
+
+		canvas.drawRect(rect, Paints.ROOM_BACKGROUND);
+		canvas.drawRect(rectB, Paints.ROOM_BORDER);
 		drawTitle(canvas, room);
+		canvas.restore();
 	}
 
 	protected void drawCorridor(Canvas canvas, Corridor corridor, Paint paint) {
@@ -74,19 +83,49 @@ public abstract class AbstractLevelDrawable extends Drawable {
 			corridor.setWeight(0.0);
 			return;
 		}
+
 		RectF rectStart = start.getRect();
+
+		
 		RectF rectEnd = end.getRect();
+
 		PointF centerStart = new PointF(rectStart.centerX(),
 				rectStart.centerY());
 		PointF centerEnd = new PointF(rectEnd.centerX(), rectEnd.centerY());
-		PointF pStart = computeIntersection(centerStart, centerEnd, rectStart);
-		PointF pEnd = computeIntersection(centerStart, centerEnd, rectEnd);
-		corridor.setWeight(length(pStart, pEnd));
+		PointF[] pStart = computeIntersections(centerStart, centerEnd, rectStart);
+		
+		PointF pStartMin = null;
+		for (PointF p : pStart) {
+			if (pStartMin == null && p != null) {
+				pStartMin = p;
+			}
+			if (pStartMin != null && p != null && length(pStartMin, centerEnd) > length(p, centerEnd) ) {
+				pStartMin = p;
+			}
+		}
+		
+		PointF[] pEnd = computeIntersections(centerStart, centerEnd, rectEnd);
+
+		PointF pEndMin = null;
+		for (PointF p : pEnd) {
+			if (pEndMin == null && p != null) {
+				pEndMin = p;
+			}
+			if (pEndMin != null && p != null && length(pEndMin, centerEnd) > length(p, centerEnd) ) {
+				pEndMin = p;
+			}
+		}
+		
+		float[] pts = { pStartMin.x, pStartMin.y };
+		start.getMatrix().mapPoints(pts);
+		PointF pointF = new PointF(pts[0], pts[1]);
+
+		corridor.setWeight(length(pStartMin, pEndMin));
 		if (corridor.isDirected()) {
-			drawArrow(canvas, pStart, pEnd, paint);
+			drawArrow(canvas, pointF, pEndMin, paint);
 		} else {
-			drawArrow(canvas, pStart, pEnd, paint);
-			drawArrow(canvas, pEnd, pStart, paint);
+			drawArrow(canvas, pointF, pEndMin, paint);
+			drawArrow(canvas, pEndMin, pointF, paint);
 		}
 	}
 
@@ -98,29 +137,38 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		return Math.sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 	}
 
-	private PointF computeIntersection(PointF start, PointF end, RectF rect) {
-		PointF point = null;
-		point = intersection(start.x, start.y, end.x, end.y, rect.left,
+	private PointF[] computeIntersections(PointF start, PointF end, RectF rect) {
+		PointF points[] = new PointF[4];
+		points[0] = intersection(start.x, start.y, end.x, end.y, rect.left,
 				rect.top, rect.right, rect.top);
-		if (point != null) {
-			return point;
-		}
-		point = intersection(start.x, start.y, end.x, end.y, rect.left,
+		points[1] =  intersection(start.x, start.y, end.x, end.y, rect.left,
 				rect.top, rect.left, rect.bottom);
-		if (point != null) {
-			return point;
-		}
-		point = intersection(start.x, start.y, end.x, end.y, rect.left,
+		points[2] = intersection(start.x, start.y, end.x, end.y, rect.left,
 				rect.bottom, rect.right, rect.bottom);
-		if (point != null) {
-			return point;
-		}
-		point = intersection(start.x, start.y, end.x, end.y, rect.right,
+		points[3] = intersection(start.x, start.y, end.x, end.y, rect.right,
 				rect.top, rect.right, rect.bottom);
-		if (point != null) {
-			return point;
-		}
-		return start;
+		return points;
+//		point = intersection(start.x, start.y, end.x, end.y, rect.left,
+//				rect.top, rect.right, rect.top);
+//		if (point != null) {
+//			return point;
+//		}
+//		point = intersection(start.x, start.y, end.x, end.y, rect.left,
+//				rect.top, rect.left, rect.bottom);
+//		if (point != null) {
+//			return point;
+//		}
+//		point = intersection(start.x, start.y, end.x, end.y, rect.left,
+//				rect.bottom, rect.right, rect.bottom);
+//		if (point != null) {
+//			return point;
+//		}
+//		point = intersection(start.x, start.y, end.x, end.y, rect.right,
+//				rect.top, rect.right, rect.bottom);
+//		if (point != null) {
+//			return point;
+//		}
+//		return start;
 	}
 
 	PointF intersection(float p0_x, float p0_y, float p1_x, float p1_y,

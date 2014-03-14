@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.graphics.Matrix;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
@@ -15,7 +16,7 @@ import fr.upem.deadhal.view.TouchEvent;
 public abstract class AbstractLevelHandler {
 
 	protected Level m_level;
-	protected List<SelectionRoomListener> selectionRoomListeners = new LinkedList<SelectionRoomListener>();
+	protected List<SelectionRoomListener> m_selectionRoomListeners = new LinkedList<SelectionRoomListener>();
 	protected AbstractView m_view;
 
 	public AbstractLevelHandler(Level level) {
@@ -31,11 +32,11 @@ public abstract class AbstractLevelHandler {
 	}
 
 	public void addSelectionRoomListener(SelectionRoomListener listener) {
-		selectionRoomListeners.add(listener);
+		m_selectionRoomListeners.add(listener);
 	}
 
 	public void removeSelectionRoomListener(SelectionRoomListener listener) {
-		selectionRoomListeners.remove(listener);
+		m_selectionRoomListeners.remove(listener);
 	}
 
 	public void addRoom(Room room) {
@@ -75,11 +76,15 @@ public abstract class AbstractLevelHandler {
 			m_view.refresh();
 		}
 	}
-
+	
 	public Room getRoomFromCoordinates(float x, float y) {
 		List<Room> reverseRooms = reverseRooms();
 		for (Room room : reverseRooms) {
-			if (room.getRect().contains(x, y)) {
+			Matrix inverse = new Matrix();
+			room.getMatrix().invert(inverse);
+			float[] pts = { x, y };
+			inverse.mapPoints(pts);
+			if (room.getRect().contains(pts[0], pts[1])) {
 				return room;
 			}
 		}

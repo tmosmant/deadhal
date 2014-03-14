@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.RectF;
 import fr.upem.deadhal.components.Corridor;
@@ -39,10 +40,10 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		}
 		super.removeRoom(room);
 	}
-
+	
 	public boolean selectRoom(Room room) {
 		if (room.equals(m_selectedRoom)) {
-			for (SelectionRoomListener listener : selectionRoomListeners) {
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
 				listener.onUnselectRoom(getLevel().getRooms().get(
 						m_selectedRoom.getId()));
 			}
@@ -50,13 +51,13 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 			refreshView();
 			return false;
 		} else if (m_selectedRoom != null) {
-			for (SelectionRoomListener listener : selectionRoomListeners) {
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
 				listener.onUnselectRoom(getLevel().getRooms().get(
 						m_selectedRoom.getId()));
 				listener.onSelectRoom(getLevel().getRooms().get(room.getId()));
 			}
 		} else {
-			for (SelectionRoomListener listener : selectionRoomListeners) {
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
 				listener.onSelectRoom(getLevel().getRooms().get(room.getId()));
 			}
 		}
@@ -66,29 +67,23 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void selectRoomFromCoordinates(float x, float y) {
-		if (m_selectedRoom != null && m_selectedRoom.getRect().contains(x, y)) {
-			for (SelectionRoomListener listener : selectionRoomListeners) {
+		Room room = getRoomFromCoordinates(x, y);
+		if (m_selectedRoom != null && m_selectedRoom.equals(room)) {
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
 				listener.onUnselectRoom(m_selectedRoom);
 			}
 			m_selectedRoom = null;
 			refreshView();
 			return;
 		}
-		List<Room> reverseRooms = reverseRooms();
-		for (Room room : reverseRooms) {
-			if (!room.equals(m_selectedRoom) && room.getRect().contains(x, y)) {
-				if (m_selectedRoom != null) {
-					for (SelectionRoomListener listener : selectionRoomListeners) {
-						listener.onUnselectRoom(m_selectedRoom);
-					}
-				}
-				for (SelectionRoomListener listener : selectionRoomListeners) {
-					listener.onSelectRoom(room);
-				}
-				m_selectedRoom = room;
-				refreshView();
-				return;
+		
+		else if (room != null) {
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
+				listener.onSelectRoom(room);
 			}
+			m_selectedRoom = room;
+			refreshView();
+			return;
 		}
 	}
 
@@ -96,6 +91,13 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		TouchEvent mode = TouchEvent.DRAG;
 
 		int radius = 20;
+
+		Matrix inverse = new Matrix();
+		m_selectedRoom.getMatrix().invert(inverse);
+		float[] pts = { x, y };
+		inverse.mapPoints(pts);
+		x = pts[0];
+		y = pts[1];
 
 		RectF leftTop = new RectF(m_selectedRoom.getRect().left - radius,
 				m_selectedRoom.getRect().top - radius,
@@ -153,7 +155,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		} else if (bottom.contains(x, y)) {
 			mode = TouchEvent.RESIZE_ROOM;
 			m_resizeType = ResizeType.RESIZE_ROOM_BOTTOM;
-		} else if (m_selectedRoom.getRect().contains(x, y)) {
+		} else if (m_selectedRoom.getRect().contains(pts[0], pts[1])) {
 			mode = TouchEvent.DRAG_ROOM;
 			m_resizeType = null;
 		}
@@ -166,10 +168,11 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void translateSelectedRoom(float dx, float dy) {
-		m_selectedRoom.getRect().left += dx;
-		m_selectedRoom.getRect().top += dy;
-		m_selectedRoom.getRect().right += dx;
-		m_selectedRoom.getRect().bottom += dy;
+		RectF rect = m_selectedRoom.getRect();
+		rect.left += dx;
+		rect.top += dy;
+		rect.right += dx;
+		rect.bottom += dy;
 	}
 
 	private final static Point m_minNone = new Point(1, 1);
@@ -178,120 +181,95 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	private final static Point m_minBoth = new Point(0, 0);
 
 	public Point resizeSelectedRoom(float dx, float dy) {
+		RectF rect = m_selectedRoom.getRect();
+
 		switch (m_resizeType) {
 		case RESIZE_ROOM_LEFT_TOP:
-			if (m_selectedRoom.getRect().left + dx >= m_selectedRoom.getRect().right
-					- MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy < m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().top += dy;
+
+			if (rect.left + dx >= rect.right - MIN_MARGIN
+					&& rect.top + dy < rect.bottom - MIN_MARGIN) {
+				rect.top += dy;
 				return m_minX;
-			} else if (m_selectedRoom.getRect().left + dx < m_selectedRoom
-					.getRect().right - MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy >= m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().left += dx;
+			} else if (rect.left + dx < rect.right - MIN_MARGIN
+					&& rect.top + dy >= rect.bottom - MIN_MARGIN) {
+				rect.left += dx;
 				return m_minY;
-			} else if (m_selectedRoom.getRect().left + dx < m_selectedRoom
-					.getRect().right - MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy < m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().left += dx;
-				m_selectedRoom.getRect().top += dy;
+			} else if (rect.left + dx < rect.right - MIN_MARGIN
+					&& rect.top + dy < rect.bottom - MIN_MARGIN) {
+				rect.left += dx;
+				rect.top += dy;
 				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_RIGHT_TOP:
-			if (m_selectedRoom.getRect().right + dx <= m_selectedRoom.getRect().left
-					+ MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy < m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().top += dy;
+			if (rect.right + dx <= rect.left + MIN_MARGIN
+					&& rect.top + dy < rect.bottom - MIN_MARGIN) {
+				rect.top += dy;
 				return m_minX;
-			} else if (m_selectedRoom.getRect().right + dx > m_selectedRoom
-					.getRect().left + MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy >= m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().right += dx;
+			} else if (rect.right + dx > rect.left + MIN_MARGIN
+					&& rect.top + dy >= rect.bottom - MIN_MARGIN) {
+				rect.right += dx;
 				return m_minY;
-			} else if (m_selectedRoom.getRect().right + dx > m_selectedRoom
-					.getRect().left + MIN_MARGIN
-					&& m_selectedRoom.getRect().top + dy < m_selectedRoom
-							.getRect().bottom - MIN_MARGIN) {
-				m_selectedRoom.getRect().right += dx;
-				m_selectedRoom.getRect().top += dy;
+			} else if (rect.right + dx > rect.left + MIN_MARGIN
+					&& rect.top + dy < rect.bottom - MIN_MARGIN) {
+				rect.right += dx;
+				rect.top += dy;
 				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_LEFT_BOTTOM:
-			if (m_selectedRoom.getRect().left + dx >= m_selectedRoom.getRect().right
-					- MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy > m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().bottom += dy;
+			if (rect.left + dx >= rect.right - MIN_MARGIN
+					&& rect.bottom + dy > rect.top + MIN_MARGIN) {
+				rect.bottom += dy;
 				return m_minX;
-			} else if (m_selectedRoom.getRect().left + dx < m_selectedRoom
-					.getRect().right - MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy <= m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().left += dx;
+			} else if (rect.left + dx < rect.right - MIN_MARGIN
+					&& rect.bottom + dy <= rect.top + MIN_MARGIN) {
+				rect.left += dx;
 				return m_minY;
-			} else if (m_selectedRoom.getRect().left + dx < m_selectedRoom
-					.getRect().right - MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy > m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().left += dx;
-				m_selectedRoom.getRect().bottom += dy;
+			} else if (rect.left + dx < rect.right - MIN_MARGIN
+					&& rect.bottom + dy > rect.top + MIN_MARGIN) {
+				rect.left += dx;
+				rect.bottom += dy;
 				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_RIGHT_BOTTOM:
-			if (m_selectedRoom.getRect().right + dx <= m_selectedRoom.getRect().left
-					+ MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy > m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().bottom += dy;
+			if (rect.right + dx <= rect.left + MIN_MARGIN
+					&& rect.bottom + dy > rect.top + MIN_MARGIN) {
+				rect.bottom += dy;
 				return m_minX;
-			} else if (m_selectedRoom.getRect().right + dx > m_selectedRoom
-					.getRect().left + MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy <= m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().right += dx;
+			} else if (rect.right + dx > rect.left + MIN_MARGIN
+					&& rect.bottom + dy <= rect.top + MIN_MARGIN) {
+				rect.right += dx;
 				return m_minY;
-			} else if (m_selectedRoom.getRect().right + dx > m_selectedRoom
-					.getRect().left + MIN_MARGIN
-					&& m_selectedRoom.getRect().bottom + dy > m_selectedRoom
-							.getRect().top + MIN_MARGIN) {
-				m_selectedRoom.getRect().right += dx;
-				m_selectedRoom.getRect().bottom += dy;
+			} else if (rect.right + dx > rect.left + MIN_MARGIN
+					&& rect.bottom + dy > rect.top + MIN_MARGIN) {
+				rect.right += dx;
+				rect.bottom += dy;
 				return m_minNone;
 			}
 			break;
 		case RESIZE_ROOM_LEFT:
-			if (m_selectedRoom.getRect().left + dx < m_selectedRoom.getRect().right
-					- MIN_MARGIN) {
-				m_selectedRoom.getRect().left += dx;
+			if (rect.left + dx < rect.right - MIN_MARGIN) {
+				rect.left += dx;
 				return m_minNone;
 			}
 			return m_minX;
 		case RESIZE_ROOM_TOP:
-			if (m_selectedRoom.getRect().top + dy < m_selectedRoom.getRect().bottom
-					- MIN_MARGIN) {
-				m_selectedRoom.getRect().top += dy;
+			if (rect.top + dy < rect.bottom - MIN_MARGIN) {
+				rect.top += dy;
 				return m_minNone;
 			}
 			return m_minY;
 		case RESIZE_ROOM_RIGHT:
-			if (m_selectedRoom.getRect().right + dx > m_selectedRoom.getRect().left
-					+ MIN_MARGIN) {
-				m_selectedRoom.getRect().right += dx;
+			if (rect.right + dx > rect.left + MIN_MARGIN) {
+				rect.right += dx;
 				return m_minNone;
 			}
 			return m_minX;
 		case RESIZE_ROOM_BOTTOM:
-			if (m_selectedRoom.getRect().bottom + dy > m_selectedRoom.getRect().top
-					+ MIN_MARGIN) {
-				m_selectedRoom.getRect().bottom += dy;
+			if (rect.bottom + dy > rect.top + MIN_MARGIN) {
+				rect.bottom += dy;
 				return m_minNone;
 			}
 			return m_minY;

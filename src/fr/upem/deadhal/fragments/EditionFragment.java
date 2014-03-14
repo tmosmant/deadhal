@@ -10,6 +10,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -134,6 +135,8 @@ public class EditionFragment extends Fragment {
 				super.onDrawerOpened(drawerView);
 			}
 		});
+		
+		m_drawerLayout.closeDrawers();
 
 		m_levelTitleEditText = (EditText) m_rootView
 				.findViewById(R.id.edit_text_level_name);
@@ -277,7 +280,7 @@ public class EditionFragment extends Fragment {
 			if (resultCode == Activity.RESULT_OK) {
 				String name = data.getStringExtra("inputText");
 				Room room = new Room(UUID.randomUUID(), name, new RectF(0, 0,
-						150, 150));
+						150, 150), new Matrix());
 				m_levelHandler.addRoom(room);
 				updateDrawer();
 				m_levelHandler.selectRoom(room);
@@ -287,7 +290,7 @@ public class EditionFragment extends Fragment {
 			if (resultCode == Activity.RESULT_OK) {
 				String title = data.getStringExtra("inputText");
 				Room room = new Room(UUID.randomUUID(), title, new RectF(0, 0,
-						150, 150));
+						150, 150), new Matrix());
 				m_levelHandler.addRoom(room);
 				updateDrawer();
 				m_levelHandler.selectRoom(room);

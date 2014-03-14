@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.ParcelUuid;
@@ -23,15 +24,19 @@ public class Room implements Parcelable {
 			return new Room[size];
 		}
 	};
+
 	private UUID id;
 	private String name;
 	private RectF rect;
 	private Map<UUID, UUID> neighbors = new HashMap<UUID, UUID>();
+	private Matrix matrix;
 
-	public Room(UUID id, String name, RectF rect) {
+	public Room(UUID id, String name, RectF rect, Matrix matrix) {
 		this.id = id;
 		this.name = name;
 		this.rect = rect;
+		this.matrix = matrix;
+		// matrix.postRotate(12f, rect.centerX(), rect.centerY());
 	}
 
 	public Room(Parcel source) {
@@ -43,6 +48,10 @@ public class Room implements Parcelable {
 		float right = source.readFloat();
 		float top = source.readFloat();
 		float bottom = source.readFloat();
+		float pts[] = new float[9];
+		source.readFloatArray(pts);
+		this.matrix = new Matrix();
+		this.matrix.setValues(pts);
 		this.rect = new RectF(left, top, right, bottom);
 		source.readMap(neighbors, HashMap.class.getClass().getClassLoader());
 	}
@@ -57,6 +66,10 @@ public class Room implements Parcelable {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public Matrix getMatrix() {
+		return matrix;
 	}
 
 	public Map<UUID, UUID> getNeighbors() {
@@ -85,6 +98,9 @@ public class Room implements Parcelable {
 		dest.writeFloat(rect.right);
 		dest.writeFloat(rect.top);
 		dest.writeFloat(rect.bottom);
+		float pts[] = new float[9];
+		matrix.getValues(pts);
+		dest.writeFloatArray(pts);
 		dest.writeMap(neighbors);
 	}
 

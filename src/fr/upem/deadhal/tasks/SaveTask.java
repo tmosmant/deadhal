@@ -73,7 +73,8 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 		xmlSerializer.setOutput(writer);
 
 		xmlSerializer.startDocument("UTF-8", null);
-		xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
+		xmlSerializer.setFeature(
+				"http://xmlpull.org/v1/doc/features.html#indent-output", true);
 
 		xmlSerializer.startTag("", "level");
 		xmlSerializer.attribute("", "title", level.getTitle());
@@ -88,6 +89,16 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 			xmlSerializer.attribute("", "right", String.valueOf(rect.right));
 			xmlSerializer.attribute("", "top", String.valueOf(rect.top));
 			xmlSerializer.attribute("", "bottom", String.valueOf(rect.bottom));
+			float pts[] = new float[9];
+			room.getMatrix().getValues(pts);
+			String strMatrix = new String();
+			for (int i = 0; i < 9; i++) {
+				strMatrix += pts[i];
+				if (i < 8) {
+					strMatrix += ":";
+				}
+			}
+			xmlSerializer.attribute("", "matrix", strMatrix);
 			xmlSerializer.endTag("", "room");
 		}
 		for (Entry<UUID, Corridor> entry : corridors.entrySet()) {
@@ -97,7 +108,8 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 			xmlSerializer.attribute("", "id", corridor.getId().toString());
 			xmlSerializer.attribute("", "src", corridor.getSrc().toString());
 			xmlSerializer.attribute("", "dst", corridor.getDst().toString());
-			xmlSerializer.attribute("", "directed", String.valueOf(corridor.isDirected()));
+			xmlSerializer.attribute("", "directed",
+					String.valueOf(corridor.isDirected()));
 			xmlSerializer.endTag("", "corridor");
 		}
 		xmlSerializer.endTag("", "level");
@@ -109,7 +121,8 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 	@Override
 	protected void onPostExecute(Integer result) {
 		if (result == 1) {
-			Toast.makeText(activity, R.string.saved_file, Toast.LENGTH_SHORT).show();
+			Toast.makeText(activity, R.string.saved_file, Toast.LENGTH_SHORT)
+					.show();
 		} else {
 			Toast.makeText(activity, m_error, Toast.LENGTH_LONG).show();
 		}

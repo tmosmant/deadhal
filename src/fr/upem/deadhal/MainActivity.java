@@ -147,7 +147,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		case R.menu.navigation:
 			menu.findItem(R.id.action_start_navigation).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_unlock).setVisible(!drawerOpen);
-			menu.findItem(R.id.checkable_gyroscope).setVisible(!drawerOpen);
+			menu.findItem(R.id.checkable_accelerometer).setVisible(!drawerOpen);
 			break;
 		case R.menu.edition:
 			menu.findItem(R.id.action_list_objects).setVisible(!drawerOpen);

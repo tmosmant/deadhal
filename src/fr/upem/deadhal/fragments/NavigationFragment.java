@@ -32,7 +32,7 @@ import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.fragments.dialogs.NavigationDialogFragment;
 import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
-import fr.upem.deadhal.sensor.Gyroscope;
+import fr.upem.deadhal.sensor.NavigationAccelerometer;
 import fr.upem.deadhal.tasks.ShortestPathTask;
 import fr.upem.deadhal.view.NavigationView;
 import fr.upem.deadhal.view.listeners.NavigationGestureListener;
@@ -42,7 +42,7 @@ public class NavigationFragment extends Fragment {
 	private static final int NAV_DIALOG = 1;
 
 	private Level m_level = null;
-	private Gyroscope m_gyroscope = null;
+	private NavigationAccelerometer m_accelerometer = null;
 	private DrawerMainListener m_callback;
 	private SharedPreferences m_prefs = null;
 	private NavigationView m_view = null;
@@ -194,15 +194,15 @@ public class NavigationFragment extends Fragment {
 						Toast.LENGTH_LONG).show();
 			}
 			return true;
-		case R.id.checkable_gyroscope:
-			if (m_gyroscope == null) {
+		case R.id.checkable_accelerometer:
+			if (m_accelerometer == null) {
 				item.setChecked(true);
-				m_gyroscope = new Gyroscope(getActivity(), m_levelHandler);
-				m_gyroscope.activate();
+				m_accelerometer = new NavigationAccelerometer(getActivity(), m_levelHandler);
+				m_accelerometer.activate();
 			} else {
 				item.setChecked(false);
-				m_gyroscope.desactivate();
-				m_gyroscope = null;
+				m_accelerometer.desactivate();
+				m_accelerometer = null;
 			}
 			return true;
 		default:
@@ -233,16 +233,16 @@ public class NavigationFragment extends Fragment {
 	public void onPause() {
 		m_view.saveMatrix(m_prefs);
 		m_callback.onLevelChange(m_level);
-		if (m_gyroscope != null) {
-			m_gyroscope.desactivate();
+		if (m_accelerometer != null) {
+			m_accelerometer.desactivate();
 		}
 		super.onPause();
 	}
 
 	@Override
 	public void onResume() {
-		if (m_gyroscope != null) {
-			m_gyroscope.activate();
+		if (m_accelerometer != null) {
+			m_accelerometer.activate();
 		}
 		super.onResume();
 	}

@@ -2,6 +2,7 @@ package fr.upem.deadhal.view;
 
 import android.content.Context;
 import android.view.MotionEvent;
+import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
 
@@ -22,13 +23,9 @@ public class NavigationView extends AbstractView {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		m_gestureDetector.onTouchEvent(event);
-
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN:
-
-			if (!move(event)) {
-				getProcess(event);
-			}
+			getProcess(event);
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
 			initZoom(event);
@@ -38,49 +35,54 @@ public class NavigationView extends AbstractView {
 			cancel();
 			break;
 		case MotionEvent.ACTION_MOVE:
-			if (!move(event)) {
-				switch (m_mode) {
-				case DRAG:
-					drag(event);
-					break;
-				case NONE:
-					break;
-				case RESIZE_ROOM:
-					break;
-				case ZOOM:
-					zoom(event);
-					break;
-				default:
-					break;
-				}
+			switch (m_mode) {
+			case DRAG:
+				drag(event);
+				break;
+			case MOVE:
+				move(event);
+				break;
+			case ZOOM:
+				zoom(event);
+				break;
+			case NONE:
+				getProcess(event);
+				break;
+			default:
+				break;
 			}
 			break;
-
 		}
-
 		refresh();
-
 		return true;
 	}
 
-	private boolean move(MotionEvent event) {
+	private void move(MotionEvent event) {
 		if (event.getPointerCount() == 1) {
 			float[] pts = convertCoordinates(event);
-			if (m_mode == TouchEvent.NONE
-					&& (m_levelHandler.move(pts[0], pts[1]) || m_levelHandler
-							.getRoomFromCoordinates(pts[0], pts[1]) != null)) {
-				setMode(TouchEvent.NONE);
-				return true;
-			}
+			m_levelHandler.move(pts[0], pts[1]);
 		}
-		return false;
 	}
 
-	private void getProcess(MotionEvent event) {
+	private void getProcess(MotionEvent event) {		
 		m_mode = TouchEvent.DRAG;
-		m_savedMatrix.set(m_matrix);
-		m_start.set(event.getX(), event.getY());
-		m_lastEvent = null;
+
+		float[] pts = convertCoordinates(event);
+		Room roomFromCoordinates = m_levelHandler.getRoomFromCoordinates(
+				pts[0], pts[1]);
+		if (roomFromCoordinates != null
+				&& roomFromCoordinates.equals(m_levelHandler
+						.getSelectedRoom())) {
+			m_mode = TouchEvent.MOVE;
+		} else {
+			if (roomFromCoordinates != null) {
+				// need to do this in order to display the error message
+				move(event);
+			}
+			m_savedMatrix.set(m_matrix);
+			m_start.set(event.getX(), event.getY());
+			m_lastEvent = null;
+		}
 	}
 
 }

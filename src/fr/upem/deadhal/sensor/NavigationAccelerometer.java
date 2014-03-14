@@ -31,7 +31,8 @@ public class NavigationAccelerometer implements SensorEventListener {
 	}
 
 	public void activate() {
-		Sensor m_sensor = m_sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		Sensor m_sensor = m_sensorManager
+				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		m_sensorManager.registerListener(this, m_sensor,
 				SensorManager.SENSOR_DELAY_GAME);
 		lockScreenOrientation();
@@ -107,7 +108,7 @@ public class NavigationAccelerometer implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		if (m_levelHandler.getLocalisationRoom() != null) {
+		if (m_levelHandler.getSelectedRoom() != null) {
 			float x = 0, y = 0;
 
 			Matrix matrix = new Matrix();
@@ -139,8 +140,8 @@ public class NavigationAccelerometer implements SensorEventListener {
 				break;
 			}
 
-			x += m_levelHandler.getLocalisationX();
-			y += m_levelHandler.getLocalisationY();
+			x += m_levelHandler.getLocalisation().x;
+			y += m_levelHandler.getLocalisation().y;
 
 			m_levelHandler.moveWithSensor(x, y);
 		}

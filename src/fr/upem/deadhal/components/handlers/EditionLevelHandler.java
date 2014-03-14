@@ -42,7 +42,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 
 	public boolean selectRoom(Room room) {
 		if (room.equals(m_selectedRoom)) {
-			for (SelectionRoomListener listener : selectionRoomListeners) {
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
 				listener.onUnselectRoom(getLevel().getRooms().get(
 						m_selectedRoom.getId()));
 			}
@@ -50,13 +50,13 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 			refreshView();
 			return false;
 		} else if (m_selectedRoom != null) {
-			for (SelectionRoomListener listener : selectionRoomListeners) {
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
 				listener.onUnselectRoom(getLevel().getRooms().get(
 						m_selectedRoom.getId()));
 				listener.onSelectRoom(getLevel().getRooms().get(room.getId()));
 			}
 		} else {
-			for (SelectionRoomListener listener : selectionRoomListeners) {
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
 				listener.onSelectRoom(getLevel().getRooms().get(room.getId()));
 			}
 		}
@@ -67,7 +67,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 
 	public void selectRoomFromCoordinates(float x, float y) {
 		if (m_selectedRoom != null && m_selectedRoom.getRect().contains(x, y)) {
-			for (SelectionRoomListener listener : selectionRoomListeners) {
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
 				listener.onUnselectRoom(m_selectedRoom);
 			}
 			m_selectedRoom = null;
@@ -78,11 +78,11 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		for (Room room : reverseRooms) {
 			if (!room.equals(m_selectedRoom) && room.getRect().contains(x, y)) {
 				if (m_selectedRoom != null) {
-					for (SelectionRoomListener listener : selectionRoomListeners) {
+					for (SelectionRoomListener listener : m_selectionRoomListeners) {
 						listener.onUnselectRoom(m_selectedRoom);
 					}
 				}
-				for (SelectionRoomListener listener : selectionRoomListeners) {
+				for (SelectionRoomListener listener : m_selectionRoomListeners) {
 					listener.onSelectRoom(room);
 				}
 				m_selectedRoom = room;

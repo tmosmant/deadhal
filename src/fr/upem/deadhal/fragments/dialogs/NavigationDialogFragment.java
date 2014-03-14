@@ -61,8 +61,8 @@ public class NavigationDialogFragment extends DialogFragment {
 
 		m_spinnerStart = new Spinner(getActivity(), Spinner.MODE_DIALOG);
 		m_spinnerStart.setAdapter(arrayAdapter);
-		Room localisationRoom = m_levelHandler.getLocalisationRoom();
-		int lastIndexOf = rooms.lastIndexOf(localisationRoom);
+		Room selectedRoom = m_levelHandler.getSelectedRoom();
+		int lastIndexOf = rooms.lastIndexOf(selectedRoom);
 		if (lastIndexOf != -1) {
 			m_spinnerStartPosition = lastIndexOf;
 		}

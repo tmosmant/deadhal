@@ -51,12 +51,12 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 	}
 
 	public void drawLocalisation(Canvas canvas) {
-		Room localisationRoom = m_levelHandler.getLocalisationRoom();
-		if (localisationRoom != null) {
+		Room selectedRoom = m_levelHandler.getSelectedRoom();
+		if (selectedRoom != null) {
 			canvas.drawBitmap(localisationBitmap(),
-					m_levelHandler.getLocalisationX()
+					m_levelHandler.getLocalisation().x
 							- localisationBitmap().getWidth() / 2,
-					m_levelHandler.getLocalisationY()
+					m_levelHandler.getLocalisation().y
 							- localisationBitmap().getHeight() / 2,
 					Paints.LOCALISATION);
 		}

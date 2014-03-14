@@ -48,7 +48,6 @@ public class NavigationFragment extends Fragment {
 	private NavigationView m_view = null;
 	private NavigationLevelHandler m_levelHandler = null;
 
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -109,10 +108,12 @@ public class NavigationFragment extends Fragment {
 
 			@Override
 			public void onSelectRoom(Room room) {
+				m_view.getVibrator().vibrate(100);
 			}
 
 			@Override
 			public void onUnselectRoom(Room room) {
+				m_view.getVibrator().vibrate(100);
 			}
 		});
 
@@ -197,7 +198,8 @@ public class NavigationFragment extends Fragment {
 		case R.id.checkable_accelerometer:
 			if (m_accelerometer == null) {
 				item.setChecked(true);
-				m_accelerometer = new NavigationAccelerometer(getActivity(), m_levelHandler);
+				m_accelerometer = new NavigationAccelerometer(getActivity(),
+						m_levelHandler);
 				m_accelerometer.activate();
 			} else {
 				item.setChecked(false);

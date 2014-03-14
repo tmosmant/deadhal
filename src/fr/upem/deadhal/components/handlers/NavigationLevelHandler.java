@@ -11,6 +11,7 @@ import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
+import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.view.TouchEvent;
 
 public class NavigationLevelHandler extends AbstractLevelHandler {
@@ -19,10 +20,9 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 
 	private Room m_roomStart;
 	private Room m_roomEnd;
-	private Room m_localisationRoom;
+	private Room m_selectedRoom;
 	private List<UUID> m_shortestPath = new ArrayList<UUID>();
-	private float m_localisationX;
-	private float m_localisationY;
+	private PointF m_localisation = new PointF();
 	private long m_timestampError = 0;
 
 	private PointF m_start = new PointF();
@@ -64,36 +64,33 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		this.m_shortestPath = m_path;
 	}
 
-	public void selectRoomFromCoordinates(float x, float y) {
-		Room room = getRoomFromCoordinates(x, y);
-		if (room != null && room.equals(m_localisationRoom)) {
-			m_localisationRoom = null;
-			m_view.getVibrator().vibrate(100);
-		} else if (room != null) {
-			handleMove(x, y);
-			m_localisationRoom = room;
-			m_view.getVibrator().vibrate(100);
-		}
-	}
-
 	private void handleMove(float x, float y) {
 		m_start.set(x, y);
-		m_localisationX = x;
-		m_localisationY = y;
+		m_localisation.set(x, y);
 		refreshView();
 	}
 
-	public Room getLocalisationRoom() {
-		return m_localisationRoom;
+	public Room getSelectedRoom() {
+		return m_selectedRoom;
 	}
 
-	public void setLocalisationRoom(Room localisationRoom) {
-		m_localisationRoom = localisationRoom;
+	public void selectRoom(Room room) {
+		if (room != null) {
+			m_selectedRoom = room;
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
+				listener.onSelectRoom(room);
+			}
+		} else {
+			m_selectedRoom = null;
+			for (SelectionRoomListener listener : m_selectionRoomListeners) {
+				listener.onUnselectRoom(room);
+			}
+		}
 	}
 
 	public void moveWithSensor(float x, float y) {
-		if (m_localisationRoom != null) {
-			RectF rect = m_localisationRoom.getRect();
+		if (m_selectedRoom != null) {
+			RectF rect = m_selectedRoom.getRect();
 			if (rect.contains(x, y)) {
 				handleMove(x, y);
 			} else {
@@ -108,24 +105,24 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 
 	public boolean move(float x, float y) {
 		Room room = getRoomFromCoordinates(x, y);
-		if (room != null && m_localisationRoom != null) {
-			if (room.equals(m_localisationRoom)) {
+		if (room != null && m_selectedRoom != null) {
+			if (room.equals(m_selectedRoom)) {
 				handleMove(x, y);
 				return true;
 			} else {
 				for (Corridor corridor : m_level.getCorridors().values()) {
-					if (corridor.getSrc().equals(m_localisationRoom.getId())
+					if (corridor.getSrc().equals(m_selectedRoom.getId())
 							&& corridor.getDst().equals(room.getId())) {
-						m_localisationRoom = room;
+						selectRoom(room);
 						handleMove(x, y);
 						m_view.getVibrator().vibrate(100);
 						return true;
 					}
 					if (!corridor.isDirected()) {
 						if (corridor.getDst()
-								.equals(m_localisationRoom.getId())
+								.equals(m_selectedRoom.getId())
 								&& corridor.getSrc().equals(room.getId())) {
-							m_localisationRoom = room;
+							selectRoom(room);
 							handleMove(x, y);
 							m_view.getVibrator().vibrate(100);
 							return true;
@@ -152,12 +149,8 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		return false;
 	}
 
-	public float getLocalisationX() {
-		return m_localisationX;
-	}
-
-	public float getLocalisationY() {
-		return m_localisationY;
+	public PointF getLocalisation() {
+		return m_localisation;
 	}
 
 }

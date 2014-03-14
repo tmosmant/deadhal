@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
@@ -22,6 +24,8 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	private float m_localisationX;
 	private float m_localisationY;
 	private long m_timestampError = 0;
+
+	private PointF m_start = new PointF();
 
 	public NavigationLevelHandler(Level level) {
 		super(level);
@@ -73,6 +77,7 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	}
 
 	private void handleMove(float x, float y) {
+		m_start.set(x, y);
 		m_localisationX = x;
 		m_localisationY = y;
 		refreshView();
@@ -84,6 +89,21 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 
 	public void setLocalisationRoom(Room localisationRoom) {
 		m_localisationRoom = localisationRoom;
+	}
+
+	public void moveWithSensor(float x, float y) {
+		if (m_localisationRoom != null) {
+			RectF rect = m_localisationRoom.getRect();
+			if (rect.contains(x, y)) {
+				handleMove(x, y);
+			} else {
+				if (rect.contains(m_start.x, y)) {
+					handleMove(m_start.x, y);
+				} else if (rect.contains(x, m_start.y)) {
+					handleMove(x, m_start.y);
+				}
+			}
+		}
 	}
 
 	public boolean move(float x, float y) {

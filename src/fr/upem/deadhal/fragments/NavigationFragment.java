@@ -1,6 +1,11 @@
 package fr.upem.deadhal.fragments;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
@@ -9,11 +14,12 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.hardware.Sensor;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.*;
+import android.view.GestureDetector;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +31,8 @@ import fr.upem.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.fragments.dialogs.NavigationDialogFragment;
-import fr.upem.deadhal.fragments.listeners.NavigationSensorEventListener;
 import fr.upem.deadhal.graphics.drawable.NavigationLevelDrawable;
+import fr.upem.deadhal.sensor.NavigationAccelerometer;
 import fr.upem.deadhal.tasks.ShortestPathTask;
 import fr.upem.deadhal.view.NavigationView;
 import fr.upem.deadhal.view.listeners.NavigationGestureListener;
@@ -36,15 +42,12 @@ public class NavigationFragment extends Fragment {
 	private static final int NAV_DIALOG = 1;
 
 	private Level m_level = null;
+	private NavigationAccelerometer m_accelerometer = null;
 	private DrawerMainListener m_callback;
 	private SharedPreferences m_prefs = null;
 	private NavigationView m_view = null;
-
-	private Sensor m_sensor = null;
-	private boolean m_gyroscope = false;
-	private SensorManager m_sensorManager = null;
 	private NavigationLevelHandler m_levelHandler = null;
-	private SensorEventListener m_sensorEventListener = null;
+
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -102,8 +105,6 @@ public class NavigationFragment extends Fragment {
 		m_view.build(gestureDetector, savedInstanceState, m_prefs);
 		relativeLayout.addView(m_view);
 
-		m_sensorManager = (SensorManager) getActivity().getSystemService(
-				Context.SENSOR_SERVICE);
 		m_levelHandler.addSelectionRoomListener(new SelectionRoomListener() {
 
 			@Override
@@ -193,14 +194,16 @@ public class NavigationFragment extends Fragment {
 						Toast.LENGTH_LONG).show();
 			}
 			return true;
-		case R.id.checkable_gyroscope:
-			m_gyroscope = !m_gyroscope;
-			if (m_gyroscope) {
-				activateGyroscope();
+		case R.id.checkable_accelerometer:
+			if (m_accelerometer == null) {
+				item.setChecked(true);
+				m_accelerometer = new NavigationAccelerometer(getActivity(), m_levelHandler);
+				m_accelerometer.activate();
 			} else {
-				desactivateGyroscope();
+				item.setChecked(false);
+				m_accelerometer.desactivate();
+				m_accelerometer = null;
 			}
-			item.setChecked(m_gyroscope);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -226,32 +229,20 @@ public class NavigationFragment extends Fragment {
 				"navigationDialog");
 	}
 
-	private void activateGyroscope() {
-		m_sensor = m_sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		m_sensorEventListener = new NavigationSensorEventListener(
-				getActivity(), m_levelHandler);
-		m_sensorManager.registerListener(m_sensorEventListener, m_sensor,
-				SensorManager.SENSOR_DELAY_GAME);
-	}
-
-	private void desactivateGyroscope() {
-		m_sensorManager.unregisterListener(m_sensorEventListener);
-	}
-
 	@Override
 	public void onPause() {
 		m_view.saveMatrix(m_prefs);
 		m_callback.onLevelChange(m_level);
-		if (m_gyroscope) {
-			desactivateGyroscope();
+		if (m_accelerometer != null) {
+			m_accelerometer.desactivate();
 		}
 		super.onPause();
 	}
 
 	@Override
 	public void onResume() {
-		if (m_gyroscope) {
-			activateGyroscope();
+		if (m_accelerometer != null) {
+			m_accelerometer.activate();
 		}
 		super.onResume();
 	}

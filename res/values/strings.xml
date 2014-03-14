@@ -60,8 +60,10 @@
     <string name="start_end">Start = end !</string>
     <string name="need_at_least_2_rooms">Need at least 2 rooms !</string>
     <string name="this_move_isn_t_possible">This move isn\'t possible !</string>
-    <string name="an_error_occured">"An error occured : "</string>
+    <string name="an_error_occured">"An error occurred : "</string>
     <string name="error_memory">Unable to access memory</string>
-    <string name="gyroscope">Gyroscope</string>
+    <string name="accelerometer">Accelerometer</string>
+    <string name="screen_lock">Screen rotation deactivated.</string>
+    <string name="screen_unlock">Screen rotation activated.</string>
 
 </resources>

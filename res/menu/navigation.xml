@@ -12,9 +12,9 @@
             android:showAsAction="ifRoom"
             android:title="@string/action_edition"/>
     <item
-            android:id="@+id/checkable_gyroscope"
+            android:id="@+id/checkable_accelerometer"
             android:showAsAction="ifRoom"
             android:checkable="true"
-            android:title="@string/gyroscope"/>
+            android:title="@string/accelerometer"/>
 
 </menu>

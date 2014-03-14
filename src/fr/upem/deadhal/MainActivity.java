@@ -1,7 +1,5 @@
 package fr.upem.deadhal;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -24,6 +22,8 @@ import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.drawers.models.DrawerMainItem;
 import fr.upem.deadhal.fragments.*;
 import fr.upem.deadhal.utils.Storage;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity implements DrawerMainListener {
 
@@ -109,23 +109,21 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		m_drawerLayout.setDrawerListener(m_drawerToggle);
 
 		if (savedInstanceState == null) {
-			// on first time display view for edition item
 			displayView(FragmentType.NAVIGATION);
-		}
-
-		if (m_level == null || m_level.getRooms().size() == 0) {
 			m_drawerLayout.openDrawer(Gravity.LEFT);
 		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(m_menu, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
 		// toggle nav drawer on selecting action bar app icon/title
 		if (m_drawerToggle.onOptionsItemSelected(item)) {
 			return true;
@@ -142,13 +140,14 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
 		// if nav drawer is opened, hide the action items
 		boolean drawerOpen = m_drawerLayout.isDrawerOpen(m_drawerList);
 		switch (m_menu) {
 		case R.menu.navigation:
 			menu.findItem(R.id.action_start_navigation).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_unlock).setVisible(!drawerOpen);
-			menu.findItem(R.id.checkable_gyroscope).setVisible(!drawerOpen);
+			menu.findItem(R.id.checkable_accelerometer).setVisible(!drawerOpen);
 			break;
 		case R.menu.edition:
 			menu.findItem(R.id.action_list_objects).setVisible(!drawerOpen);
@@ -163,7 +162,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			break;
 		}
 
-		return super.onPrepareOptionsMenu(menu);
+		return true;
 	}
 
 	public void displayView(FragmentType fragmentType) {
@@ -232,6 +231,12 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		m_drawerToggle.syncState();
+
+		if (m_level.getRooms().size() == 0) {
+			// on first time display view for edition item
+			displayView(FragmentType.NAVIGATION);
+			m_drawerLayout.openDrawer(Gravity.LEFT);
+		}
 	}
 
 	@Override
@@ -244,12 +249,14 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		outState.putParcelable("level", m_level);
 		outState.putInt("menu", m_menu);
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
+		m_level = savedInstanceState.getParcelable("level");
 		m_menu = savedInstanceState.getInt("menu");
 		invalidateOptionsMenu();
 	}

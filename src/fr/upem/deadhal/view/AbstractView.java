@@ -242,21 +242,27 @@ public abstract class AbstractView extends View {
 		m_levelHandler.endProcess();
 	}
 
-	public float[] convertCoordinates(MotionEvent event) {
+	public float[] convertCoordinates(float x, float y) {
 		Matrix inverse = new Matrix();
-
 		m_matrix.invert(inverse);
-
-		float[] pts = new float[2];
-
-		pts[0] = event.getX(0);
-		pts[1] = event.getY(0);
-
+		float[] pts = { x, y };
 		inverse.mapPoints(pts);
 		return pts;
 	}
 
+	public float[] convertCoordinates(MotionEvent event) {
+		return convertCoordinates(event.getX(0), event.getY(0));
+	}
+
 	public Vibrator getVibrator() {
 		return m_vibrator;
+	}
+
+	public float getRotation() {
+		float[] values = new float[9];
+		m_matrix.getValues(values);
+		return Math.round(Math.atan2(values[Matrix.MSKEW_X],
+				values[Matrix.MSCALE_X]) * (180 / Math.PI));
+
 	}
 }

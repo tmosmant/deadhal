@@ -1,6 +1,7 @@
 package fr.upem.deadhal.fragments.listeners;
 
 import android.app.Activity;
+import android.graphics.Matrix;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,27 +27,39 @@ public class NavigationSensorEventListener implements SensorEventListener {
 	public void onSensorChanged(SensorEvent event) {
 		if (m_levelHandler.getLocalisationRoom() != null) {
 			float x = 0, y = 0;
+
+			Matrix matrix = new Matrix();
+			matrix.postRotate(m_levelHandler.getView().getRotation());
+			Matrix inverse = new Matrix();
+			matrix.invert(inverse);
+
+			float[] convertCoordinates = { event.values[0], event.values[1] };
+
+			inverse.mapPoints(convertCoordinates);
+
 			switch (activity.getWindowManager().getDefaultDisplay()
 					.getRotation()) {
 			case Surface.ROTATION_0:
-				x = -event.values[0];
-				y = event.values[1];
+				x = -convertCoordinates[0];
+				y = convertCoordinates[1];
 				break;
 			case Surface.ROTATION_90:
-				x = event.values[1];
-				y = event.values[0];
+				x = convertCoordinates[0];
+				y = convertCoordinates[1];
 				break;
 			case Surface.ROTATION_180:
-				x = event.values[0];
-				y = -event.values[1];
+				x = convertCoordinates[0];
+				y = -convertCoordinates[1];
 				break;
 			case Surface.ROTATION_270:
-				x = -event.values[1];
-				y = -event.values[0];
+				x = -convertCoordinates[1];
+				y = -convertCoordinates[0];
 				break;
 			}
+
 			x += m_levelHandler.getLocalisationX();
 			y += m_levelHandler.getLocalisationY();
+
 			m_levelHandler.moveWithSensor(x, y);
 		}
 	}

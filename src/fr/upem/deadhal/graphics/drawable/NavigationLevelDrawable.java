@@ -2,12 +2,9 @@ package fr.upem.deadhal.graphics.drawable;
 
 import java.util.Collection;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
@@ -17,7 +14,6 @@ import fr.upem.deadhal.graphics.Paints;
 public class NavigationLevelDrawable extends AbstractLevelDrawable {
 
 	private NavigationLevelHandler m_levelHandler;
-	private Bitmap m_localisationBitmap;
 
 	public NavigationLevelDrawable(NavigationLevelHandler levelHandler) {
 		super(levelHandler);
@@ -39,8 +35,6 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 		if (roomEnd != null) {
 			drawSelectedRoom(canvas, roomEnd, Paints.ROOM_END_BACKGROUND);
 		}
-		drawLocalisation(canvas);
-
 		for (Corridor corridor : level.getCorridors().values()) {
 			if (m_levelHandler.getShortestPath().contains(corridor.getId())) {
 				drawCorridor(canvas, corridor, Paints.CORRIDOR_HIGHLIGHT);
@@ -48,28 +42,7 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 				drawCorridor(canvas, corridor, Paints.CORRIDOR);
 			}
 		}
-	}
-
-	public void drawLocalisation(Canvas canvas) {
-		Room selectedRoom = m_levelHandler.getSelectedRoom();
-		if (selectedRoom != null) {
-			canvas.drawBitmap(localisationBitmap(),
-					m_levelHandler.getLocalisation().x
-							- localisationBitmap().getWidth() / 2,
-					m_levelHandler.getLocalisation().y
-							- localisationBitmap().getHeight() / 2,
-					Paints.LOCALISATION);
-		}
-	}
-
-	private Bitmap localisationBitmap() {
-		// no need to synchronize, this isn't static
-		if (m_localisationBitmap == null) {
-			m_localisationBitmap = BitmapFactory.decodeResource(m_levelHandler
-					.getView().getResources(),
-					R.drawable.ic_action_location_found);
-		}
-		return m_localisationBitmap;
+		m_levelHandler.getPawn().draw(canvas);
 	}
 
 	private void drawSelectedRoom(Canvas canvas, Room room, Paint paint) {

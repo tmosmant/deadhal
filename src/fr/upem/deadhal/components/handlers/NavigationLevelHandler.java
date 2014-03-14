@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import android.graphics.PointF;
-import android.graphics.RectF;
 import android.widget.Toast;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.components.Room;
 import fr.upem.deadhal.components.listeners.SelectionRoomListener;
+import fr.upem.deadhal.graphics.drawable.Pawn;
 import fr.upem.deadhal.view.TouchEvent;
 
 public class NavigationLevelHandler extends AbstractLevelHandler {
@@ -22,10 +21,8 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	private Room m_roomEnd;
 	private Room m_selectedRoom;
 	private List<UUID> m_shortestPath = new ArrayList<UUID>();
-	private PointF m_localisation = new PointF();
 	private long m_timestampError = 0;
-
-	private PointF m_start = new PointF();
+	private Pawn m_pawn = new Pawn(this);
 
 	public NavigationLevelHandler(Level level) {
 		super(level);
@@ -64,12 +61,6 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		this.m_shortestPath = m_path;
 	}
 
-	private void handleMove(float x, float y) {
-		m_start.set(x, y);
-		m_localisation.set(x, y);
-		refreshView();
-	}
-
 	public Room getSelectedRoom() {
 		return m_selectedRoom;
 	}
@@ -89,42 +80,28 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void moveWithSensor(float x, float y) {
-		if (m_selectedRoom != null) {
-			RectF rect = m_selectedRoom.getRect();
-			if (rect.contains(x, y)) {
-				handleMove(x, y);
-			} else {
-				if (rect.contains(m_start.x, y)) {
-					handleMove(m_start.x, y);
-				} else if (rect.contains(x, m_start.y)) {
-					handleMove(x, m_start.y);
-				}
-			}
-		}
+		m_pawn.slide(x, y);
 	}
 
 	public boolean move(float x, float y) {
 		Room room = getRoomFromCoordinates(x, y);
 		if (room != null && m_selectedRoom != null) {
 			if (room.equals(m_selectedRoom)) {
-				handleMove(x, y);
+				m_pawn.handleMove(x, y);
 				return true;
 			} else {
 				for (Corridor corridor : m_level.getCorridors().values()) {
 					if (corridor.getSrc().equals(m_selectedRoom.getId())
 							&& corridor.getDst().equals(room.getId())) {
 						selectRoom(room);
-						handleMove(x, y);
-						m_view.getVibrator().vibrate(100);
+						m_pawn.handleMove(x, y);
 						return true;
 					}
 					if (!corridor.isDirected()) {
-						if (corridor.getDst()
-								.equals(m_selectedRoom.getId())
+						if (corridor.getDst().equals(m_selectedRoom.getId())
 								&& corridor.getSrc().equals(room.getId())) {
 							selectRoom(room);
-							handleMove(x, y);
-							m_view.getVibrator().vibrate(100);
+							m_pawn.handleMove(x, y);
 							return true;
 						}
 					}
@@ -136,6 +113,7 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 				}
 			}
 		}
+		m_pawn.slide(x, y);
 		return false;
 	}
 
@@ -149,8 +127,7 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		return false;
 	}
 
-	public PointF getLocalisation() {
-		return m_localisation;
+	public Pawn getPawn() {
+		return m_pawn;
 	}
-
 }

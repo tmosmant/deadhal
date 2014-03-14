@@ -70,7 +70,7 @@ public abstract class AbstractLevelHandler {
 
 	public abstract void endProcess();
 
-	protected void refreshView() {
+	public void refreshView() {
 		if (m_view != null) {
 			m_view.refresh();
 		}

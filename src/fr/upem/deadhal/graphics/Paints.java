@@ -1,5 +1,6 @@
 package fr.upem.deadhal.graphics;
 
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 
@@ -15,7 +16,9 @@ public class Paints {
 	public final static Paint ROOM_END_BACKGROUND = new Paint();
 	public final static Paint CORRIDOR = new Paint();
 	public final static Paint CORRIDOR_HIGHLIGHT = new Paint();
-	public final static Paint LOCALISATION = new Paint();
+	public final static Paint LOCALISATION_INTERN = new Paint();
+	public final static Paint LOCALISATION_MIDDLE = new Paint();
+	public final static Paint LOCALISATION_EXTERN = new Paint();
 
 	public final static Paint ROOM_TITLE = new Paint();
 
@@ -57,12 +60,12 @@ public class Paints {
 		ROOM_TITLE.setTextAlign(Align.CENTER);
 		ROOM_TITLE.setAntiAlias(true);
 		ROOM_TITLE.setAlpha(255);
-		
+
 		ROOM_START_BACKGROUND.setColor(Colors.GREEN);
 		ROOM_START_BACKGROUND.setStyle(Paint.Style.FILL);
 		ROOM_START_BACKGROUND.setAntiAlias(true);
 		ROOM_START_BACKGROUND.setAlpha(255);
-				
+
 		ROOM_END_BACKGROUND.setColor(Colors.RED);
 		ROOM_END_BACKGROUND.setStyle(Paint.Style.FILL);
 		ROOM_END_BACKGROUND.setAntiAlias(true);
@@ -80,9 +83,20 @@ public class Paints {
 		CORRIDOR_HIGHLIGHT.setAntiAlias(true);
 		CORRIDOR_HIGHLIGHT.setAlpha(255);
 
-		LOCALISATION.setColor(Colors.BLACK);
-		LOCALISATION.setAntiAlias(true);
-		LOCALISATION.setAlpha(255);
+		LOCALISATION_INTERN.setColor(Color.WHITE);
+		LOCALISATION_INTERN.setStyle(Paint.Style.FILL);
+		LOCALISATION_INTERN.setAntiAlias(true);
+		LOCALISATION_INTERN.setAlpha(255);
+
+		LOCALISATION_MIDDLE.setColor(Colors.BLUE);
+		LOCALISATION_MIDDLE.setStyle(Paint.Style.FILL);
+		LOCALISATION_MIDDLE.setAntiAlias(true);
+		LOCALISATION_MIDDLE.setAlpha(255);
+
+		LOCALISATION_EXTERN.setColor(Colors.BLACK);
+		LOCALISATION_EXTERN.setStyle(Paint.Style.FILL);
+		LOCALISATION_EXTERN.setAntiAlias(true);
+		LOCALISATION_EXTERN.setAlpha(255);
 	}
 
 	public static void setAntiAlias(boolean aa) {
@@ -97,7 +111,9 @@ public class Paints {
 		ROOM_TITLE.setAntiAlias(aa);
 		CORRIDOR.setAntiAlias(aa);
 		CORRIDOR_HIGHLIGHT.setAntiAlias(aa);
-		LOCALISATION.setAntiAlias(aa);
+		LOCALISATION_INTERN.setAntiAlias(aa);
+		LOCALISATION_MIDDLE.setAntiAlias(aa);
+		LOCALISATION_EXTERN.setAntiAlias(aa);
 	}
 
 	private Paints() {

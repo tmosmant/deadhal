@@ -140,8 +140,8 @@ public class NavigationAccelerometer implements SensorEventListener {
 				break;
 			}
 
-			x += m_levelHandler.getLocalisation().x;
-			y += m_levelHandler.getLocalisation().y;
+			x += m_levelHandler.getPawn().getPosition().x;
+			y += m_levelHandler.getPawn().getPosition().y;
 
 			m_levelHandler.moveWithSensor(x, y);
 		}

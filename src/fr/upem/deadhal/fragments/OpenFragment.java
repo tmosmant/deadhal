@@ -62,7 +62,9 @@ public class OpenFragment extends Fragment implements
 				files);
 		if (savedInstanceState != null) {
 			int position = savedInstanceState.getInt("position");
-			onClick(position);
+			if (position != -1) {
+				onClick(position);
+			}
 		}
 	}
 

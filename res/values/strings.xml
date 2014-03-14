@@ -62,5 +62,6 @@
     <string name="this_move_isn_t_possible">This move isn\'t possible !</string>
     <string name="an_error_occured">"An error occured : "</string>
     <string name="error_memory">Unable to access memory</string>
+    <string name="gyroscope">Gyroscope</string>
 
 </resources>

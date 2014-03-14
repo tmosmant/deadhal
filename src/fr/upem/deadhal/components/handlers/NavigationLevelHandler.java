@@ -61,22 +61,14 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void selectRoomFromCoordinates(float x, float y) {
-		if (m_localisationRoom != null
-				&& m_localisationRoom.getRect().contains(x, y)) {
+		Room room = getRoomFromCoordinates(x, y);
+		if (room != null && room.equals(m_localisationRoom)) {
 			m_localisationRoom = null;
-			refreshView();
 			m_view.getVibrator().vibrate(100);
-			return;
-		}
-		List<Room> reverseRooms = reverseRooms();
-		for (Room room : reverseRooms) {
-			if (!room.equals(m_localisationRoom)
-					&& room.getRect().contains(x, y)) {
-				m_localisationRoom = room;
-				handleMove(x, y);
-				m_view.getVibrator().vibrate(100);
-				return;
-			}
+		} else if (room != null) {
+			handleMove(x, y);
+			m_localisationRoom = room;
+			m_view.getVibrator().vibrate(100);
 		}
 	}
 
@@ -147,4 +139,5 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	public float getLocalisationY() {
 		return m_localisationY;
 	}
+
 }

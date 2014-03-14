@@ -232,7 +232,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		m_drawerToggle.syncState();
 
-		if (m_level.getRooms().size() == 0) {
+		if (savedInstanceState == null && m_level.getRooms().size() == 0) {
 			// on first time display view for edition item
 			displayView(FragmentType.NAVIGATION);
 			m_drawerLayout.openDrawer(Gravity.LEFT);

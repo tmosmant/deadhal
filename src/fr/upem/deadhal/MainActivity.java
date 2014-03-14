@@ -1,7 +1,5 @@
 package fr.upem.deadhal;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -24,6 +22,8 @@ import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.deadhal.drawers.models.DrawerMainItem;
 import fr.upem.deadhal.fragments.*;
 import fr.upem.deadhal.utils.Storage;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity implements DrawerMainListener {
 
@@ -249,12 +249,14 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		outState.putParcelable("level", m_level);
 		outState.putInt("menu", m_menu);
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
+		m_level = savedInstanceState.getParcelable("level");
 		m_menu = savedInstanceState.getInt("menu");
 		invalidateOptionsMenu();
 	}

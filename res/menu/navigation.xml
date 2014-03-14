@@ -13,7 +13,7 @@
             android:title="@string/action_edition"/>
     <item
             android:id="@+id/checkable_accelerometer"
-            android:showAsAction="ifRoom"
+            android:showAsAction="withText"
             android:checkable="true"
             android:title="@string/accelerometer"/>
 

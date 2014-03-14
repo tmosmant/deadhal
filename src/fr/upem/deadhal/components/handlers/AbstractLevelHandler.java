@@ -16,7 +16,7 @@ import fr.upem.deadhal.view.TouchEvent;
 public abstract class AbstractLevelHandler {
 
 	protected Level m_level;
-	protected List<SelectionRoomListener> selectionRoomListeners = new LinkedList<SelectionRoomListener>();
+	protected List<SelectionRoomListener> m_selectionRoomListeners = new LinkedList<SelectionRoomListener>();
 	protected AbstractView m_view;
 
 	public AbstractLevelHandler(Level level) {
@@ -32,11 +32,11 @@ public abstract class AbstractLevelHandler {
 	}
 
 	public void addSelectionRoomListener(SelectionRoomListener listener) {
-		selectionRoomListeners.add(listener);
+		m_selectionRoomListeners.add(listener);
 	}
 
 	public void removeSelectionRoomListener(SelectionRoomListener listener) {
-		selectionRoomListeners.remove(listener);
+		m_selectionRoomListeners.remove(listener);
 	}
 
 	public void addRoom(Room room) {

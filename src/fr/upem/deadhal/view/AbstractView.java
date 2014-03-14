@@ -205,8 +205,6 @@ public abstract class AbstractView extends View {
 		if (m_lastEvent != null && event.getPointerCount() >= 2) {
 			m_newRotation = rotation(event);
 			float r = m_newRotation - m_distance;
-			float[] values = new float[9];
-			m_matrix.getValues(values);
 
 			float xc = m_middle.x;
 			float yc = m_middle.y;

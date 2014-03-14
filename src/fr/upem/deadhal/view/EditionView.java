@@ -2,7 +2,6 @@ package fr.upem.deadhal.view;
 
 import android.content.Context;
 import android.graphics.Matrix;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -76,8 +75,6 @@ public class EditionView extends AbstractView {
 		if (m_lastEvent != null && event.getPointerCount() >= 2) {
 			m_newRotation = rotation(event);
 			float r = m_newRotation - m_distance;
-			float[] values = new float[9];
-			m_matrix.getValues(values);
 
 			float xc = m_middle.x;
 			float yc = m_middle.y;
@@ -89,8 +86,6 @@ public class EditionView extends AbstractView {
 		if (m_lastEvent != null && event.getPointerCount() >= 2) {
 			m_newRotation = rotation(event);
 			float r = (m_newRotation - m_distance);
-			float[] values = new float[9];
-			m_levelHandler.getSelectedRoom().getMatrix().getValues(values);
 			RectF rect = m_levelHandler.getSelectedRoom().getRect();
 			m_levelHandler.getSelectedRoom().getMatrix()
 					.postRotate(r, rect.centerX(), rect.centerY());
@@ -182,34 +177,30 @@ public class EditionView extends AbstractView {
 		final float[] pts = { x, y };
 		m_savedInverseMatrix.mapPoints(pts);
 
-		// Calculate the distance moved
-//		final float dx = pts[0] - m_start.x;
-//		final float dy = pts[1] - m_start.y;
-
 		Matrix inverse = new Matrix();
-		m_levelHandler.getSelectedRoom().getMatrix().invert(inverse);
-		
-		float[] pts2 = { pts[0] , pts[1] };
+		Matrix matrix = m_levelHandler.getSelectedRoom().getMatrix();
+		matrix.invert(inverse);
+
+		float[] pts2 = { pts[0], pts[1], m_start.x, m_start.y };
 		inverse.mapPoints(pts2);
-		float[] pts3 = { m_start.x , m_start.y };
-		inverse.mapPoints(pts3);
 
-		float dx = pts2[0] - pts3[0];
-		float dy = pts2[1] - pts3[1];
-		
-		
-		
-		final Point point = m_levelHandler.resizeSelectedRoom(dx, dy);
+		float dx = pts2[0] - pts2[2];
+		float dy = pts2[1] - pts2[3];
 
-		
+		System.out.println(pts2[1] + " - " + pts2[3] + " = " + dy);
+
+		m_levelHandler.resizeSelectedRoom(dx, dy);
+
+		m_start.set(pts[0], pts[1]);
+
 		// Avoid to store coordinates when the resize reach the min
 		// size
-		if (point.x != 0) {
-			m_start.x = pts[0];
-		}
-		if (point.y != 0) {
-			m_start.y = pts[1];
-		}
+		// if (point.x != 0) {
+		// m_start.x = pts[0];
+		// }
+		// if (point.y != 0) {
+		// m_start.y = pts[1];
+		// }
 	}
 
 	private void dragRoom(MotionEvent event) {
@@ -219,13 +210,16 @@ public class EditionView extends AbstractView {
 		float[] pts = { x, y };
 		m_savedInverseMatrix.mapPoints(pts);
 
-		// Calculate the distance moved
-		final float dx = pts[0] - m_start.x;
-		final float dy = pts[1] - m_start.y;
+		Matrix inverse = new Matrix();
+		m_levelHandler.getSelectedRoom().getMatrix().invert(inverse);
 
-		m_levelHandler.getSelectedRoom().getMatrix().postTranslate(dx, dy);
+		float[] pts2 = { pts[0], pts[1], m_start.x, m_start.y };
+		inverse.mapPoints(pts2);
 
-//		 m_levelHandler.translateSelectedRoom(dx, dy);
+		float dx = pts2[0] - pts2[2];
+		float dy = pts2[1] - pts2[3];
+
+		m_levelHandler.translateSelectedRoom(dx, dy);
 
 		// Remember this touch position for the next move
 		// event

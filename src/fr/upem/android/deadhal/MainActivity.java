@@ -118,7 +118,9 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(m_menu, menu);
+		if (m_menu != -1) {
+			getMenuInflater().inflate(m_menu, menu);
+		}
 		return true;
 	}
 
@@ -154,10 +156,9 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			menu.findItem(R.id.action_list_objects).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_lock).setVisible(!drawerOpen);
 			break;
-		case R.menu.save:
-			break;
 		case R.menu.edition_corridor:
-			menu.findItem(R.id.action_directed_corridors).setVisible(!drawerOpen);
+			menu.findItem(R.id.action_directed_corridors).setVisible(
+					!drawerOpen);
 			menu.findItem(R.id.action_end_corridors).setVisible(!drawerOpen);
 			break;
 		default:
@@ -189,7 +190,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 				Toast.makeText(getApplicationContext(), R.string.error_memory,
 						Toast.LENGTH_LONG).show();
 			}
-			m_menu = R.menu.save;
+			m_menu = -1;
 			break;
 		case SAVE:
 			if (Storage.isExternalStorageWritable()) {
@@ -199,7 +200,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 				Toast.makeText(getApplicationContext(), R.string.error_memory,
 						Toast.LENGTH_LONG).show();
 			}
-			m_menu = R.menu.save;
+			m_menu = -1;
 			break;
 		case EDITION_CORRIDOR:
 			fragment = new EditionCorridorFragment();

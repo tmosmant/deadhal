@@ -3,8 +3,6 @@ package fr.upem.android.deadhal.components.handlers;
 import java.util.List;
 import java.util.UUID;
 
-import android.graphics.PointF;
-import android.graphics.RectF;
 import android.widget.Toast;
 import fr.upem.android.deadhal.components.Corridor;
 import fr.upem.android.deadhal.components.Level;
@@ -16,8 +14,6 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 	private Room m_start;
 	private Room m_end;
 	private boolean m_directed = false;
-	private PointF m_startPoint;
-	private PointF m_endPoint;
 
 	public EditionCorridorLevelHandler(Level level) {
 		super(level);
@@ -46,35 +42,27 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 		return m_start != null && m_end != null;
 	}
 
-	private void setRoom(Room room, PointF point) {
+	private void setRoom(Room room) {
 		m_view.getVibrator().vibrate(100);
 
 		if (m_start == null) {
 			m_start = room;
-			RectF rect = room.getRect();
-			m_startPoint = new PointF(point.x - rect.left, point.y - rect.top);
 		} else if (m_start.equals(room)) {
 			Toast.makeText(m_view.getContext(),
 					"Corridors are only available between two rooms.",
 					Toast.LENGTH_SHORT).show();
 			m_start = null;
-			m_startPoint = null;
 		} else if (corridorBetween(m_start, room)) {
 			Toast.makeText(m_view.getContext(),
 					"There is already a corridor between those rooms.",
 					Toast.LENGTH_SHORT).show();
 			m_start = null;
-			m_startPoint = null;
 		} else {
 			m_end = room;
-			RectF rect = room.getRect();
-			m_endPoint = new PointF(point.x - rect.left, point.y - rect.top);
 			Corridor corridor = new Corridor(UUID.randomUUID(),
-					m_start.getId(), m_end.getId(), m_directed, m_startPoint,
-					m_endPoint);
+					m_start.getId(), m_end.getId(), m_directed);
 			m_level.addCorridor(corridor);
 			m_start = m_end = null;
-			m_startPoint = m_endPoint = null;
 		}
 		refreshView();
 	}
@@ -94,11 +82,10 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void selectRoomFromCoordinates(float x, float y) {
-		PointF pointF = new PointF(x, y);
 		List<Room> reverseRooms = reverseRooms();
 		for (Room room : reverseRooms) {
-			if (room.getRect().contains(pointF.x, pointF.y)) {
-				setRoom(room, pointF);
+			if (room.getRect().contains(x, y)) {
+				setRoom(room);
 				return;
 			}
 		}

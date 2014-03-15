@@ -1,21 +1,16 @@
 package fr.upem.android.deadhal.tasks;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.util.UUID;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import fr.upem.android.deadhal.components.Corridor;
 import fr.upem.android.deadhal.components.Level;
 import fr.upem.android.deadhal.components.Room;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.*;
+import java.util.UUID;
 
 public class OpenTask extends AsyncTask<File, Integer, Level> {
 
@@ -121,16 +116,9 @@ public class OpenTask extends AsyncTask<File, Integer, Level> {
 		UUID corridorId = UUID.fromString(xpp.getAttributeValue(null, "id"));
 		UUID src = UUID.fromString(xpp.getAttributeValue(null, "src"));
 		UUID dst = UUID.fromString(xpp.getAttributeValue(null, "dst"));
-		boolean directed = Boolean.valueOf(xpp.getAttributeValue(null,
-				"directed"));
-		String[] split = xpp.getAttributeValue(null, "srcPoint").split(",");
-		PointF srcPoint = new PointF(Float.valueOf(split[0]),
-				Float.valueOf(split[1]));
-		split = xpp.getAttributeValue(null, "dstPoint").split(",");
-		PointF dstPoint = new PointF(Float.valueOf(split[0]),
-				Float.valueOf(split[1]));
-		Corridor corridor = new Corridor(corridorId, src, dst, directed,
-				srcPoint, dstPoint);
+		boolean directed = Boolean.valueOf(xpp.getAttributeValue(null, "directed"));
+
+		Corridor corridor = new Corridor(corridorId, src, dst, directed);
 		m_level.addCorridor(corridor);
 	}
 }

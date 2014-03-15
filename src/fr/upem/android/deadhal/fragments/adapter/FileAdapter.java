@@ -1,10 +1,6 @@
 package fr.upem.android.deadhal.fragments.adapter;
 
-import java.io.File;
-import java.util.List;
-
 import android.app.Activity;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import fr.upem.deadhal.R;
 
+import java.io.File;
+import java.util.List;
+
 public class FileAdapter extends ArrayAdapter<File> {
 
 	private final int resource;
 	private final Activity activity;
 	private final List<File> files;
-	private int m_selectedItemId = -1;
 
 	public FileAdapter(Activity activity, int resource, List<File> files) {
 		super(activity, resource, files);
@@ -41,10 +39,6 @@ public class FileAdapter extends ArrayAdapter<File> {
 		return position;
 	}
 
-	public boolean hasCheckedItem() {
-		return m_selectedItemId != -1;
-	}
-
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
@@ -65,43 +59,11 @@ public class FileAdapter extends ArrayAdapter<File> {
 		File file = files.get(position);
 		holder.fileName.setText(file.getName());
 
-		if (m_selectedItemId == position) {
-			listView.setBackgroundColor(activity.getResources().getColor(
-					android.R.color.holo_blue_light));
-		} else {
-			listView.setBackgroundColor(Color.TRANSPARENT);
-		}
-
 		return listView;
 	}
 
-	public void toggleSelection(int position) {
-		if (m_selectedItemId == position) {
-			unselectView(position);
-		} else {
-			selectView(position);
-		}
-	}
-
 	public void removeSelection() {
-		m_selectedItemId = -1;
 		notifyDataSetChanged();
-	}
-
-	public void selectView(int position) {
-		removeSelection();
-		m_selectedItemId = position;
-		notifyDataSetChanged();
-	}
-
-	public void unselectView(int position) {
-		removeSelection();
-		m_selectedItemId = -1;
-		notifyDataSetChanged();
-	}
-
-	public int getSelectedId() {
-		return m_selectedItemId;
 	}
 
 	private static class ViewHolder {

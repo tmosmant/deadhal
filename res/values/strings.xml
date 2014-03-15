@@ -49,6 +49,14 @@
         <item>@drawable/ic_action_save_dark</item>
     </array>
 
+    <string-array
+            name="open_options">
+        <item>Rename</item>
+        <item>Delete</item>
+        <item>Share</item>
+        <item>Validate</item>
+    </string-array>
+
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="deleted_file">File deleted</string>
     <string name="saved_file">File has been saved</string>

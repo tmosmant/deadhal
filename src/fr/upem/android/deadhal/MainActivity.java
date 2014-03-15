@@ -16,13 +16,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import fr.upem.android.deadhal.components.Level;
+import fr.upem.android.deadhal.drawers.adapters.DrawerMainListAdapter;
+import fr.upem.android.deadhal.drawers.listeners.DrawerMainListener;
+import fr.upem.android.deadhal.drawers.models.DrawerMainItem;
+import fr.upem.android.deadhal.fragments.*;
+import fr.upem.android.deadhal.utils.Storage;
 import fr.upem.deadhal.R;
-import fr.upem.deadhal.components.Level;
-import fr.upem.deadhal.drawers.adapters.DrawerMainListAdapter;
-import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
-import fr.upem.deadhal.drawers.models.DrawerMainItem;
-import fr.upem.deadhal.fragments.*;
-import fr.upem.deadhal.utils.Storage;
 
 import java.util.ArrayList;
 

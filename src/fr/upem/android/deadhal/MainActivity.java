@@ -1,4 +1,4 @@
-package fr.upem.deadhal;
+package fr.upem.android.deadhal;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Level;
 import fr.upem.deadhal.drawers.adapters.DrawerMainListAdapter;
 import fr.upem.deadhal.drawers.listeners.DrawerMainListener;
@@ -156,6 +157,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		case R.menu.save:
 			break;
 		case R.menu.edition_corridor:
+			menu.findItem(R.id.action_directed_corridors).setVisible(!drawerOpen);
 			menu.findItem(R.id.action_end_corridors).setVisible(!drawerOpen);
 			break;
 		default:

@@ -27,7 +27,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import fr.upem.deadhal.MainActivity;
+import android.widget.Toast;
+import fr.upem.android.deadhal.MainActivity;
 import fr.upem.deadhal.R;
 import fr.upem.deadhal.components.Corridor;
 import fr.upem.deadhal.components.Level;
@@ -134,7 +135,7 @@ public class EditionFragment extends Fragment {
 				super.onDrawerOpened(drawerView);
 			}
 		});
-		
+
 		m_drawerLayout.closeDrawers();
 
 		m_levelTitleEditText = (EditText) m_rootView
@@ -213,13 +214,18 @@ public class EditionFragment extends Fragment {
 				Type type = item.getType();
 				switch (type) {
 				case ADD_CORRIDOR:
-					m_drawerList.setItemChecked(position, false);
 
-					m_drawerLayout.closeDrawers();
-
-					MainActivity activity = (MainActivity) getActivity();
-					activity.displayView(FragmentType.EDITION_CORRIDOR);
+					if (m_level.getRooms().size() >= 2) {
+						m_drawerLayout.closeDrawers();
+						MainActivity activity = (MainActivity) getActivity();
+						activity.displayView(FragmentType.EDITION_CORRIDOR);
+					} else {
+						Toast.makeText(getActivity(),
+								R.string.need_at_least_two_rooms,
+								Toast.LENGTH_SHORT).show();
+					}
 					m_levelHandler.unselectRoom();
+					m_drawerList.setItemChecked(position, false);
 
 					break;
 				case ADD_ROOM:

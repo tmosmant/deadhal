@@ -65,5 +65,6 @@
     <string name="accelerometer">Accelerometer</string>
     <string name="screen_lock">Screen rotation deactivated.</string>
     <string name="screen_unlock">Screen rotation activated.</string>
+    <string name="need_at_least_two_rooms">Need at least two rooms.</string>
 
 </resources>

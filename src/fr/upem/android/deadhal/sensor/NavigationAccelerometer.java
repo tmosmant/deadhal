@@ -17,6 +17,12 @@ import fr.upem.deadhal.R;
 
 public class NavigationAccelerometer implements SensorEventListener {
 
+	private static boolean ms_activated = false;
+
+	public static boolean isActivated() {
+		return ms_activated;
+	}
+
 	private Activity m_activity;
 	private NavigationLevelHandler m_levelHandler;
 
@@ -31,6 +37,7 @@ public class NavigationAccelerometer implements SensorEventListener {
 	}
 
 	public void activate() {
+		ms_activated = true;
 		Sensor m_sensor = m_sensorManager
 				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		m_sensorManager.registerListener(this, m_sensor,
@@ -39,6 +46,7 @@ public class NavigationAccelerometer implements SensorEventListener {
 	}
 
 	public void desactivate() {
+		ms_activated = false;
 		m_sensorManager.unregisterListener(this);
 		unlockScreenOrientation();
 	}

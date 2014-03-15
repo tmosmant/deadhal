@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 import fr.upem.android.deadhal.components.Room;
 import fr.upem.android.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.android.deadhal.graphics.drawable.NavigationLevelDrawable;
+import fr.upem.android.deadhal.sensor.NavigationAccelerometer;
 
 public class NavigationView extends AbstractView {
 
@@ -75,7 +76,8 @@ public class NavigationView extends AbstractView {
 		float[] pts = convertCoordinates(event);
 		Room roomFromCoordinates = m_levelHandler.getRoomFromCoordinates(
 				pts[0], pts[1]);
-		if (roomFromCoordinates != null && move(event, false)) {
+		if (!NavigationAccelerometer.isActivated()
+				&& roomFromCoordinates != null && move(event, false)) {
 			m_mode = TouchEvent.MOVE;
 		} else {
 			m_savedMatrix.set(m_matrix);

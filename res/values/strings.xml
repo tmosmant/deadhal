@@ -10,7 +10,7 @@
     <string name="save">Save</string>
     <string name="not_yet_implemented">Not yet implemented.</string>
     <string name="action_new">New</string>
-    <string name="action_remove">Remove</string>
+    <string name="action_remove">Delete ?</string>
     <string name="action_undo">Undo</string>
     <string name="room">Room</string>
     <string name="corridor">Corridor</string>

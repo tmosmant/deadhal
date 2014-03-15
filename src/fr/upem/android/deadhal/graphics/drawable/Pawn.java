@@ -1,13 +1,13 @@
 package fr.upem.android.deadhal.graphics.drawable;
 
-import fr.upem.android.deadhal.components.Room;
-import fr.upem.android.deadhal.components.handlers.NavigationLevelHandler;
-import fr.upem.android.deadhal.graphics.Paints;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import fr.upem.android.deadhal.components.Room;
+import fr.upem.android.deadhal.components.handlers.NavigationLevelHandler;
+import fr.upem.android.deadhal.graphics.Paints;
 
 public class Pawn extends Drawable {
 	private final int m_radiusExtern = 25;
@@ -78,35 +78,38 @@ public class Pawn extends Drawable {
 		Room selectedRoom = m_levelHandler.getSelectedRoom();
 		if (selectedRoom != null) {
 			RectF rect = selectedRoom.getRect();
-
-			if (rect != null) {
-				if (rect.contains(x, y)) {
+			RectF rectCopy = new RectF(rect);
+			// need to do this due to the implementation of RectF.contains().
+			rectCopy.right++;
+			rectCopy.bottom++;
+			if (rectCopy != null) {
+				if (rectCopy.contains(x, y)) {
 					handleMove(x, y);
 				} else {
-					if (rect.contains(m_lastPosition.x, y)) {
-						if (x < rect.left) {
-							m_lastPosition.x = rect.left;
+					if (rectCopy.contains(m_lastPosition.x, y)) {
+						if (x < rectCopy.left) {
+							m_lastPosition.x = rectCopy.left;
 						} else {
-							m_lastPosition.x = rect.right - 1;
+							m_lastPosition.x = rectCopy.right;
 						}
 						handleMove(m_lastPosition.x, y);
-					} else if (rect.contains(x, m_lastPosition.y)) {
-						if (y < rect.top) {
-							m_lastPosition.y = rect.top;
+					} else if (rectCopy.contains(x, m_lastPosition.y)) {
+						if (y < rectCopy.top) {
+							m_lastPosition.y = rectCopy.top;
 						} else {
-							m_lastPosition.y = rect.bottom - 1;
+							m_lastPosition.y = rectCopy.bottom;
 						}
 						handleMove(x, m_lastPosition.y);
 					} else {
-						if (x < rect.left) {
-							m_lastPosition.x = rect.left;
+						if (x < rectCopy.left) {
+							m_lastPosition.x = rectCopy.left;
 						} else {
-							m_lastPosition.x = rect.right - 1;
+							m_lastPosition.x = rectCopy.right;
 						}
-						if (y < rect.top) {
-							m_lastPosition.y = rect.top;
+						if (y < rectCopy.top) {
+							m_lastPosition.y = rectCopy.top;
 						} else {
-							m_lastPosition.y = rect.bottom - 1;
+							m_lastPosition.y = rectCopy.bottom;
 						}
 						handleMove(m_lastPosition.x, m_lastPosition.y);
 					}

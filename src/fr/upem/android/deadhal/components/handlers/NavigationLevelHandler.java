@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import android.graphics.PointF;
+import android.graphics.RectF;
+import android.util.Log;
 import android.widget.Toast;
 import fr.upem.android.deadhal.components.Corridor;
 import fr.upem.android.deadhal.components.Level;
@@ -80,6 +83,65 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void moveWithSensor(float x, float y) {
+
+		for (UUID corridorId : m_selectedRoom.getNeighbors().keySet()) {
+			Corridor corridor = m_level.getCorridors().get(corridorId);
+			if (m_level.getRooms().get(corridor.getSrc())
+					.equals(m_selectedRoom)) {
+				Room roomStart = m_level.getRooms().get(corridor.getSrc());
+				RectF rectStart = roomStart.getRect();
+				Room roomEnd = m_level.getRooms().get(corridor.getDst());
+				RectF rectEnd = roomEnd.getRect();
+
+				PointF srcPoint = new PointF(corridor.getSrcPoint().x
+						+ rectStart.left, corridor.getSrcPoint().y
+						+ rectStart.top);
+				PointF dstPoint = new PointF(corridor.getDstPoint().x
+						+ rectEnd.left, corridor.getDstPoint().y + rectEnd.top);
+
+				PointF pStart = computeIntersection(srcPoint, dstPoint,
+						rectStart);
+				PointF pEnd = computeIntersection(srcPoint, dstPoint, rectEnd);
+
+				RectF hitbox = new RectF(pStart.x - 14, pStart.y - 14,
+						pStart.x + 38, pStart.y + 38);
+
+				if (hitbox.contains(x, y)) {
+					selectRoom(roomEnd);
+					m_pawn.slide(pEnd.x, pEnd.y);
+					return;
+
+				}
+			} else if (m_level.getRooms().get(corridor.getDst())
+					.equals(m_selectedRoom)) {
+				Log.v("deadhal", "test");
+				Room roomStart = m_level.getRooms().get(corridor.getSrc());
+				RectF rectStart = roomStart.getRect();
+				Room roomEnd = m_level.getRooms().get(corridor.getDst());
+				RectF rectEnd = roomEnd.getRect();
+
+				PointF srcPoint = new PointF(corridor.getSrcPoint().x
+						+ rectStart.left, corridor.getSrcPoint().y
+						+ rectStart.top);
+				PointF dstPoint = new PointF(corridor.getDstPoint().x
+						+ rectEnd.left, corridor.getDstPoint().y + rectEnd.top);
+
+				PointF pStart = computeIntersection(srcPoint, dstPoint,
+						rectStart);
+				PointF pEnd = computeIntersection(srcPoint, dstPoint, rectEnd);
+
+				RectF hitbox = new RectF(pEnd.x - 14, pEnd.y - 14, pEnd.x + 38,
+						pEnd.y + 38);
+
+				if (hitbox.contains(x, y)) {
+					selectRoom(roomStart);
+					m_pawn.slide(pStart.x, pStart.y);
+					return;
+
+				}
+			}
+		}
+
 		m_pawn.slide(x, y);
 	}
 

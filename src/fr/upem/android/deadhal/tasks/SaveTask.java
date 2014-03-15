@@ -73,7 +73,8 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 		xmlSerializer.setOutput(writer);
 
 		xmlSerializer.startDocument("UTF-8", null);
-		xmlSerializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
+		xmlSerializer.setFeature(
+				"http://xmlpull.org/v1/doc/features.html#indent-output", true);
 
 		xmlSerializer.startTag("", "level");
 		xmlSerializer.attribute("", "title", level.getTitle());
@@ -97,7 +98,12 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 			xmlSerializer.attribute("", "id", corridor.getId().toString());
 			xmlSerializer.attribute("", "src", corridor.getSrc().toString());
 			xmlSerializer.attribute("", "dst", corridor.getDst().toString());
-			xmlSerializer.attribute("", "directed", String.valueOf(corridor.isDirected()));
+			xmlSerializer.attribute("", "directed",
+					String.valueOf(corridor.isDirected()));
+			xmlSerializer.attribute("", "srcPoint", corridor.getSrcPoint().x
+					+ "," + corridor.getSrcPoint().y);
+			xmlSerializer.attribute("", "dstPoint", corridor.getDstPoint().x
+					+ "," + corridor.getDstPoint().y);
 			xmlSerializer.endTag("", "corridor");
 		}
 		xmlSerializer.endTag("", "level");
@@ -109,7 +115,8 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 	@Override
 	protected void onPostExecute(Integer result) {
 		if (result == 1) {
-			Toast.makeText(activity, R.string.saved_file, Toast.LENGTH_SHORT).show();
+			Toast.makeText(activity, R.string.saved_file, Toast.LENGTH_SHORT)
+					.show();
 		} else {
 			Toast.makeText(activity, m_error, Toast.LENGTH_LONG).show();
 		}

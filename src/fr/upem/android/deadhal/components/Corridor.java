@@ -2,6 +2,7 @@ package fr.upem.android.deadhal.components;
 
 import java.util.UUID;
 
+import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.ParcelUuid;
 import android.os.Parcelable;
@@ -13,12 +14,17 @@ public class Corridor implements Parcelable {
 	private UUID dst;
 	private boolean directed;
 	private double m_weight;
+	private PointF srcPoint;
+	private PointF dstPoint;
 
-	public Corridor(UUID id, UUID src, UUID dst, boolean directed) {
+	public Corridor(UUID id, UUID src, UUID dst, boolean directed,
+			PointF srcPoint, PointF dstPoint) {
 		this.id = id;
 		this.src = src;
 		this.dst = dst;
 		this.directed = directed;
+		this.srcPoint = srcPoint;
+		this.dstPoint = dstPoint;
 	}
 
 	public Corridor(Parcel source) {
@@ -95,5 +101,13 @@ public class Corridor implements Parcelable {
 
 	public double getWeight() {
 		return m_weight;
+	}
+
+	public PointF getSrcPoint() {
+		return srcPoint;
+	}
+
+	public PointF getDstPoint() {
+		return dstPoint;
 	}
 }

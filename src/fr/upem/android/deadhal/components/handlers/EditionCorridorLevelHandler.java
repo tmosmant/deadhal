@@ -73,20 +73,6 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 		refreshView();
 	}
 
-	private boolean corridorBetween(Room start, Room end) {
-		for (Corridor corridor : m_level.getCorridors().values()) {
-			if (corridor.getSrc().equals(start.getId())
-					&& corridor.getDst().equals(end.getId())) {
-				return true;
-			}
-			if (corridor.getDst().equals(start.getId())
-					&& corridor.getSrc().equals(end.getId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public void selectRoomFromCoordinates(float x, float y) {
 		PointF pointF = new PointF(x, y);
 		List<Room> reverseRooms = reverseRooms();

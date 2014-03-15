@@ -3,6 +3,7 @@ package fr.upem.android.deadhal.drawers.adapters;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import fr.upem.android.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.android.deadhal.drawers.models.DrawerEditionItem;
+import fr.upem.android.deadhal.drawers.models.DrawerEditionItem.Type;
 import fr.upem.android.deadhal.fragments.EditionFragment;
+import fr.upem.android.deadhal.fragments.dialogs.RoomOptionsDialogFragment;
 import fr.upem.android.deadhal.view.AbstractView;
 import fr.upem.deadhal.R;
 
@@ -77,7 +80,12 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 		} else {
 			superTitle.setText("");
 			txtTitle.setText(item.getTitle());
-			imgIcon.setImageResource(R.drawable.ic_action_remove_dark);
+			if (item.getType() == Type.CORRIDOR) {
+				imgIcon.setImageResource(R.drawable.ic_action_remove_dark);
+			} else {
+				imgIcon.setImageResource(R.drawable.ic_action_expand);
+
+			}
 			imgIcon.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -86,7 +94,14 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 						removeItem(position, parent, item);
 						break;
 					case ROOM:
-						removeItem(position, parent, item);
+						DialogFragment dialogFragment = RoomOptionsDialogFragment
+								.newInstance(item.getRoom().getName(), item
+										.getRoom().getId());
+						dialogFragment.setTargetFragment(m_editionFragment,
+								EditionFragment.OPTION_DIALOG);
+						dialogFragment.show(m_editionFragment
+								.getFragmentManager().beginTransaction(),
+								"roomOptionsDialog");
 					default:
 						break;
 					}
@@ -104,16 +119,16 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 		switch (item.getType()) {
 		case CORRIDOR:
 			m_levelHandler.removeCorridor(item.getCorridor());
+			m_levelHandler.unselectRoom();
+			m_levelHandler.unselectCorridor();
 			break;
 		case ROOM:
-			m_levelHandler.removeRoom(item.getRoom());
+			m_levelHandler.unselectCorridor();
 			break;
 		default:
 			break;
 		}
 		m_editionFragment.updateDrawer();
-		m_levelHandler.unselectRoom();
-		m_levelHandler.unselectCorridor();
 		m_view.refresh();
 	}
 }

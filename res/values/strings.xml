@@ -54,6 +54,10 @@
         <item>Share</item>
         <item>Delete</item>
     </string-array>
+    <string-array name="room_options">
+        <item>Rename</item>
+        <item>Delete</item>
+    </string-array>
 
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="deleted_file">File deleted</string>
@@ -76,5 +80,6 @@
     <string name="from_">From :</string>
     <string name="to_">To :</string>
     <string name="cancel">Cancel</string>
+    <string name="new_name_for_">"New name for "</string>
 
 </resources>

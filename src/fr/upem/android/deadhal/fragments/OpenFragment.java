@@ -161,9 +161,10 @@ public class OpenFragment extends Fragment implements
 	}
 
 	private void showRenameDialog() {
-		int title = R.string.action_rename;
+		String title = getActivity().getString(R.string.action_rename);
 
-		DialogFragment dialogFragment = InputDialogFragment.newInstance(title);
+		DialogFragment dialogFragment = InputDialogFragment.newInstance(title,
+				null);
 		dialogFragment.setTargetFragment(this, RENAME_DIALOG);
 		dialogFragment.show(getFragmentManager().beginTransaction(),
 				"renameDialog");

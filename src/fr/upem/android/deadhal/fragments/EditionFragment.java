@@ -48,6 +48,8 @@ import fr.upem.deadhal.R;
 public class EditionFragment extends Fragment {
 
 	private static final int ADD_NEW_ROOM = 0;
+	public static final int OPTION_DIALOG = 1;
+	private static final int RENAME_ROOM = 2;
 
 	private DrawerMainListener m_callback;
 
@@ -230,10 +232,11 @@ public class EditionFragment extends Fragment {
 
 					break;
 				case ADD_ROOM:
-					int title = R.string.name_for_this_room;
+					String title = getActivity().getString(
+							R.string.name_for_this_room);
 
 					DialogFragment dialogFragment = InputDialogFragment
-							.newInstance(title);
+							.newInstance(title, null);
 					dialogFragment.setTargetFragment(EditionFragment.this,
 							ADD_NEW_ROOM);
 					dialogFragment.show(
@@ -295,11 +298,50 @@ public class EditionFragment extends Fragment {
 				Room room = new Room(UUID.randomUUID(), name, new RectF(0, 0,
 						150, 150));
 				m_levelHandler.addRoom(room);
-				updateDrawer();
 				m_levelHandler.selectRoom(room);
 			}
 			break;
+		case OPTION_DIALOG:
+			if (resultCode == Activity.RESULT_OK) {
+				int option = data.getIntExtra("option", -1);
+				String strId = data.getStringExtra("id");
+				UUID id = UUID.fromString(strId);
+				switch (option) {
+				case 0:
+					Room room = m_level.getRooms().get(id);
+					String title = getActivity().getString(
+							R.string.new_name_for_);
+
+					DialogFragment dialogFragment = InputDialogFragment
+							.newInstance(title + room.getName() + " :", strId);
+					dialogFragment.setTargetFragment(this,
+							EditionFragment.RENAME_ROOM);
+					dialogFragment.show(
+							getFragmentManager().beginTransaction(),
+							"roomRenameDialog");
+
+					break;
+				case 1:
+					m_levelHandler.removeRoom(m_level.getRooms().get(id));
+					m_levelHandler.unselectRoom();
+					break;
+				default:
+					break;
+				}
+
+			}
+			break;
+		case RENAME_ROOM:
+			if (resultCode == Activity.RESULT_OK) {
+				String name = data.getStringExtra("inputText");
+				String strId = data.getStringExtra("id");
+				Room room = m_level.getRooms().get(UUID.fromString(strId));
+				room.setName(name);
+				m_levelHandler.unselectRoom();
+			}
+			break;
 		}
+		updateDrawer();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 

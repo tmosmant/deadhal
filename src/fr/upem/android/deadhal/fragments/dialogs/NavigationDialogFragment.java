@@ -1,7 +1,6 @@
 package fr.upem.android.deadhal.fragments.dialogs;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import fr.upem.android.deadhal.components.Room;
 import fr.upem.android.deadhal.components.handlers.NavigationLevelHandler;
+import fr.upem.deadhal.R;
 
 public class NavigationDialogFragment extends DialogFragment {
 
@@ -25,12 +25,11 @@ public class NavigationDialogFragment extends DialogFragment {
 	private int m_spinnerEndPosition = 1;
 	private static NavigationLevelHandler m_levelHandler;
 
-	public static NavigationDialogFragment newInstance(int title,
+	public static NavigationDialogFragment newInstance(
 			NavigationLevelHandler levelHandler, ArrayList<Room> rooms) {
 		NavigationDialogFragment.m_levelHandler = levelHandler;
 		NavigationDialogFragment dialogFragment = new NavigationDialogFragment();
 		Bundle bundle = new Bundle();
-		bundle.putInt("title", title);
 		bundle.putParcelableArrayList("rooms", rooms);
 		dialogFragment.setArguments(bundle);
 		return dialogFragment;
@@ -48,7 +47,6 @@ public class NavigationDialogFragment extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		int title = getArguments().getInt("title");
 		ArrayList<Room> rooms = getArguments().getParcelableArrayList("rooms");
 		ArrayAdapter<Room> arrayAdapter = new ArrayAdapter<Room>(getActivity(),
 				android.R.layout.simple_list_item_1, android.R.id.text1, rooms);
@@ -57,7 +55,8 @@ public class NavigationDialogFragment extends DialogFragment {
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 
 		TextView textViewStart = new TextView(getActivity());
-		textViewStart.setText("Start");
+		textViewStart.setText(R.string.from_);
+		textViewStart.setPadding(15, 10, 0, 0);
 
 		m_spinnerStart = new Spinner(getActivity(), Spinner.MODE_DIALOG);
 		m_spinnerStart.setAdapter(arrayAdapter);
@@ -69,14 +68,15 @@ public class NavigationDialogFragment extends DialogFragment {
 		m_spinnerStart.setSelection(m_spinnerStartPosition);
 
 		TextView textViewEnd = new TextView(getActivity());
-		textViewEnd.setText("End");
+		textViewEnd.setText(R.string.to_);
+		textViewEnd.setPadding(15, 0, 0, 0);
 
 		m_spinnerEnd = new Spinner(getActivity(), Spinner.MODE_DIALOG);
 		m_spinnerEnd.setAdapter(arrayAdapter);
-		Random rand = new Random();
-		do {
-			m_spinnerEndPosition = rand.nextInt(rooms.size());
-		} while (m_spinnerStartPosition == m_spinnerEndPosition);
+		m_spinnerEndPosition = 1;
+		if (m_spinnerStartPosition == 1) {
+			m_spinnerEndPosition = 0;
+		}
 		m_spinnerEnd.setSelection(m_spinnerEndPosition);
 
 		linearLayout.addView(textViewStart);
@@ -85,12 +85,10 @@ public class NavigationDialogFragment extends DialogFragment {
 		linearLayout.addView(m_spinnerEnd);
 
 		return new AlertDialog.Builder(getActivity())
-				.setTitle(title)
-				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(R.string.select_route)
 				.setView(linearLayout)
 				.setPositiveButton(android.R.string.ok,
 						new DialogInterface.OnClickListener() {
-
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
@@ -98,7 +96,6 @@ public class NavigationDialogFragment extends DialogFragment {
 										.getSelectedItem();
 								Room end = (Room) m_spinnerEnd
 										.getSelectedItem();
-
 								Intent data = new Intent();
 								data.putExtra("start", start);
 								data.putExtra("end", end);
@@ -106,7 +103,7 @@ public class NavigationDialogFragment extends DialogFragment {
 										getTargetRequestCode(),
 										Activity.RESULT_OK, data);
 							}
-						}).create();
+						}).setNegativeButton(R.string.cancel, null).create();
 	}
 
 	@Override

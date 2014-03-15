@@ -128,7 +128,7 @@ public class NavigationFragment extends Fragment {
 				Room start = data.getParcelableExtra("start");
 				Room end = data.getParcelableExtra("end");
 				if (start.equals(end)) {
-					Toast.makeText(getActivity(), R.string.start_end,
+					Toast.makeText(getActivity(), R.string.same_from_to,
 							Toast.LENGTH_LONG).show();
 				} else {
 					m_levelHandler.setRoomStart(null);
@@ -213,8 +213,6 @@ public class NavigationFragment extends Fragment {
 	}
 
 	private void showNavigationDialog() {
-		int title = R.string.navigation;
-
 		ArrayList<Room> rooms = new ArrayList<Room>(m_level.getRooms().values());
 		Collections.sort(rooms, new Comparator<Room>() {
 
@@ -225,7 +223,7 @@ public class NavigationFragment extends Fragment {
 		});
 
 		DialogFragment dialogFragmentEnd = NavigationDialogFragment
-				.newInstance(title, m_levelHandler, rooms);
+				.newInstance(m_levelHandler, rooms);
 		dialogFragmentEnd.setTargetFragment(this, NAV_DIALOG);
 		dialogFragmentEnd.show(getFragmentManager().beginTransaction(),
 				"navigationDialog");

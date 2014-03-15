@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-            android:id="@+id/action_start_navigation"
-            android:showAsAction="ifRoom"
-            android:icon="@drawable/ic_action_directions"
-            android:title="@string/start_navigation"/>
+        android:id="@+id/action_unlock"
+        android:icon="@drawable/ic_action_secure"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_edition"/>
     <item
-            android:id="@+id/action_unlock"
-            android:icon="@drawable/ic_action_secure"
-            android:showAsAction="ifRoom"
-            android:title="@string/action_edition"/>
+        android:id="@+id/action_start_navigation"
+        android:icon="@drawable/ic_action_directions"
+        android:showAsAction="ifRoom"
+        android:title="@string/start_navigation"/>
     <item
-            android:id="@+id/checkable_accelerometer"
-            android:showAsAction="withText"
-            android:checkable="true"
-            android:title="@string/accelerometer"/>
+        android:id="@+id/checkable_accelerometer"
+        android:checkable="true"
+        android:showAsAction="withText"
+        android:title="@string/accelerometer"/>
 
 </menu>

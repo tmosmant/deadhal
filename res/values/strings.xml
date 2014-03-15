@@ -29,7 +29,7 @@
     <string name="add_room">Add a room&#8230;</string>
     <string name="add_corridor">Add a corridor&#8230;</string>
     <string name="action_list_objects">Open the objects list</string>
-    <string name="action_add">Name for the new room :</string>
+    <string name="name_for_this_room">Name for this room :</string>
     <string name="action_directed">Directed</string>
 
     <!-- Nav Drawer Menu Items -->
@@ -57,7 +57,7 @@
     <string name="start_navigation">Start navigation</string>
     <string name="no_path_found">No path found.</string>
     <string name="follow_the_green_path">Follow the green path.</string>
-    <string name="start_end">Start = end !</string>
+    <string name="same_from_to">Trivial path !</string>
     <string name="need_at_least_2_rooms">Need at least 2 rooms !</string>
     <string name="this_move_isn_t_possible">This move isn\'t possible !</string>
     <string name="an_error_occured">"An error occurred : "</string>
@@ -66,5 +66,9 @@
     <string name="screen_lock">Screen rotation deactivated.</string>
     <string name="screen_unlock">Screen rotation activated.</string>
     <string name="need_at_least_two_rooms">Need at least two rooms.</string>
+    <string name="select_route">Select route</string>
+    <string name="from_">From :</string>
+    <string name="to_">To :</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

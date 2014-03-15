@@ -229,7 +229,7 @@ public class EditionFragment extends Fragment {
 
 					break;
 				case ADD_ROOM:
-					int title = R.string.action_add;
+					int title = R.string.name_for_this_room;
 
 					DialogFragment dialogFragment = InputDialogFragment
 							.newInstance(title);

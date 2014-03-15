@@ -52,9 +52,8 @@
     <string-array
             name="open_options">
         <item>Rename</item>
-        <item>Delete</item>
         <item>Share</item>
-        <item>Validate</item>
+        <item>Delete</item>
     </string-array>
 
     <string name="desc_list_item_icon">Item Icon</string>

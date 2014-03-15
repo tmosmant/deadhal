@@ -84,6 +84,10 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	}
 
 	public boolean move(float x, float y) {
+		return move(x, y, true);
+	}
+
+	public boolean move(float x, float y, boolean mustSlide) {
 		Room room = getRoomFromCoordinates(x, y);
 		if (room != null && m_selectedRoom != null) {
 			if (room.equals(m_selectedRoom)) {
@@ -113,7 +117,9 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 				}
 			}
 		}
-		m_pawn.slide(x, y);
+		if (mustSlide) {
+			m_pawn.slide(x, y);
+		}
 		return false;
 	}
 

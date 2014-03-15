@@ -57,28 +57,27 @@ public class NavigationView extends AbstractView {
 		return true;
 	}
 
-	private void move(MotionEvent event) {
-		if (event.getPointerCount() == 1) {
-			float[] pts = convertCoordinates(event);
-			m_levelHandler.move(pts[0], pts[1]);
-		}
+	private boolean move(MotionEvent event) {
+		return move(event, true);
 	}
 
-	private void getProcess(MotionEvent event) {		
+	private boolean move(MotionEvent event, boolean mustSlide) {
+		if (event.getPointerCount() == 1) {
+			float[] pts = convertCoordinates(event);
+			return m_levelHandler.move(pts[0], pts[1], mustSlide);
+		}
+		return false;
+	}
+
+	private void getProcess(MotionEvent event) {
 		m_mode = TouchEvent.DRAG;
 
 		float[] pts = convertCoordinates(event);
 		Room roomFromCoordinates = m_levelHandler.getRoomFromCoordinates(
 				pts[0], pts[1]);
-		if (roomFromCoordinates != null
-				&& roomFromCoordinates.equals(m_levelHandler
-						.getSelectedRoom())) {
+		if (roomFromCoordinates != null && move(event, false)) {
 			m_mode = TouchEvent.MOVE;
 		} else {
-			if (roomFromCoordinates != null) {
-				// need to do this in order to display the error message
-				move(event);
-			}
 			m_savedMatrix.set(m_matrix);
 			m_start.set(event.getX(), event.getY());
 			m_lastEvent = null;

@@ -33,6 +33,7 @@ public class NavigationGestureListener extends
 			} else {
 				if (selectedRoom == null && selectedRoom == null) {
 					m_levelHandler.selectRoom(roomFromCoordinates);
+					m_levelHandler.getPawn().handleMove(pts[0], pts[1]);
 					m_view.setMode(TouchEvent.MOVE);
 				}
 			}

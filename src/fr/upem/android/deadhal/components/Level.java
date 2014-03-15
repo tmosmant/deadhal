@@ -49,7 +49,7 @@ public class Level implements Parcelable {
 					.getSerializable("corridors");
 		} catch (Exception e) {
 			// handle an exception thrown on samsung devices
-			m_title = "";
+			m_title = null;
 		}
 
 	}

@@ -137,7 +137,8 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		};
 		m_drawerLayout.setDrawerListener(m_drawerToggle);
 
-		if (savedInstanceState == null) {
+		if (savedInstanceState == null || m_level == null
+				|| (m_level != null && m_level.getTitle() == null)) {
 			displayView(FragmentType.NAVIGATION);
 			m_drawerLayout.openDrawer(Gravity.LEFT);
 		}

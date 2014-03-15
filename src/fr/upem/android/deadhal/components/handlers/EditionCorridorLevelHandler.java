@@ -51,7 +51,7 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 
 		if (m_start == null) {
 			m_start = room;
-			RectF rect = room.getRect();
+			RectF rect = m_start.getRect();
 			m_startPoint = new PointF(point.x - rect.left, point.y - rect.top);
 		} else if (m_start.equals(room)) {
 			Toast.makeText(m_view.getContext(),
@@ -59,15 +59,9 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 					Toast.LENGTH_SHORT).show();
 			m_start = null;
 			m_startPoint = null;
-		} else if (corridorBetween(m_start, room)) {
-			Toast.makeText(m_view.getContext(),
-					"There is already a corridor between those rooms.",
-					Toast.LENGTH_SHORT).show();
-			m_start = null;
-			m_startPoint = null;
 		} else {
 			m_end = room;
-			RectF rect = room.getRect();
+			RectF rect = m_end.getRect();
 			m_endPoint = new PointF(point.x - rect.left, point.y - rect.top);
 			Corridor corridor = new Corridor(UUID.randomUUID(),
 					m_start.getId(), m_end.getId(), m_directed, m_startPoint,

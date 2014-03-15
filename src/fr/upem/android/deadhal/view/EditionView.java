@@ -3,6 +3,7 @@ package fr.upem.android.deadhal.view;
 import android.content.Context;
 import android.graphics.Point;
 import android.view.MotionEvent;
+import fr.upem.android.deadhal.components.Corridor;
 import fr.upem.android.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.android.deadhal.graphics.drawable.EditionLevelDrawable;
 
@@ -62,17 +63,20 @@ public class EditionView extends AbstractView {
 	}
 
 	private void resizeRoom(MotionEvent event) {
-		final float x = event.getX();
-		final float y = event.getY();
 
-		final float[] pts = { x, y };
-		m_savedInverseMatrix.mapPoints(pts);
+		final float[] pts = convertCoordinates(event);
 
 		// Calculate the distance moved
 		final float dx = pts[0] - m_start.x;
 		final float dy = pts[1] - m_start.y;
 
+		float scaleWidth = m_levelHandler.getSelectedRoom().getRect().width();
+		float scaleHeight = m_levelHandler.getSelectedRoom().getRect().height();
+
 		final Point point = m_levelHandler.resizeSelectedRoom(dx, dy);
+
+		scaleWidth /= m_levelHandler.getSelectedRoom().getRect().width();
+		scaleHeight /= m_levelHandler.getSelectedRoom().getRect().height();
 
 		// Avoid to store coordinates when the resize reach the min
 		// size
@@ -82,14 +86,25 @@ public class EditionView extends AbstractView {
 		if (point.y != 0) {
 			m_start.y = pts[1];
 		}
+
+		for (Corridor corridor : m_levelHandler.getLevel().getCorridors()
+				.values()) {
+			if (m_levelHandler.getLevel().getRooms().get(corridor.getSrc())
+					.equals(m_levelHandler.getSelectedRoom())) {
+				corridor.getSrcPoint().x /= scaleWidth;
+				corridor.getSrcPoint().y /= scaleHeight;
+			}
+			if (m_levelHandler.getLevel().getRooms().get(corridor.getDst())
+					.equals(m_levelHandler.getSelectedRoom())) {
+				corridor.getDstPoint().x /= scaleWidth;
+				corridor.getDstPoint().y /= scaleHeight;
+			}
+		}
+
 	}
 
 	private void dragRoom(MotionEvent event) {
-		final float x = event.getX();
-		final float y = event.getY();
-
-		float[] pts = { x, y };
-		m_savedInverseMatrix.mapPoints(pts);
+		float[] pts = convertCoordinates(event);
 
 		// Calculate the distance moved
 		final float dx = pts[0] - m_start.x;

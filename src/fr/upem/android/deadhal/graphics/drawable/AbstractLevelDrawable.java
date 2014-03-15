@@ -76,11 +76,14 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		}
 		RectF rectStart = start.getRect();
 		RectF rectEnd = end.getRect();
-		PointF centerStart = new PointF(rectStart.centerX(),
-				rectStart.centerY());
-		PointF centerEnd = new PointF(rectEnd.centerX(), rectEnd.centerY());
-		PointF pStart = computeIntersection(centerStart, centerEnd, rectStart);
-		PointF pEnd = computeIntersection(centerStart, centerEnd, rectEnd);
+
+		PointF srcPoint = new PointF(corridor.getSrcPoint().x + rectStart.left,
+				corridor.getSrcPoint().y + rectStart.top);
+		PointF dstPoint = new PointF(corridor.getDstPoint().x + rectEnd.left,
+				corridor.getDstPoint().y + rectEnd.top);
+
+		PointF pStart = computeIntersection(srcPoint, dstPoint, rectStart);
+		PointF pEnd = computeIntersection(srcPoint, dstPoint, rectEnd);
 		corridor.setWeight(length(pStart, pEnd));
 		if (corridor.isDirected()) {
 			drawArrow(canvas, pStart, pEnd, paint);

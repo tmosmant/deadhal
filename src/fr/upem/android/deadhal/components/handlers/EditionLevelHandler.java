@@ -166,10 +166,11 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void translateSelectedRoom(float dx, float dy) {
-		m_selectedRoom.getRect().left += dx;
-		m_selectedRoom.getRect().top += dy;
-		m_selectedRoom.getRect().right += dx;
-		m_selectedRoom.getRect().bottom += dy;
+		RectF rect = m_selectedRoom.getRect();
+		rect.left += dx;
+		rect.top += dy;
+		rect.right += dx;
+		rect.bottom += dy;
 	}
 
 	private final static Point m_minNone = new Point(1, 1);
@@ -178,6 +179,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	private final static Point m_minBoth = new Point(0, 0);
 
 	public Point resizeSelectedRoom(float dx, float dy) {
+
 		switch (m_resizeType) {
 		case RESIZE_ROOM_LEFT_TOP:
 			if (m_selectedRoom.getRect().left + dx >= m_selectedRoom.getRect().right

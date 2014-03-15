@@ -61,7 +61,8 @@ public class OpenFragment extends Fragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ArrayList<File> m_files = Storage.getFilesList();
-		m_filesAdapter = new FileAdapter(getActivity(), R.layout.list_file, m_files);
+		m_filesAdapter = new FileAdapter(getActivity(), R.layout.list_file,
+				m_files);
 	}
 
 	@Override
@@ -99,32 +100,33 @@ public class OpenFragment extends Fragment implements
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-			case OPTIONS_DIALOG:
-				if (resultCode == Activity.RESULT_OK) {
-					int option = data.getIntExtra("option", -1);
-					switch (option) {
-						case 0:
-							showRenameDialog();
-							break;
-						case 1:
-							showRemoveDialog();
-							break;
-						case 2: share(); break;
-						case 3: open(); break;
-					}
+		case OPTIONS_DIALOG:
+			if (resultCode == Activity.RESULT_OK) {
+				int option = data.getIntExtra("option", -1);
+				switch (option) {
+				case 0:
+					showRenameDialog();
+					break;
+				case 1:
+					share();
+					break;
+				case 2:
+					showRemoveDialog();
+					break;
 				}
-				break;
-			case RENAME_DIALOG:
-				if (resultCode == Activity.RESULT_OK) {
-					String fileName = data.getStringExtra("inputText");
-					rename(fileName);
-				}
-				break;
-			case REMOVE_DIALOG:
-				if (resultCode == Activity.RESULT_OK) {
-					delete(m_selectedFile);
-				}
-				break;
+			}
+			break;
+		case RENAME_DIALOG:
+			if (resultCode == Activity.RESULT_OK) {
+				String fileName = data.getStringExtra("inputText");
+				rename(fileName);
+			}
+			break;
+		case REMOVE_DIALOG:
+			if (resultCode == Activity.RESULT_OK) {
+				delete(m_selectedFile);
+			}
+			break;
 		}
 	}
 

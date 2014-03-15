@@ -3,9 +3,12 @@ package fr.upem.android.deadhal;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -21,9 +24,11 @@ import fr.upem.android.deadhal.drawers.adapters.DrawerMainListAdapter;
 import fr.upem.android.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.android.deadhal.drawers.models.DrawerMainItem;
 import fr.upem.android.deadhal.fragments.*;
+import fr.upem.android.deadhal.tasks.OpenTask;
 import fr.upem.android.deadhal.utils.Storage;
 import fr.upem.deadhal.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity implements DrawerMainListener {
@@ -44,7 +49,27 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		m_level = new Level();
+
+		if (getIntent().getData() != null) {
+			Uri uri = getIntent().getData();
+			File file = new File(uri.getPath());
+
+			OpenTask openTask = new OpenTask();
+			openTask.execute(file);
+
+			try {
+				m_level = openTask.get();
+				SharedPreferences preferences = getSharedPreferences("pref",
+						Context.MODE_PRIVATE);
+				SharedPreferences.Editor ed = preferences.edit();
+				ed.clear();
+				ed.commit();
+			} catch (Exception e) {
+			}
+		} else {
+			m_level = new Level();
+		}
+
 		buildDrawer(savedInstanceState);
 	}
 

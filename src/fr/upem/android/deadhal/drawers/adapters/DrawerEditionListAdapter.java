@@ -113,6 +113,7 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 		}
 		m_editionFragment.updateDrawer();
 		m_levelHandler.unselectRoom();
+		m_levelHandler.unselectCorridor();
 		m_view.refresh();
 	}
 }

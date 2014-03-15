@@ -48,6 +48,10 @@ public class EditionLevelDrawable extends AbstractLevelDrawable {
 		for (Corridor corridor : level.getCorridors().values()) {
 			drawCorridor(canvas, corridor);
 		}
+		Corridor selectedCorridor = m_levelHandler.getSelectedCorridor();
+		if (selectedCorridor != null) {
+			drawCorridor(canvas, selectedCorridor, Paints.CORRIDOR_HIGHLIGHT);
+		}
 	}
 
 	private void drawRoomSelected(Canvas canvas, Room room) {

@@ -48,7 +48,6 @@ import fr.upem.deadhal.R;
 public class EditionFragment extends Fragment {
 
 	private static final int ADD_NEW_ROOM = 0;
-	private static final int ADD_NEW_CORRIDOR = 1;
 
 	private DrawerMainListener m_callback;
 
@@ -171,6 +170,7 @@ public class EditionFragment extends Fragment {
 
 			@Override
 			public void onSelectRoom(Room room) {
+				m_levelHandler.unselectCorridor();
 				m_view.getVibrator().vibrate(100);
 				for (int i = 0; i < m_drawerList.getAdapter().getCount(); i++) {
 					DrawerEditionItem item = (DrawerEditionItem) m_drawerList
@@ -225,6 +225,7 @@ public class EditionFragment extends Fragment {
 								Toast.LENGTH_SHORT).show();
 					}
 					m_levelHandler.unselectRoom();
+					m_levelHandler.unselectCorridor();
 					m_drawerList.setItemChecked(position, false);
 
 					break;
@@ -240,13 +241,20 @@ public class EditionFragment extends Fragment {
 							"addDialog");
 
 					m_levelHandler.unselectRoom();
+					m_levelHandler.unselectCorridor();
 					m_drawerList.setItemChecked(position, false);
 					break;
 				case CORRIDOR:
 					m_levelHandler.unselectRoom();
-					m_drawerList.setItemChecked(position, false);
+					Corridor corridor = item.getCorridor();
+					if (corridor != null) {
+						boolean selectCorridor = m_levelHandler
+								.selectCorridor(corridor);
+						m_drawerList.setItemChecked(position, selectCorridor);
+					}
 					break;
 				case ROOM:
+					m_levelHandler.unselectCorridor();
 					Room room = item.getRoom();
 					if (room != null) {
 						boolean selectRoom = m_levelHandler.selectRoom(room);
@@ -285,16 +293,6 @@ public class EditionFragment extends Fragment {
 			if (resultCode == Activity.RESULT_OK) {
 				String name = data.getStringExtra("inputText");
 				Room room = new Room(UUID.randomUUID(), name, new RectF(0, 0,
-						150, 150));
-				m_levelHandler.addRoom(room);
-				updateDrawer();
-				m_levelHandler.selectRoom(room);
-			}
-			break;
-		case ADD_NEW_CORRIDOR:
-			if (resultCode == Activity.RESULT_OK) {
-				String title = data.getStringExtra("inputText");
-				Room room = new Room(UUID.randomUUID(), title, new RectF(0, 0,
 						150, 150));
 				m_levelHandler.addRoom(room);
 				updateDrawer();

@@ -87,6 +87,7 @@ public class NavigationDialogFragment extends DialogFragment {
 		return new AlertDialog.Builder(getActivity())
 				.setTitle(R.string.select_route)
 				.setView(linearLayout)
+				.setIcon(R.drawable.ic_action_directions)
 				.setPositiveButton(android.R.string.ok,
 						new DialogInterface.OnClickListener() {
 							@Override

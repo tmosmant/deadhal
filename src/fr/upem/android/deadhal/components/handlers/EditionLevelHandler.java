@@ -19,6 +19,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	private Room m_selectedRoom;
 	private ResizeType m_resizeType = null;
 	private final static int MIN_MARGIN = 100;
+	private Corridor m_selectedCorridor;
 
 	public EditionLevelHandler(Level level) {
 		super(level);
@@ -340,6 +341,28 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	public void unselectRoom() {
 		m_selectedRoom = null;
 		refreshView();
+	}
+
+	public boolean selectCorridor(Corridor corridor) {
+		if (m_selectedCorridor == null || !m_selectedCorridor.equals(corridor)) {
+			m_selectedCorridor = corridor;
+			m_view.getVibrator().vibrate(100);
+			refreshView();
+			return true;
+		} else {
+			m_view.getVibrator().vibrate(100);
+			unselectCorridor();
+		}
+		return false;
+	}
+
+	public void unselectCorridor() {
+		m_selectedCorridor = null;
+		refreshView();
+	}
+
+	public Corridor getSelectedCorridor() {
+		return m_selectedCorridor;
 	}
 
 }

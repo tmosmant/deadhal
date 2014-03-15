@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import fr.upem.deadhal.R;
 
 public class ConfirmDialogFragment extends DialogFragment {
 	
@@ -26,22 +27,18 @@ public class ConfirmDialogFragment extends DialogFragment {
 		return new AlertDialog.Builder(getActivity())
 				.setTitle(title)
 				.setMessage(message)
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setPositiveButton(android.R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								getTargetFragment().onActivityResult(
-										getTargetRequestCode(),
-										Activity.RESULT_OK,
-										getActivity().getIntent());
-							}
-						})
-				.setNegativeButton(android.R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-							}
-						}).create();
+				.setIcon(R.drawable.ic_action_warning)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int whichButton) {
+						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,
+						                                     getActivity().getIntent());
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int whichButton) {
+					}
+				}).create();
 	}
 }

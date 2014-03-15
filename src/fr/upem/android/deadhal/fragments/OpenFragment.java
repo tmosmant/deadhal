@@ -6,12 +6,12 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import fr.upem.android.deadhal.components.Level;
@@ -19,6 +19,7 @@ import fr.upem.android.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.android.deadhal.fragments.adapter.FileAdapter;
 import fr.upem.android.deadhal.fragments.dialogs.ConfirmDialogFragment;
 import fr.upem.android.deadhal.fragments.dialogs.InputDialogFragment;
+import fr.upem.android.deadhal.fragments.dialogs.OptionsDialogFragment;
 import fr.upem.android.deadhal.tasks.OpenTask;
 import fr.upem.android.deadhal.utils.Storage;
 import fr.upem.deadhal.R;
@@ -29,16 +30,18 @@ import java.util.Comparator;
 import java.util.concurrent.ExecutionException;
 
 public class OpenFragment extends Fragment implements
-		AdapterView.OnItemClickListener {
+		AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
-	private static final int RENAME_DIALOG = 1;
-	private static final int REMOVE_DIALOG = 2;
+	private static final int OPTIONS_DIALOG = 1;
+	private static final int RENAME_DIALOG = 2;
+	private static final int REMOVE_DIALOG = 3;
 
 	private File m_selectedFile;
 
 	private DrawerMainListener m_callback;
 	private FileAdapter m_filesAdapter;
-	private ActionMode m_actionMode;
+
+	// private ActionMode m_actionMode;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -57,15 +60,8 @@ public class OpenFragment extends Fragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ArrayList<File> files = Storage.getFilesList();
-		m_filesAdapter = new FileAdapter(getActivity(), R.layout.list_file,
-				files);
-		if (savedInstanceState != null) {
-			int position = savedInstanceState.getInt("position");
-			if (position != -1) {
-				onClick(position);
-			}
-		}
+		ArrayList<File> m_files = Storage.getFilesList();
+		m_filesAdapter = new FileAdapter(getActivity(), R.layout.list_file, m_files);
 	}
 
 	@Override
@@ -79,6 +75,7 @@ public class OpenFragment extends Fragment implements
 		ListView m_listView = (ListView) rootView.findViewById(R.id.list_file);
 		m_listView.setAdapter(m_filesAdapter);
 		m_listView.setOnItemClickListener(this);
+		m_listView.setOnItemLongClickListener(this);
 
 		return rootView;
 	}
@@ -86,48 +83,62 @@ public class OpenFragment extends Fragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		onClick(position);
-	}
-
-	private void onClick(int position) {
-		m_filesAdapter.toggleSelection(position);
+		// onClick(position);
 		m_selectedFile = m_filesAdapter.getItem(position);
-		boolean hasCheckedItem = m_filesAdapter.hasCheckedItem();
+		open();
+	}
 
-		if (hasCheckedItem && m_actionMode == null) {
-			// there are some selected items, start the actionMode
-			m_actionMode = getActivity().startActionMode(
-					new ActionModeCallback());
-		} else if (!hasCheckedItem && m_actionMode != null) {
-			// there no selected items, finish the actionMode
-			m_actionMode.finish();
-		}
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view,
+			int position, long id) {
+		m_selectedFile = m_filesAdapter.getItem(position);
+		showOptionsDialog(m_selectedFile.getName());
+		return true;
+	}
 
-		if (m_actionMode != null) {
-			m_actionMode.setTitle(m_selectedFile.getName());
-
-			int doneButtonId = Resources.getSystem().getIdentifier(
-					"action_mode_close_button", "id", "android");
-			LinearLayout layout = (LinearLayout) getActivity().findViewById(
-					doneButtonId);
-			layout.setOnClickListener(buildDoneClickListener(m_selectedFile));
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case OPTIONS_DIALOG:
+				if (resultCode == Activity.RESULT_OK) {
+					int option = data.getIntExtra("option", -1);
+					switch (option) {
+						case 0:
+							showRenameDialog();
+							break;
+						case 1:
+							showRemoveDialog();
+							break;
+						case 2: share(); break;
+						case 3: open(); break;
+					}
+				}
+				break;
+			case RENAME_DIALOG:
+				if (resultCode == Activity.RESULT_OK) {
+					String fileName = data.getStringExtra("inputText");
+					rename(fileName);
+				}
+				break;
+			case REMOVE_DIALOG:
+				if (resultCode == Activity.RESULT_OK) {
+					delete(m_selectedFile);
+				}
+				break;
 		}
 	}
 
-	private View.OnClickListener buildDoneClickListener(final File file) {
-		return new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				m_actionMode.finish();
-				open(file);
-			}
-		};
+	private void showOptionsDialog(String title) {
+		DialogFragment dialogFragment = OptionsDialogFragment
+				.newInstance(title);
+		dialogFragment.setTargetFragment(this, OPTIONS_DIALOG);
+		dialogFragment.show(getFragmentManager().beginTransaction(),
+				"renameDialog");
 	}
 
-	private boolean open(File file) {
+	private boolean open() {
 		OpenTask openTask = new OpenTask();
-		openTask.execute(file);
+		openTask.execute(m_selectedFile);
 
 		try {
 			Level m_level = openTask.get();
@@ -157,7 +168,6 @@ public class OpenFragment extends Fragment implements
 	}
 
 	private void rename(String fileName) {
-		m_actionMode.finish();
 		m_filesAdapter.remove(m_selectedFile);
 		Storage.renameFile(m_selectedFile, fileName);
 		m_filesAdapter.add(Storage.openFile(fileName));
@@ -183,7 +193,6 @@ public class OpenFragment extends Fragment implements
 
 	private void delete(File file) {
 		if (file.delete()) {
-			m_actionMode.finish();
 			m_callback.onFileNumberChange();
 			m_filesAdapter.remove(m_selectedFile);
 
@@ -204,74 +213,4 @@ public class OpenFragment extends Fragment implements
 		startActivity(intent);
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (requestCode) {
-		case RENAME_DIALOG:
-			if (resultCode == Activity.RESULT_OK) {
-				String fileName = data.getStringExtra("inputText");
-				rename(fileName);
-			}
-			break;
-		case REMOVE_DIALOG:
-			if (resultCode == Activity.RESULT_OK) {
-				delete(m_selectedFile);
-			}
-			break;
-		}
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		if (m_actionMode != null) {
-			m_actionMode.finish();
-		}
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putInt("position", m_filesAdapter.getSelectedId());
-	}
-
-	private class ActionModeCallback implements ActionMode.Callback {
-
-		@Override
-		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			// inflate contextual menu
-			mode.getMenuInflater().inflate(R.menu.open, menu);
-			return true;
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			return false;
-		}
-
-		@Override
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			switch (item.getItemId()) {
-			case R.id.action_delete:
-				showRemoveDialog();
-				return true;
-
-			case R.id.action_share:
-				share();
-				m_filesAdapter.removeSelection();
-				return true;
-
-			case R.id.action_rename:
-				showRenameDialog();
-				return true;
-			default:
-				return false;
-			}
-		}
-
-		@Override
-		public void onDestroyActionMode(ActionMode mode) {
-			m_actionMode = null;
-		}
-	}
 }

@@ -1,8 +1,5 @@
 package fr.upem.android.deadhal;
 
-import java.io.File;
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -15,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,19 +24,17 @@ import fr.upem.android.deadhal.components.Level;
 import fr.upem.android.deadhal.drawers.adapters.DrawerMainListAdapter;
 import fr.upem.android.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.android.deadhal.drawers.models.DrawerMainItem;
-import fr.upem.android.deadhal.fragments.EditionCorridorFragment;
-import fr.upem.android.deadhal.fragments.EditionFragment;
-import fr.upem.android.deadhal.fragments.FragmentType;
-import fr.upem.android.deadhal.fragments.NavigationFragment;
-import fr.upem.android.deadhal.fragments.OpenFragment;
-import fr.upem.android.deadhal.fragments.SaveFragment;
+import fr.upem.android.deadhal.fragments.*;
 import fr.upem.android.deadhal.tasks.OpenTask;
 import fr.upem.android.deadhal.utils.Storage;
 import fr.upem.deadhal.R;
 
+import java.io.File;
+import java.util.ArrayList;
+
 public class MainActivity extends Activity implements DrawerMainListener {
 
-	private Level m_level;
+	private Level m_level = null;
 	private boolean m_newLevel = false;
 
 	private DrawerLayout m_drawerLayout;
@@ -54,7 +50,12 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		if (getIntent().getData() != null) {
+
+		if (savedInstanceState != null) {
+			Log.e("savedInstance", "not null");
+		}
+
+		if (savedInstanceState == null && getIntent().getData() != null) {
 			Uri uri = getIntent().getData();
 			File file = new File(uri.getPath());
 
@@ -63,6 +64,18 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 			try {
 				m_level = openTask.get();
+				if (m_level != null) {
+//					if (Storage.fileExists(file.getName())) {
+//						Log.e("create", "already exist");
+//					} else {
+//						file.createNewFile();
+//						SaveTask saveTask = new SaveTask(this, file);
+//						saveTask.execute(m_level);
+//						onFileNumberChange();
+//					}
+					Storage.copyFile(file);
+				}
+
 				SharedPreferences preferences = getSharedPreferences("pref",
 						Context.MODE_PRIVATE);
 				SharedPreferences.Editor ed = preferences.edit();

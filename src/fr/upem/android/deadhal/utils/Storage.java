@@ -1,15 +1,13 @@
 package fr.upem.android.deadhal.utils;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
 import android.annotation.SuppressLint;
 import android.os.Environment;
 import android.util.Log;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Storage {
 
@@ -18,7 +16,8 @@ public class Storage {
 	/* Checks if external storage is available to at least read */
 	public static boolean isExternalStorageReadable() {
 		String state = Environment.getExternalStorageState();
-		return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
+		return Environment.MEDIA_MOUNTED.equals(state)
+				|| Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
 	}
 
 	/* Checks if external storage is available for read and write */
@@ -81,18 +80,21 @@ public class Storage {
 
 	/* Return true if the file exists */
 	public static boolean fileExists(String name) {
-		return new File(getDeadHalDir().getAbsolutePath() + File.separator + name + FILE_EXTENSION).exists();
+		return new File(getDeadHalDir().getAbsolutePath() + File.separator
+				+ name + FILE_EXTENSION).exists();
 	}
 
 	/* Return a file */
 	public static File openFile(String name) {
-		return new File(getDeadHalDir().getAbsolutePath() + File.separator + name + FILE_EXTENSION);
+		return new File(getDeadHalDir().getAbsolutePath() + File.separator
+				+ name + FILE_EXTENSION);
 	}
 
 	/* Return a new file */
 	public static File createFile(String name) {
 		if (isExternalStorageWritable()) {
-			File file = new File(getDeadHalDir().getAbsolutePath() + File.separator + name + FILE_EXTENSION);
+			File file = new File(getDeadHalDir().getAbsolutePath()
+					+ File.separator + name + FILE_EXTENSION);
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
@@ -111,12 +113,48 @@ public class Storage {
 
 	/* Return the deadhal directory (create it if doesn't exists) */
 	private static File getDeadHalDir() {
-		File directory = new File(Environment.getExternalStorageDirectory() + File.separator + "Deadhal");
+		File directory = new File(Environment.getExternalStorageDirectory()
+				+ File.separator + "Deadhal");
 		if (!directory.exists()) {
 			if (!directory.mkdirs()) {
 				Log.e("dir", "Directory not created");
 			}
 		}
 		return directory;
+	}
+
+	/* Copy file to deadhal directory */
+	public static boolean copyFile(File src) throws IOException {
+		if (src.getParent()
+				.equals(getDeadHalDir().getAbsolutePath())) {
+			return true;
+		} else {
+			File newFile;
+			if (fileExists(getFileNameWithoutExtension(src))) {
+				newFile = createFile(getFileNameWithoutExtension(src) + System.currentTimeMillis());
+			} else {
+				newFile = createFile(getFileNameWithoutExtension(src));
+			}
+
+			InputStream is = new FileInputStream(src);
+			OutputStream os = new FileOutputStream(newFile);
+			byte[] buff = new byte[1024];
+			int len;
+			while ((len = is.read(buff)) > 0) {
+				os.write(buff, 0, len);
+			}
+			is.close();
+			os.close();
+		}
+		return true;
+	}
+
+	private static String getFileNameWithoutExtension(File file) {
+		String name = file.getName();
+		int pos = name.lastIndexOf(".");
+		if (pos > 0) {
+			name = name.substring(0, pos);
+		}
+		return name;
 	}
 }

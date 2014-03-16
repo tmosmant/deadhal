@@ -10,8 +10,21 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import fr.upem.deadhal.R;
 
+/**
+ * This class is the option dialog used to display options.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class OptionsDialogFragment extends DialogFragment {
 
+	/**
+	 * Constructs the option dialog.
+	 * 
+	 * @param title
+	 *            the title
+	 * @return the option dialog
+	 */
 	public static OptionsDialogFragment newInstance(String title) {
 		OptionsDialogFragment dialogFragment = new OptionsDialogFragment();
 		Bundle bundle = new Bundle();
@@ -54,6 +67,7 @@ public class OptionsDialogFragment extends DialogFragment {
 		Intent data = new Intent();
 		data.putExtra("option", which);
 
-		getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
+		getTargetFragment().onActivityResult(getTargetRequestCode(),
+				Activity.RESULT_OK, data);
 	}
 }

@@ -15,6 +15,12 @@ import fr.upem.android.deadhal.graphics.drawable.Pawn;
 import fr.upem.android.deadhal.view.TouchEvent;
 import fr.upem.deadhal.R;
 
+/**
+ * This class handle the level for the navigation part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class NavigationLevelHandler extends AbstractLevelHandler {
 
 	private static final int SHORT_DELAY = 2000;
@@ -26,22 +32,50 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	private long m_timestampError = 0;
 	private Pawn m_pawn = new Pawn(this);
 
+	/**
+	 * Constructs the level handler.
+	 * 
+	 * @param level
+	 *            the level to handle
+	 */
 	public NavigationLevelHandler(Level level) {
 		super(level);
 	}
 
+	/**
+	 * Returns the start room for the computation of shortest path.
+	 * 
+	 * @return the start room for the computation of shortest path
+	 */
 	public Room getRoomStart() {
 		return m_roomStart;
 	}
 
+	/**
+	 * Set the start room for the computation of shortest path.
+	 * 
+	 * @param room
+	 *            the room to set
+	 */
 	public void setRoomStart(Room room) {
 		m_roomStart = room;
 	}
 
+	/**
+	 * Returns the end room for the computation of shortest path.
+	 * 
+	 * @return the end room for the computation of shortest path.
+	 */
 	public Room getRoomEnd() {
 		return m_roomEnd;
 	}
 
+	/**
+	 * Set the end room for the computation of shortest path.
+	 * 
+	 * @param room
+	 *            the room to set
+	 */
 	public void setRoomEnd(Room room) {
 		m_roomEnd = room;
 	}
@@ -55,24 +89,49 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	public void endProcess() {
 	}
 
+	/**
+	 * Returns the shortest path.
+	 * 
+	 * @return the shortest path
+	 */
 	public List<UUID> getShortestPath() {
 		return m_shortestPath;
 	}
 
+	/**
+	 * Set the shortest path.
+	 * 
+	 * @param m_path
+	 *            the shortest path to set
+	 */
 	public void setShortestPath(List<UUID> m_path) {
 		m_shortestPath = m_path;
 	}
 
+	/**
+	 * Clears the actual shortest path.
+	 */
 	public void clearShortestPath() {
 		m_shortestPath = new ArrayList<UUID>();
 		m_roomStart = null;
 		m_roomEnd = null;
 	}
 
+	/**
+	 * Returns the selected room.
+	 * 
+	 * @return the selected room
+	 */
 	public Room getSelectedRoom() {
 		return m_selectedRoom;
 	}
 
+	/**
+	 * Toggle the selection of a room.
+	 * 
+	 * @param room
+	 *            the room to select
+	 */
 	public void selectRoom(Room room) {
 		if (room != null) {
 			m_selectedRoom = room;
@@ -87,8 +146,15 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		}
 	}
 
+	/**
+	 * Handle the move of the pawn with a sensor.
+	 * 
+	 * @param x
+	 *            the x coordinate
+	 * @param y
+	 *            the y coordinate
+	 */
 	public void moveWithSensor(float x, float y) {
-
 		for (UUID corridorId : m_selectedRoom.getNeighbors().keySet()) {
 			Corridor corridor = m_level.getCorridors().get(corridorId);
 			if (m_level.getRooms().get(corridor.getSrc())
@@ -109,6 +175,21 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		m_pawn.slide(x, y);
 	}
 
+	/**
+	 * Try to cross a corridor if possible. Handles the hitbox.
+	 * 
+	 * @param corridor
+	 *            the corridor to cross
+	 * @param src
+	 *            the id of the source room
+	 * @param dst
+	 *            the id of the end room
+	 * @param x
+	 *            the x coordinate of the pawn
+	 * @param y
+	 *            the y coordinate of the pawn
+	 * @return true if the pawn can cross the corridor, false otherwise
+	 */
 	public boolean runCorridor(Corridor corridor, UUID src, UUID dst, float x,
 			float y) {
 		PointF srcPoint;
@@ -150,10 +231,30 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		return false;
 	}
 
+	/**
+	 * Move the pawn with sliding on the edge if necessary.
+	 * 
+	 * @param x
+	 *            the x coordinate of the pawn
+	 * @param y
+	 *            the y coordinate of the pawn
+	 * @return true if the pawn moved, false otherwise
+	 */
 	public boolean move(float x, float y) {
 		return move(x, y, true);
 	}
 
+	/**
+	 * Move the pawn with sliding or not on the edge.
+	 * 
+	 * @param x
+	 *            the x coordinate of the pawn
+	 * @param y
+	 *            the y coordinate of the pawn
+	 * @param mustSlide
+	 *            true if the pawn must slide, false otherwise
+	 * @return true if the pawn moved, false otherwise
+	 */
 	public boolean move(float x, float y, boolean mustSlide) {
 		Room room = getRoomFromCoordinates(x, y);
 		if (room != null && m_selectedRoom != null) {
@@ -190,6 +291,11 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		return false;
 	}
 
+	/**
+	 * Returns if an error must be printed, depending on the timestamp.
+	 * 
+	 * @return true if an error must be printed, false otherwise
+	 */
 	private boolean mustPrintError() {
 		long currentTimeMillis = System.currentTimeMillis();
 		if (m_timestampError == 0
@@ -200,6 +306,11 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 		return false;
 	}
 
+	/**
+	 * Returns the pawn.
+	 * 
+	 * @return the pawn
+	 */
 	public Pawn getPawn() {
 		return m_pawn;
 	}

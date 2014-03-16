@@ -16,20 +16,14 @@ import fr.upem.android.deadhal.graphics.drawable.AbstractLevelDrawable;
 
 public abstract class AbstractView extends View {
 
-	// private Drawable m_drawable;
 	private AbstractLevelDrawable m_levelDrawable;
 	protected GestureDetector m_gestureDetector;
 	protected AbstractLevelHandler m_levelHandler;
 
-	// these matrices will be used to move and zoom image
 	protected Matrix m_matrix = new Matrix();
 	protected Matrix m_savedMatrix = new Matrix();
 	protected Matrix m_savedInverseMatrix = new Matrix();
-
-	// we can be in one of these 3 states
 	protected TouchEvent m_mode = TouchEvent.NONE;
-
-	// remember some things for zooming
 	protected PointF m_start = new PointF();
 	protected PointF m_middle = new PointF();
 	protected float m_oldDistance = 1f;

@@ -20,6 +20,12 @@ import fr.upem.android.deadhal.fragments.dialogs.RoomOptionsDialogFragment;
 import fr.upem.android.deadhal.view.AbstractView;
 import fr.upem.deadhal.R;
 
+/**
+ * The adapter for the edition drawer.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class DrawerEditionListAdapter extends BaseAdapter {
 
 	private Context m_context;
@@ -28,6 +34,20 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 	private AbstractView m_view;
 	private EditionFragment m_editionFragment;
 
+	/**
+	 * Constructs the adapter.
+	 * 
+	 * @param context
+	 *            the context
+	 * @param navDrawerItems
+	 *            the items
+	 * @param levelHandler
+	 *            the level handler
+	 * @param view
+	 *            the view
+	 * @param editionFragment
+	 *            the edition fragment
+	 */
 	public DrawerEditionListAdapter(Context context,
 			ArrayList<DrawerEditionItem> navDrawerItems,
 			EditionLevelHandler levelHandler, AbstractView view,
@@ -91,7 +111,7 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 				public void onClick(View v) {
 					switch (item.getType()) {
 					case CORRIDOR:
-						removeItem(position, parent, item);
+						removeItem(position, item);
 						break;
 					case ROOM:
 						DialogFragment dialogFragment = RoomOptionsDialogFragment
@@ -114,8 +134,15 @@ public class DrawerEditionListAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	private void removeItem(final int position, final ViewGroup parent,
-			final DrawerEditionItem item) {
+	/**
+	 * Remove an item from the list.
+	 * 
+	 * @param position
+	 *            the item's position
+	 * @param item
+	 *            the item to remove
+	 */
+	private void removeItem(final int position, final DrawerEditionItem item) {
 		switch (item.getType()) {
 		case CORRIDOR:
 			m_levelHandler.removeCorridor(item.getCorridor());

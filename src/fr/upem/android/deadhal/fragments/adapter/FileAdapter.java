@@ -11,12 +11,28 @@ import fr.upem.deadhal.R;
 import java.io.File;
 import java.util.List;
 
+/**
+ * This item represents a file adapter.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class FileAdapter extends ArrayAdapter<File> {
 
 	private final int resource;
 	private final Activity activity;
 	private final List<File> files;
 
+	/**
+	 * Constructs the file adapter.
+	 * 
+	 * @param activity
+	 *            the activity
+	 * @param resource
+	 *            the resource to inflate
+	 * @param files
+	 *            the file list
+	 */
 	public FileAdapter(Activity activity, int resource, List<File> files) {
 		super(activity, resource, files);
 		this.resource = resource;

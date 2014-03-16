@@ -14,6 +14,12 @@ import fr.upem.android.deadhal.components.Room;
 import fr.upem.android.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.android.deadhal.view.TouchEvent;
 
+/**
+ * This class handle the level for the edition part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class EditionLevelHandler extends AbstractLevelHandler {
 
 	private Room m_selectedRoom;
@@ -21,14 +27,30 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	private final static int MIN_MARGIN = 100;
 	private Corridor m_selectedCorridor;
 
+	/**
+	 * Constructs the level handler.
+	 * 
+	 * @param level
+	 *            the level to handle
+	 */
 	public EditionLevelHandler(Level level) {
 		super(level);
 	}
 
+	/**
+	 * Returns the selected room.
+	 * 
+	 * @return the selected room
+	 */
 	public Room getSelectedRoom() {
 		return m_selectedRoom;
 	}
 
+	/**
+	 * Return the selected room state.
+	 * 
+	 * @return true if there is a selected room, false otherwise
+	 */
 	public boolean isRoomSelected() {
 		return m_selectedRoom != null;
 	}
@@ -41,6 +63,14 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		super.removeRoom(room);
 	}
 
+	/**
+	 * Force the selection a room. If the room to select is already selected,
+	 * unselect it.
+	 * 
+	 * @param room
+	 *            the room to select
+	 * @return true if a room is selected, false otherwise
+	 */
 	public boolean selectRoom(Room room) {
 		if (room.equals(m_selectedRoom)) {
 			for (SelectionRoomListener listener : m_selectionRoomListeners) {
@@ -66,6 +96,14 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		return true;
 	}
 
+	/**
+	 * Selects a room from coordinates.
+	 * 
+	 * @param x
+	 *            the x coordinate
+	 * @param y
+	 *            the y coordinate
+	 */
 	public void selectRoomFromCoordinates(float x, float y) {
 		if (m_selectedRoom != null && m_selectedRoom.getRect().contains(x, y)) {
 			for (SelectionRoomListener listener : m_selectionRoomListeners) {
@@ -93,6 +131,7 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		}
 	}
 
+	@Override
 	public TouchEvent getProcess(float x, float y) {
 		TouchEvent mode = TouchEvent.DRAG;
 
@@ -166,6 +205,14 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		m_resizeType = null;
 	}
 
+	/**
+	 * Translates the position of the selected room.
+	 * 
+	 * @param dx
+	 *            the x distance to add
+	 * @param dy
+	 *            the y distance to add
+	 */
 	public void translateSelectedRoom(float dx, float dy) {
 		RectF rect = m_selectedRoom.getRect();
 		rect.left += dx;
@@ -179,6 +226,15 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 	private final static Point m_minY = new Point(1, 0);
 	private final static Point m_minBoth = new Point(0, 0);
 
+	/**
+	 * Resizes the selected room.
+	 * 
+	 * @param dx
+	 *            the x distance to add
+	 * @param dy
+	 *            the y distance to add
+	 * @return a point used to know which size have been resized
+	 */
 	public Point resizeSelectedRoom(float dx, float dy) {
 
 		switch (m_resizeType) {
@@ -302,10 +358,20 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		return m_minBoth;
 	}
 
+	/**
+	 * Returns the resize type.
+	 * 
+	 * @return the resize type
+	 */
 	public ResizeType getResizeType() {
 		return m_resizeType;
 	}
 
+	/**
+	 * Returns the list of rooms ordered by their name.
+	 * 
+	 * @return the list of rooms ordered by their name
+	 */
 	public List<Room> getRoomByName() {
 		Collection<Room> collection = m_level.getRooms().values();
 
@@ -321,6 +387,11 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		return list;
 	}
 
+	/**
+	 * Returns the list of corridors by their source name.
+	 * 
+	 * @return the list of corridors by their source name
+	 */
 	public List<Corridor> getCorridorBySrc() {
 		Collection<Corridor> collection = m_level.getCorridors().values();
 
@@ -338,11 +409,21 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		return list;
 	}
 
+	/**
+	 * Force the unselection of a room.
+	 */
 	public void unselectRoom() {
 		m_selectedRoom = null;
 		refreshView();
 	}
 
+	/**
+	 * Toggle the selection of a corridor.
+	 * 
+	 * @param corridor
+	 *            the corridor to select
+	 * @return true if a corridor is selected, false otherwise
+	 */
 	public boolean selectCorridor(Corridor corridor) {
 		if (m_selectedCorridor == null || !m_selectedCorridor.equals(corridor)) {
 			m_selectedCorridor = corridor;
@@ -356,11 +437,19 @@ public class EditionLevelHandler extends AbstractLevelHandler {
 		return false;
 	}
 
+	/**
+	 * For the unselection of a corridor.
+	 */
 	public void unselectCorridor() {
 		m_selectedCorridor = null;
 		refreshView();
 	}
 
+	/**
+	 * Returns the selected corridor.
+	 * 
+	 * @return the selected corridor
+	 */
 	public Corridor getSelectedCorridor() {
 		return m_selectedCorridor;
 	}

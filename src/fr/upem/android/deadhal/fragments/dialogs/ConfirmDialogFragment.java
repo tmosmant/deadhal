@@ -8,8 +8,23 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import fr.upem.deadhal.R;
 
+/**
+ * This class is the confirm dialog used to confirm actions.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class ConfirmDialogFragment extends DialogFragment {
-	
+
+	/**
+	 * Give a new instance of the dialog.
+	 * 
+	 * @param title
+	 *            the dialog title
+	 * @param message
+	 *            the dialog message
+	 * @return the dialog
+	 */
 	public static ConfirmDialogFragment newInstance(int title, int message) {
 		ConfirmDialogFragment dialogFragment = new ConfirmDialogFragment();
 		Bundle bundle = new Bundle();
@@ -28,17 +43,23 @@ public class ConfirmDialogFragment extends DialogFragment {
 				.setTitle(title)
 				.setMessage(message)
 				.setIcon(R.drawable.ic_action_warning)
-				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
 
-					public void onClick(DialogInterface dialog, int whichButton) {
-						getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,
-						                                     getActivity().getIntent());
-					}
-				})
-				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								getTargetFragment().onActivityResult(
+										getTargetRequestCode(),
+										Activity.RESULT_OK,
+										getActivity().getIntent());
+							}
+						})
+				.setNegativeButton(android.R.string.cancel,
+						new DialogInterface.OnClickListener() {
 
-					public void onClick(DialogInterface dialog, int whichButton) {
-					}
-				}).create();
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+							}
+						}).create();
 	}
 }

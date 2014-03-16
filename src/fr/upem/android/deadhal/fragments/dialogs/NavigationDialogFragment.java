@@ -17,6 +17,12 @@ import fr.upem.android.deadhal.components.Room;
 import fr.upem.android.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.deadhal.R;
 
+/**
+ * This class is the navigation dialog used to select a route.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class NavigationDialogFragment extends DialogFragment {
 
 	private Spinner m_spinnerStart;
@@ -25,6 +31,15 @@ public class NavigationDialogFragment extends DialogFragment {
 	private int m_spinnerEndPosition = 1;
 	private static NavigationLevelHandler m_levelHandler;
 
+	/**
+	 * Constructs the navigation dialog.
+	 * 
+	 * @param levelHandler
+	 *            the level handler
+	 * @param rooms
+	 *            the rooms
+	 * @return
+	 */
 	public static NavigationDialogFragment newInstance(
 			NavigationLevelHandler levelHandler, ArrayList<Room> rooms) {
 		NavigationDialogFragment.m_levelHandler = levelHandler;

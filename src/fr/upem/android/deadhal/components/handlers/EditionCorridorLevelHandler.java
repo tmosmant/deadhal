@@ -1,6 +1,5 @@
 package fr.upem.android.deadhal.components.handlers;
 
-import java.util.List;
 import java.util.UUID;
 
 import android.graphics.PointF;
@@ -11,6 +10,12 @@ import fr.upem.android.deadhal.components.Level;
 import fr.upem.android.deadhal.components.Room;
 import fr.upem.android.deadhal.view.TouchEvent;
 
+/**
+ * This class handle the level for the edition corridor part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 
 	private Room m_start;
@@ -19,18 +24,40 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 	private PointF m_startPoint;
 	private PointF m_endPoint;
 
+	/**
+	 * Constructs the level handler.
+	 * 
+	 * @param level
+	 *            the level to handle
+	 */
 	public EditionCorridorLevelHandler(Level level) {
 		super(level);
 	}
 
+	/**
+	 * Return the start room for a new corridor.
+	 * 
+	 * @return the start room
+	 */
 	public Room getStart() {
 		return m_start;
 	}
-	
+
+	/**
+	 * Set the start room for a new corridor.
+	 * 
+	 * @param m_start
+	 *            the start room to set
+	 */
 	public void setStart(Room m_start) {
 		this.m_start = m_start;
 	}
 
+	/**
+	 * Return the end room for a new corridor.
+	 * 
+	 * @return the end room
+	 */
 	public Room getEnd() {
 		return m_end;
 	}
@@ -46,11 +73,25 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 		// nothing to do
 	}
 
+	/**
+	 * Returns the state of the new corridor construction process.
+	 * 
+	 * @return true if there is a start and an end room, false otherwise
+	 */
 	public boolean isAllSet() {
 		return m_start != null && m_end != null;
 	}
 
-	private void setRoom(Room room, PointF point) {
+	/**
+	 * Set the next room for constructing a new corridor. May be the start or
+	 * the end room.
+	 * 
+	 * @param room
+	 *            the room to set
+	 * @param point
+	 *            the point for the corridor
+	 */
+	public void setRoom(Room room, PointF point) {
 		m_view.getVibrator().vibrate(100);
 
 		if (m_start == null) {
@@ -77,21 +118,21 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 		refreshView();
 	}
 
-	public void selectRoomFromCoordinates(float x, float y) {
-		PointF pointF = new PointF(x, y);
-		List<Room> reverseRooms = reverseRooms();
-		for (Room room : reverseRooms) {
-			if (room.getRect().contains(pointF.x, pointF.y)) {
-				setRoom(room, pointF);
-				return;
-			}
-		}
-	}
-
+	/**
+	 * Returns the directed state.
+	 * 
+	 * @return the directed state
+	 */
 	public boolean isDirected() {
 		return m_directed;
 	}
 
+	/**
+	 * Set the directed state.
+	 * 
+	 * @param directed
+	 *            the directed state to set
+	 */
 	public void setDirected(boolean directed) {
 		m_directed = directed;
 	}

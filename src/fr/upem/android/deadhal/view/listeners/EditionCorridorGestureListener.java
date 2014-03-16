@@ -1,7 +1,9 @@
 package fr.upem.android.deadhal.view.listeners;
 
+import android.graphics.PointF;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import fr.upem.android.deadhal.components.Room;
 import fr.upem.android.deadhal.components.handlers.EditionCorridorLevelHandler;
 import fr.upem.android.deadhal.view.AbstractView;
 import fr.upem.android.deadhal.view.TouchEvent;
@@ -22,7 +24,12 @@ public class EditionCorridorGestureListener extends
 	public void onLongPress(MotionEvent e) {
 		float[] pts = m_view.convertCoordinates(e);
 		if (e.getPointerCount() == 1) {
-			m_levelHander.selectRoomFromCoordinates(pts[0], pts[1]);
+			Room roomFromCoordinates = m_levelHander.getRoomFromCoordinates(
+					pts[0], pts[1]);
+			if (roomFromCoordinates != null) {
+				m_levelHander.setRoom(roomFromCoordinates, new PointF(pts[0],
+						pts[1]));
+			}
 			m_view.setMode(TouchEvent.NONE);
 			m_view.refresh();
 		}

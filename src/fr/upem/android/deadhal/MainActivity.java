@@ -76,14 +76,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			try {
 				m_level = openTask.get();
 				if (m_level != null) {
-					// if (Storage.fileExists(file.getName())) {
-					// Log.e("create", "already exist");
-					// } else {
-					// file.createNewFile();
-					// SaveTask saveTask = new SaveTask(this, file);
-					// saveTask.execute(m_level);
-					// onFileNumberChange();
-					// }
 					Storage.copyFile(file);
 				}
 
@@ -104,7 +96,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		String[] navMenuTitles = getResources().getStringArray(
 				R.array.nav_drawer_items);
 
-		// nav drawer icons from resources
 		TypedArray navMenuIcons = getResources().obtainTypedArray(
 				R.array.nav_drawer_icons);
 
@@ -112,37 +103,21 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		m_drawerList = (ListView) findViewById(R.id.list_slidermenu);
 
 		m_navDrawerItems = new ArrayList<DrawerMainItem>();
-
-		// adding nav drawer items to array
-
-		// New
 		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[0], navMenuIcons
 				.getResourceId(0, -1)));
-
-		// Navigation
 		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[1], navMenuIcons
 				.getResourceId(1, -1)));
-
-		// Open, Will add a counter here
 		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[2], navMenuIcons
 				.getResourceId(2, -1), true, String.valueOf(Storage
 				.getNbFiles())));
-
-		// Save
 		m_navDrawerItems.add(new DrawerMainItem(navMenuTitles[3], navMenuIcons
 				.getResourceId(3, -1)));
-
-		// Recycle the typed array
 		navMenuIcons.recycle();
 
 		m_drawerList.setOnItemClickListener(new SlideMenuClickListener());
-
-		// setting the nav drawer list adapter
 		m_adapter = new DrawerMainListAdapter(getApplicationContext(),
 				m_navDrawerItems);
 		m_drawerList.setAdapter(m_adapter);
-
-		// enabling action bar app icon and behaving it as toggle button
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
@@ -150,12 +125,10 @@ public class MainActivity extends Activity implements DrawerMainListener {
 				R.drawable.ic_drawer, R.string.app_name, R.string.app_name) {
 
 			public void onDrawerClosed(View view) {
-				// calling onPrepareOptionsMenu() to show action bar icons
 				invalidateOptionsMenu();
 			}
 
 			public void onDrawerOpened(View drawerView) {
-				// calling onPrepareOptionsMenu() to hide action bar icons
 				invalidateOptionsMenu();
 			}
 		};
@@ -178,24 +151,18 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		super.onOptionsItemSelected(item);
-		// toggle nav drawer on selecting action bar app icon/title
 		if (m_drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		// Handle action bar actions click
 		switch (item.getItemId()) {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	/* *
-	 * Called when invalidateOptionsMenu() is triggered
-	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		// if nav drawer is opened, hide the action items
 		boolean drawerOpen = m_drawerLayout.isDrawerOpen(m_drawerList);
 		switch (m_menu) {
 		case R.menu.navigation:
@@ -220,7 +187,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	}
 
 	public void displayView(FragmentType fragmentType) {
-		// update the main content by switching fragments
 		FragmentManager fragmentManager = getFragmentManager();
 		m_fragment = null;
 
@@ -288,7 +254,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		// Sync the toggle state after onRestoreInstanceState has occurred.
 		m_drawerToggle.syncState();
 
 		if (savedInstanceState == null && m_level.getRooms().size() == 0) {
@@ -301,7 +266,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		// Pass any configuration change to the drawer toggle
 		m_drawerToggle.onConfigurationChanged(newConfig);
 	}
 
@@ -358,15 +322,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	// @Override
-	// public void onBackPressed() {
-	// Toast.makeText(this, "HEHEHE", Toast.LENGTH_LONG).show();
-	// Intent setIntent = new Intent(Intent.ACTION_MAIN);
-	// setIntent.addCategory(Intent.CATEGORY_HOME);
-	// setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	// startActivity(setIntent);
-	// }
-
 	/**
 	 * Slide menu item click listener
 	 */
@@ -376,8 +331,6 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			// display view for selected nav drawer item
-
 			switch (position) {
 			case 0:
 				m_newLevel = true;

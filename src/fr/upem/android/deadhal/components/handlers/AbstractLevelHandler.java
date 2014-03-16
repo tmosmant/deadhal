@@ -14,37 +14,83 @@ import fr.upem.android.deadhal.components.listeners.SelectionRoomListener;
 import fr.upem.android.deadhal.view.AbstractView;
 import fr.upem.android.deadhal.view.TouchEvent;
 
+/**
+ * This class is used to provide basic function for level handlers.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public abstract class AbstractLevelHandler {
 
 	protected Level m_level;
 	protected List<SelectionRoomListener> m_selectionRoomListeners = new LinkedList<SelectionRoomListener>();
 	protected AbstractView m_view;
 
+	/**
+	 * Constructs the level handler.
+	 * 
+	 * @param level
+	 *            level to handle
+	 */
 	public AbstractLevelHandler(Level level) {
 		m_level = level;
 	}
 
+	/**
+	 * Returns the view.
+	 * 
+	 * @return the view
+	 */
 	public AbstractView getView() {
 		return m_view;
 	}
 
+	/**
+	 * Set the view.
+	 * 
+	 * @param view
+	 *            the view to set
+	 */
 	public void setView(AbstractView view) {
 		m_view = view;
 	}
 
+	/**
+	 * Add a listener to be noticed when a room is selected or unselected.
+	 * 
+	 * @param listener
+	 *            the listener
+	 */
 	public void addSelectionRoomListener(SelectionRoomListener listener) {
 		m_selectionRoomListeners.add(listener);
 	}
 
+	/**
+	 * Remove a listener.
+	 * 
+	 * @param listener
+	 */
 	public void removeSelectionRoomListener(SelectionRoomListener listener) {
 		m_selectionRoomListeners.remove(listener);
 	}
 
+	/**
+	 * Add a room.
+	 * 
+	 * @param room
+	 *            the room to add
+	 */
 	public void addRoom(Room room) {
 		getLevel().addRoom(room);
 		refreshView();
 	}
 
+	/**
+	 * Remove a room.
+	 * 
+	 * @param room
+	 *            the room to remove
+	 */
 	public void removeRoom(Room room) {
 		for (Corridor corridor : m_level.getCorridors().values()) {
 			if (room.getId().equals(corridor.getSrc())
@@ -56,28 +102,69 @@ public abstract class AbstractLevelHandler {
 		refreshView();
 	}
 
+	/**
+	 * Add a corridor.
+	 * 
+	 * @param corridor
+	 *            the corridor to add
+	 */
 	public void addCorridor(Corridor corridor) {
 		m_level.addCorridor(corridor);
 	}
 
+	/**
+	 * Remove a corridor.
+	 * 
+	 * @param corridor
+	 *            the corridor to remove
+	 */
 	public void removeCorridor(Corridor corridor) {
 		m_level.removeCorridor(corridor);
 	}
 
+	/**
+	 * Returns the level.
+	 * 
+	 * @return the level
+	 */
 	public Level getLevel() {
 		return m_level;
 	}
 
+	/**
+	 * Get the inital process for finger coordinates.
+	 * 
+	 * @param x
+	 *            the x position
+	 * @param y
+	 *            the y position
+	 * @return the touch event to handle
+	 */
 	public abstract TouchEvent getProcess(float x, float y);
 
+	/**
+	 * Put a term to the process.
+	 */
 	public abstract void endProcess();
 
+	/**
+	 * Refresh the view.
+	 */
 	public void refreshView() {
 		if (m_view != null) {
 			m_view.refresh();
 		}
 	}
 
+	/**
+	 * Get a room from coordinates.
+	 * 
+	 * @param x
+	 *            the x coordinate
+	 * @param y
+	 *            the y coordinate
+	 * @return the room for the previous coordinates
+	 */
 	public Room getRoomFromCoordinates(float x, float y) {
 		List<Room> reverseRooms = reverseRooms();
 		for (Room room : reverseRooms) {
@@ -88,6 +175,12 @@ public abstract class AbstractLevelHandler {
 		return null;
 	}
 
+	/**
+	 * Reverse the list of room. This one is used to handle properly the
+	 * superpositions of rooms on canvas.
+	 * 
+	 * @return the reversed list of rooms
+	 */
 	protected List<Room> reverseRooms() {
 		Collection<Room> rooms = m_level.getRooms().values();
 		LinkedList<Room> reverseRooms = new LinkedList<Room>(rooms);
@@ -95,6 +188,17 @@ public abstract class AbstractLevelHandler {
 		return reverseRooms;
 	}
 
+	/**
+	 * Compute the intersection between a line and a rectangle.
+	 * 
+	 * @param start
+	 *            the start coordinate of the line
+	 * @param end
+	 *            the end coordinate of the line
+	 * @param rect
+	 *            the rectangle to work with
+	 * @return the first known intersection
+	 */
 	public PointF computeIntersection(PointF start, PointF end, RectF rect) {
 		PointF point = null;
 		point = intersection(start.x, start.y, end.x, end.y, rect.left,
@@ -120,6 +224,27 @@ public abstract class AbstractLevelHandler {
 		return start;
 	}
 
+	/**
+	 * Compute the intersection between two lines. Found on stackoverflow.
+	 * 
+	 * @param p0_x
+	 *            the x1 coordinate of the first line
+	 * @param p0_y
+	 *            the y1 coordinate of the first line
+	 * @param p1_x
+	 *            the x2 coordinate of the first line
+	 * @param p1_y
+	 *            the y2 coordinate of the first line
+	 * @param p2_x
+	 *            the x1 coordinate of the second line
+	 * @param p2_y
+	 *            the y1 coordinate of the second line
+	 * @param p3_x
+	 *            the x2 coordinate of the second line
+	 * @param p3_y
+	 *            the y2 coordinate of the second line
+	 * @return the point of intersection between the two lines, or null if none
+	 */
 	PointF intersection(float p0_x, float p0_y, float p1_x, float p1_y,
 			float p2_x, float p2_y, float p3_x, float p3_y) {
 		float s02_x, s02_y, s10_x, s10_y, s32_x, s32_y, s_numer, t_numer, denom, t;

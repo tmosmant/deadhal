@@ -63,10 +63,7 @@ public class EditionView extends AbstractView {
 	}
 
 	private void resizeRoom(MotionEvent event) {
-
 		final float[] pts = convertCoordinates(event);
-
-		// Calculate the distance moved
 		final float dx = pts[0] - m_start.x;
 		final float dy = pts[1] - m_start.y;
 
@@ -78,8 +75,6 @@ public class EditionView extends AbstractView {
 		scaleWidth /= m_levelHandler.getSelectedRoom().getRect().width();
 		scaleHeight /= m_levelHandler.getSelectedRoom().getRect().height();
 
-		// Avoid to store coordinates when the resize reach the min
-		// size
 		if (point.x != 0) {
 			m_start.x = pts[0];
 		}

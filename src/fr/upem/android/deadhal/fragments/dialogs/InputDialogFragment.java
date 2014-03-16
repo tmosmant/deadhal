@@ -16,11 +16,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+/**
+ * This class is the input dialog used to request input text.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class InputDialogFragment extends DialogFragment {
 
 	private EditText m_editText = null;
 	private String m_strId = new String();
 
+	/**
+	 * Constructs the input dialog.
+	 * 
+	 * @param title
+	 *            the dialog title
+	 * @param strId
+	 *            the room id
+	 * @return the dialog
+	 */
 	public static InputDialogFragment newInstance(String title, String strId) {
 		InputDialogFragment renameDialogFragment = new InputDialogFragment();
 		Bundle bundle = new Bundle();

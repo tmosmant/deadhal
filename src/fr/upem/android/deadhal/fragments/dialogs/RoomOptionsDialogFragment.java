@@ -12,8 +12,23 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import fr.upem.deadhal.R;
 
+/**
+ * This class is the room option dialog used to display room options.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class RoomOptionsDialogFragment extends DialogFragment {
 
+	/**
+	 * Constructs the room option dialog.
+	 * 
+	 * @param title
+	 *            the title
+	 * @param id
+	 *            the room id
+	 * @return the option dialog
+	 */
 	public static RoomOptionsDialogFragment newInstance(String title, UUID id) {
 		RoomOptionsDialogFragment dialogFragment = new RoomOptionsDialogFragment();
 		Bundle bundle = new Bundle();

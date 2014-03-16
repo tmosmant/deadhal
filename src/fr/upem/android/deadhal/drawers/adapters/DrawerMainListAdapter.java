@@ -13,11 +13,25 @@ import android.widget.TextView;
 import fr.upem.android.deadhal.drawers.models.DrawerMainItem;
 import fr.upem.deadhal.R;
 
+/**
+ * The adapter for the main drawer.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class DrawerMainListAdapter extends BaseAdapter {
 
 	private Context m_context;
 	private ArrayList<DrawerMainItem> m_navDrawerItems;
 
+	/**
+	 * Constructs the adapter.
+	 * 
+	 * @param context
+	 *            the context
+	 * @param navDrawerItems
+	 *            the items
+	 */
 	public DrawerMainListAdapter(Context context,
 			ArrayList<DrawerMainItem> navDrawerItems) {
 		this.m_context = context;
@@ -44,11 +58,14 @@ public class DrawerMainListAdapter extends BaseAdapter {
 		if (convertView == null) {
 			LayoutInflater mInflater = (LayoutInflater) m_context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			convertView = mInflater.inflate(R.layout.list_adapter_main_drawer, null);
+			convertView = mInflater.inflate(R.layout.list_adapter_main_drawer,
+					null);
 		}
 
-		ImageView imgIcon = (ImageView) convertView.findViewById(R.id.list_adapter_edition_drawer_icon);
-		TextView txtTitle = (TextView) convertView.findViewById(R.id.list_adapter_edition_drawer_title);
+		ImageView imgIcon = (ImageView) convertView
+				.findViewById(R.id.list_adapter_edition_drawer_icon);
+		TextView txtTitle = (TextView) convertView
+				.findViewById(R.id.list_adapter_edition_drawer_title);
 		TextView txtCount = (TextView) convertView.findViewById(R.id.counter);
 
 		imgIcon.setImageResource(m_navDrawerItems.get(position).getIcon());

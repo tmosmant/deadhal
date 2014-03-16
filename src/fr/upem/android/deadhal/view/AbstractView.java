@@ -2,6 +2,7 @@ package fr.upem.android.deadhal.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
@@ -91,11 +92,15 @@ public abstract class AbstractView extends View {
 		} else {
 			restoreMatrix(preferences);
 		}
-
-		setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-		View rootView = getRootView();
-		rootView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-
+		if (AbstractView.isTablet(getContext())) {
+			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+			View rootView = getRootView();
+			rootView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		} else {
+			setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			View rootView = getRootView();
+			rootView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+		}
 		refresh();
 	}
 
@@ -105,7 +110,8 @@ public abstract class AbstractView extends View {
 	public void refresh() {
 		bringToFront();
 		View rootView = getRootView();
-		if (rootView.getLayerType() != View.LAYER_TYPE_SOFTWARE) {
+		if (rootView.getLayerType() != View.LAYER_TYPE_SOFTWARE
+				&& AbstractView.isTablet(getContext())) {
 			rootView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
 		rootView.requestLayout();
@@ -375,4 +381,16 @@ public abstract class AbstractView extends View {
 				values[Matrix.MSCALE_X]) * (180 / Math.PI));
 
 	}
+
+	/**
+	 * Test if the device is a tablet.
+	 * 
+	 * @param context
+	 *            the context
+	 * @return true if the device is a tablet, false otherwise
+	 */
+	public static boolean isTablet(Context context) {
+		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+	}
+
 }

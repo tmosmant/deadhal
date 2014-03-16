@@ -7,12 +7,26 @@ import fr.upem.android.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.android.deadhal.view.AbstractView;
 import fr.upem.android.deadhal.view.TouchEvent;
 
+/**
+ * This class handler the motion event on the navigation part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class NavigationGestureListener extends
 		GestureDetector.SimpleOnGestureListener {
 
 	private AbstractView m_view;
 	private NavigationLevelHandler m_levelHandler;
 
+	/**
+	 * Constructs the listener.
+	 * 
+	 * @param view
+	 *            the view
+	 * @param levelHandler
+	 *            the level handler.
+	 */
 	public NavigationGestureListener(AbstractView view,
 			NavigationLevelHandler levelHandler) {
 		m_view = view;

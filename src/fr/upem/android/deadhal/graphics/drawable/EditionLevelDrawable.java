@@ -10,10 +10,22 @@ import fr.upem.android.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.android.deadhal.components.handlers.ResizeType;
 import fr.upem.android.deadhal.graphics.Paints;
 
+/**
+ * This class draws the edition level part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class EditionLevelDrawable extends AbstractLevelDrawable {
 
 	private EditionLevelHandler m_levelHandler;
 
+	/**
+	 * Constructs the drawable with a level handler.
+	 * 
+	 * @param levelHandler
+	 *            the level handler
+	 */
 	public EditionLevelDrawable(EditionLevelHandler levelHandler) {
 		super(levelHandler);
 		m_levelHandler = levelHandler;
@@ -54,6 +66,14 @@ public class EditionLevelDrawable extends AbstractLevelDrawable {
 		}
 	}
 
+	/**
+	 * Draw a room on a canvas.
+	 * 
+	 * @param canvas
+	 *            the canvas to draw on
+	 * @param room
+	 *            the room to draw
+	 */
 	private void drawRoomSelected(Canvas canvas, Room room) {
 		float borderSize = (float) 1.5;
 
@@ -66,6 +86,14 @@ public class EditionLevelDrawable extends AbstractLevelDrawable {
 		drawTitle(canvas, room);
 	}
 
+	/**
+	 * Draw a room on a canvas with error.
+	 * 
+	 * @param canvas
+	 *            the canvas to draw on
+	 * @param room
+	 *            the room to draw
+	 */
 	private void drawRoomSelectedError(Canvas canvas, Room room) {
 		float borderSize = (float) 1.5;
 
@@ -78,6 +106,14 @@ public class EditionLevelDrawable extends AbstractLevelDrawable {
 		drawTitle(canvas, room);
 	}
 
+	/**
+	 * Draw the resize points.
+	 * 
+	 * @param rect
+	 *            the rect to calculate the points
+	 * @param canvas
+	 *            the canvas to draw on
+	 */
 	private void drawPoints(RectF rect, Canvas canvas) {
 		PointF p = new PointF();
 		float radius = 12;

@@ -17,6 +17,12 @@ import fr.upem.android.deadhal.components.Level;
 import fr.upem.android.deadhal.components.Room;
 import fr.upem.deadhal.R;
 
+/**
+ * This class is in charge of saving a level in a file.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 
 	private Activity activity;
@@ -24,6 +30,14 @@ public class SaveTask extends AsyncTask<Level, Integer, Integer> {
 	private String m_error;
 	private File m_file = null;
 
+	/**
+	 * Constructs the task.
+	 * 
+	 * @param activity
+	 *            the activity
+	 * @param file
+	 *            the file
+	 */
 	public SaveTask(Activity activity, File file) {
 		this.activity = activity;
 		m_file = file;

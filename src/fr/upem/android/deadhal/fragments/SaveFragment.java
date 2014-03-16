@@ -25,6 +25,12 @@ import fr.upem.android.deadhal.utils.Input;
 import fr.upem.android.deadhal.utils.Storage;
 import fr.upem.deadhal.R;
 
+/**
+ * This class is the save fragment. Used to save deadhal files.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class SaveFragment extends AbstractFragment {
 
 	public static final int OVERRIDE_DIALOG = 1;
@@ -32,9 +38,6 @@ public class SaveFragment extends AbstractFragment {
 	private DrawerMainListener m_callback;
 	private String m_fileName = null;
 	private Level m_level = null;
-
-	public SaveFragment() {
-	}
 
 	@Override
 	public void onAttach(Activity activity) {

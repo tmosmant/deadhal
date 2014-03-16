@@ -5,14 +5,36 @@ import android.view.MotionEvent;
 import fr.upem.android.deadhal.components.handlers.EditionCorridorLevelHandler;
 import fr.upem.android.deadhal.graphics.drawable.EditionCorridorLevelDrawable;
 
+/**
+ * This class is the view for the edition corridor part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class EditionCorridorView extends AbstractView {
 
 	private EditionCorridorLevelHandler m_levelHandler;
 
+	/**
+	 * Constructs the view.
+	 * 
+	 * @param context
+	 *            the context
+	 */
 	private EditionCorridorView(Context context) {
 		super(context);
 	}
 
+	/**
+	 * Constructs the view.
+	 * 
+	 * @param context
+	 *            the context
+	 * @param levelHandler
+	 *            the level handler
+	 * @param drawable
+	 *            the drawable
+	 */
 	public EditionCorridorView(Context context,
 			EditionCorridorLevelHandler levelHandler,
 			EditionCorridorLevelDrawable drawable) {

@@ -15,10 +15,21 @@ import android.widget.Toast;
 import fr.upem.android.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.deadhal.R;
 
+/**
+ * This class handles the accelerometer movement for the pawn.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class NavigationAccelerometer implements SensorEventListener {
 
 	private static boolean ms_activated = false;
 
+	/**
+	 * Returns the state of the accelerometer.
+	 * 
+	 * @return the state of the accelerometer
+	 */
 	public static boolean isActivated() {
 		return ms_activated;
 	}
@@ -28,6 +39,14 @@ public class NavigationAccelerometer implements SensorEventListener {
 
 	private SensorManager m_sensorManager = null;
 
+	/**
+	 * Constructs the adapted sensor.
+	 * 
+	 * @param activity
+	 *            the activity
+	 * @param levelHandler
+	 *            the level handler
+	 */
 	public NavigationAccelerometer(Activity activity,
 			NavigationLevelHandler levelHandler) {
 		m_activity = activity;
@@ -36,6 +55,9 @@ public class NavigationAccelerometer implements SensorEventListener {
 				.getSystemService(Context.SENSOR_SERVICE);
 	}
 
+	/**
+	 * Activate the sensor.
+	 */
 	public void activate() {
 		ms_activated = true;
 		Sensor m_sensor = m_sensorManager
@@ -45,7 +67,10 @@ public class NavigationAccelerometer implements SensorEventListener {
 		lockScreenOrientation();
 	}
 
-	public void desactivate() {
+	/**
+	 * Deactivate the sensor.
+	 */
+	public void deactivate() {
 		ms_activated = false;
 		m_sensorManager.unregisterListener(this);
 		unlockScreenOrientation();

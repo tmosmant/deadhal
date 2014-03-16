@@ -36,6 +36,13 @@ import fr.upem.android.deadhal.view.NavigationView;
 import fr.upem.android.deadhal.view.listeners.NavigationGestureListener;
 import fr.upem.deadhal.R;
 
+/**
+ * This class is the navigation fragment. Used to handle the pawn navigation and
+ * the shortest path.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class NavigationFragment extends AbstractFragment {
 
 	private static final int NAV_DIALOG = 1;
@@ -202,7 +209,7 @@ public class NavigationFragment extends AbstractFragment {
 				m_accelerometer.activate();
 			} else {
 				item.setChecked(false);
-				m_accelerometer.desactivate();
+				m_accelerometer.deactivate();
 				m_accelerometer = null;
 			}
 			return true;
@@ -233,7 +240,7 @@ public class NavigationFragment extends AbstractFragment {
 		m_view.saveMatrix(m_prefs);
 		m_callback.onLevelChange(m_level);
 		if (m_accelerometer != null) {
-			m_accelerometer.desactivate();
+			m_accelerometer.deactivate();
 		}
 		super.onPause();
 	}

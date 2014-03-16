@@ -11,10 +11,22 @@ import fr.upem.android.deadhal.components.Room;
 import fr.upem.android.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.android.deadhal.graphics.Paints;
 
+/**
+ * This class draw the navigation part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class NavigationLevelDrawable extends AbstractLevelDrawable {
 
 	private NavigationLevelHandler m_levelHandler;
 
+	/**
+	 * Constructs the drawable with a level handler.
+	 * 
+	 * @param levelHandler
+	 *            the level handler
+	 */
 	public NavigationLevelDrawable(NavigationLevelHandler levelHandler) {
 		super(levelHandler);
 		m_levelHandler = levelHandler;
@@ -45,6 +57,16 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 		m_levelHandler.getPawn().draw(canvas);
 	}
 
+	/**
+	 * Draw a room on a canvas with a paint.
+	 * 
+	 * @param canvas
+	 *            the canvas to draw on
+	 * @param room
+	 *            the room to draw
+	 * @param paint
+	 *            the paint to use
+	 */
 	private void drawSelectedRoom(Canvas canvas, Room room, Paint paint) {
 		float borderSize = (float) 1.5;
 

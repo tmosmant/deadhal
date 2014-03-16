@@ -8,10 +8,22 @@ import fr.upem.android.deadhal.components.Room;
 import fr.upem.android.deadhal.components.handlers.EditionCorridorLevelHandler;
 import fr.upem.android.deadhal.graphics.Paints;
 
+/**
+ * This class draws the edition corridor part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class EditionCorridorLevelDrawable extends AbstractLevelDrawable {
 
 	private EditionCorridorLevelHandler m_levelHandler;
 
+	/**
+	 * Constructs the drawable with a level handler.
+	 * 
+	 * @param levelHandler
+	 *            the level handler
+	 */
 	public EditionCorridorLevelDrawable(EditionCorridorLevelHandler levelHandler) {
 		super(levelHandler);
 		m_levelHandler = levelHandler;
@@ -33,6 +45,14 @@ public class EditionCorridorLevelDrawable extends AbstractLevelDrawable {
 		}
 	}
 
+	/**
+	 * Draws a room on a canvas.
+	 * 
+	 * @param canvas
+	 *            the canvas to draw on
+	 * @param room
+	 *            the room to draw
+	 */
 	private void drawRoomSelected(Canvas canvas, Room room) {
 		float borderSize = (float) 1.5;
 

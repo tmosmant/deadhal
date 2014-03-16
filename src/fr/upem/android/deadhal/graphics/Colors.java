@@ -2,6 +2,12 @@ package fr.upem.android.deadhal.graphics;
 
 import android.graphics.Color;
 
+/**
+ * This class handles the colors.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class Colors {
 
 	public static final int BLACK = Color.BLACK;

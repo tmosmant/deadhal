@@ -7,6 +7,12 @@ import fr.upem.android.deadhal.components.Corridor;
 import fr.upem.android.deadhal.components.handlers.EditionLevelHandler;
 import fr.upem.android.deadhal.graphics.drawable.EditionLevelDrawable;
 
+/**
+ * This class is the view for the edition part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class EditionView extends AbstractView {
 
 	private EditionLevelHandler m_levelHandler;
@@ -15,6 +21,16 @@ public class EditionView extends AbstractView {
 		super(context);
 	}
 
+	/**
+	 * Constructs the view.
+	 * 
+	 * @param context
+	 *            the context
+	 * @param levelHandler
+	 *            the level handler
+	 * @param drawable
+	 *            the drawable
+	 */
 	public EditionView(Context context, EditionLevelHandler levelHandler,
 			EditionLevelDrawable drawable) {
 		super(context, levelHandler, drawable);

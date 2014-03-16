@@ -9,18 +9,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * Provides static storage methods.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class Storage {
 
 	private static final String FILE_EXTENSION = ".dh";
 
-	/* Checks if external storage is available to at least read */
+	/**
+	 * Checks if external storage is available to at least read.
+	 * 
+	 * @return true if external storage is available to at least read, false
+	 *         otherwise
+	 */
 	public static boolean isExternalStorageReadable() {
 		String state = Environment.getExternalStorageState();
 		return Environment.MEDIA_MOUNTED.equals(state)
 				|| Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
 	}
 
-	/* Checks if external storage is available for read and write */
+	/**
+	 * Checks if external storage is available for read and write.
+	 * 
+	 * @return true if external storage is available for read and write, false
+	 *         otherwise
+	 */
 	public static boolean isExternalStorageWritable() {
 		String state = Environment.getExternalStorageState();
 		return Environment.MEDIA_MOUNTED.equals(state);
@@ -37,7 +53,11 @@ public class Storage {
 		};
 	}
 
-	/* Return the number of file to open */
+	/**
+	 * Returns the number of files that can be opened.
+	 * 
+	 * @return the number of files that can be opened
+	 */
 	public static int getNbFiles() {
 		File[] files;
 		File directory = getDeadHalDir();
@@ -48,24 +68,11 @@ public class Storage {
 		return 0;
 	}
 
-	/* List all the files in the deadhal directory */
-	// public static List<String> getFilesList() {
-	// File directory = getDeadHalDir();
-	// List<String> list = new ArrayList<String>();
-	//
-	// if (directory.isDirectory()) {
-	// File files[] = directory.listFiles(filter());
-	// for (File file : files) {
-	// String name = file.getName();
-	// name = name.replace(FILE_EXTENSION, "");
-	// list.add(name);
-	// }
-	// Collections.sort(list);
-	// }
-	// return list;
-	// }
-
-	/* List all the files in the deadhal directory */
+	/**
+	 * List all the files in the deadhal directory.
+	 * 
+	 * @return all the files in the deadhal directory
+	 */
 	public static ArrayList<File> getFilesList() {
 		ArrayList<File> fileList = null;
 		File directory = getDeadHalDir();
@@ -78,19 +85,37 @@ public class Storage {
 		return fileList;
 	}
 
-	/* Return true if the file exists */
+	/**
+	 * Returns the existence of a file.
+	 * 
+	 * @param name
+	 *            the file name
+	 * @return true if it exists, false otherwise
+	 */
 	public static boolean fileExists(String name) {
 		return new File(getDeadHalDir().getAbsolutePath() + File.separator
 				+ name + FILE_EXTENSION).exists();
 	}
 
-	/* Return a file */
+	/**
+	 * Returns a file in deadhal directory.
+	 * 
+	 * @param name
+	 *            the file name
+	 * @return a file
+	 */
 	public static File openFile(String name) {
 		return new File(getDeadHalDir().getAbsolutePath() + File.separator
 				+ name + FILE_EXTENSION);
 	}
 
-	/* Return a new file */
+	/**
+	 * Create a new file.
+	 * 
+	 * @param name
+	 *            the file name
+	 * @return the new file
+	 */
 	public static File createFile(String name) {
 		if (isExternalStorageWritable()) {
 			File file = new File(getDeadHalDir().getAbsolutePath()
@@ -105,7 +130,15 @@ public class Storage {
 		return null;
 	}
 
-	/* Rename a file */
+	/**
+	 * Rename a file.
+	 * 
+	 * @param from
+	 *            the file to rename
+	 * @param newName
+	 *            the new name
+	 * @return true if renamed, false otherwise
+	 */
 	public static boolean renameFile(File from, String newName) {
 		File to = openFile(newName);
 		return from.renameTo(to);
@@ -123,15 +156,22 @@ public class Storage {
 		return directory;
 	}
 
-	/* Copy file to deadhal directory */
+	/**
+	 * Copy a file to deadhal directory.
+	 * 
+	 * @param src
+	 *            the file source to copy
+	 * @return true if copied, false otherwise
+	 * @throws IOException
+	 */
 	public static boolean copyFile(File src) throws IOException {
-		if (src.getParent()
-				.equals(getDeadHalDir().getAbsolutePath())) {
+		if (src.getParent().equals(getDeadHalDir().getAbsolutePath())) {
 			return true;
 		} else {
 			File newFile;
 			if (fileExists(getFileNameWithoutExtension(src))) {
-				newFile = createFile(getFileNameWithoutExtension(src) + System.currentTimeMillis());
+				newFile = createFile(getFileNameWithoutExtension(src)
+						+ System.currentTimeMillis());
 			} else {
 				newFile = createFile(getFileNameWithoutExtension(src));
 			}

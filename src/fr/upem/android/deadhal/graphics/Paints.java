@@ -4,6 +4,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 
+/**
+ * This class handles the paints.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class Paints {
 
 	public final static Paint ROOM_BACKGROUND = new Paint();
@@ -99,6 +105,12 @@ public class Paints {
 		LOCALISATION_EXTERN.setAlpha(255);
 	}
 
+	/**
+	 * Set the anti aliasing on all the paints.
+	 * 
+	 * @param aa
+	 *            true to activate, false to deactivate
+	 */
 	public static void setAntiAlias(boolean aa) {
 		ROOM_BACKGROUND.setAntiAlias(aa);
 		ROOM_BORDER.setAntiAlias(aa);

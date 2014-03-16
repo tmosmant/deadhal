@@ -45,6 +45,12 @@ import fr.upem.android.deadhal.view.EditionView;
 import fr.upem.android.deadhal.view.listeners.EditionGestureListener;
 import fr.upem.deadhal.R;
 
+/**
+ * This class is the edition fragment. Used to handle the edition of rooms.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class EditionFragment extends AbstractFragment {
 
 	private static final int ADD_NEW_ROOM = 0;
@@ -273,6 +279,9 @@ public class EditionFragment extends AbstractFragment {
 		};
 	}
 
+	/**
+	 * Allows to update the edition drawer.
+	 */
 	public void updateDrawer() {
 		ArrayList<DrawerEditionItem> drawerItems = new ArrayList<DrawerEditionItem>();
 		drawerItems.add(new DrawerEditionItem(getString(R.string.add_room),

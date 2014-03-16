@@ -12,11 +12,23 @@ import fr.upem.android.deadhal.components.Room;
 import fr.upem.android.deadhal.components.handlers.AbstractLevelHandler;
 import fr.upem.android.deadhal.graphics.Paints;
 
+/**
+ * This class provides methods to draw levels and can be extended.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public abstract class AbstractLevelDrawable extends Drawable {
 
 	protected AbstractLevelHandler m_levelHandler;
 	private int m_alpha = 255;
 
+	/**
+	 * Constructs the drawable with a level handler.
+	 * 
+	 * @param levelHandler
+	 *            the level handler
+	 */
 	public AbstractLevelDrawable(AbstractLevelHandler levelHandler) {
 		m_levelHandler = levelHandler;
 	}
@@ -39,6 +51,14 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		return m_alpha;
 	}
 
+	/**
+	 * Draw the title of a room. Trunc it if necessary.
+	 * 
+	 * @param canvas
+	 *            the canvas to draw on
+	 * @param room
+	 *            the room to draw the title
+	 */
 	protected void drawTitle(Canvas canvas, Room room) {
 		String title = room.getName();
 		RectF rect = room.getRect();
@@ -56,6 +76,14 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		}
 	}
 
+	/**
+	 * Draw a room.
+	 * 
+	 * @param canvas
+	 *            the canvas to draw on
+	 * @param room
+	 *            the room to draw
+	 */
 	protected void drawRoom(Canvas canvas, Room room) {
 		float borderSize = (float) 1.5;
 		RectF rect = room.getRect();
@@ -66,6 +94,16 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		drawTitle(canvas, room);
 	}
 
+	/**
+	 * Draw a corridor.
+	 * 
+	 * @param canvas
+	 *            the canvas to draw on
+	 * @param corridor
+	 *            the corridor to draw
+	 * @param paint
+	 *            the paint to use
+	 */
 	protected void drawCorridor(Canvas canvas, Corridor corridor, Paint paint) {
 		Room start = m_levelHandler.getLevel().getRooms()
 				.get(corridor.getSrc());
@@ -95,14 +133,43 @@ public abstract class AbstractLevelDrawable extends Drawable {
 		}
 	}
 
+	/**
+	 * Draw a corridor using the default painting.
+	 * 
+	 * @param canvas
+	 *            the canvas to draw on
+	 * @param corridor
+	 *            the corridor to draw
+	 */
 	protected void drawCorridor(Canvas canvas, Corridor corridor) {
 		drawCorridor(canvas, corridor, Paints.CORRIDOR);
 	}
 
+	/**
+	 * Calculate the length between two point.
+	 * 
+	 * @param a
+	 *            the first point
+	 * @param b
+	 *            the second point
+	 * @return the calculated length
+	 */
 	private double length(PointF a, PointF b) {
 		return Math.sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 	}
 
+	/**
+	 * Draw an arrow.
+	 * 
+	 * @param canvas
+	 *            the canvas to draw on
+	 * @param startPoint
+	 *            the start point of the arrow
+	 * @param endPoint
+	 *            the end point of the arrow
+	 * @param paint
+	 *            the paint to use
+	 */
 	private void drawArrow(Canvas canvas, PointF startPoint, PointF endPoint,
 			Paint paint) {
 		Path path = new Path();

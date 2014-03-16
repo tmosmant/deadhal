@@ -7,6 +7,12 @@ import fr.upem.android.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.android.deadhal.graphics.drawable.NavigationLevelDrawable;
 import fr.upem.android.deadhal.sensor.NavigationAccelerometer;
 
+/**
+ * This class is the view for the navigation part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class NavigationView extends AbstractView {
 
 	private NavigationLevelHandler m_levelHandler;
@@ -15,6 +21,16 @@ public class NavigationView extends AbstractView {
 		super(context);
 	}
 
+	/**
+	 * Constructs the view.
+	 * 
+	 * @param context
+	 *            the context
+	 * @param levelHandler
+	 *            the level handler
+	 * @param drawable
+	 *            the drawable
+	 */
 	public NavigationView(Context context, NavigationLevelHandler levelHandler,
 			NavigationLevelDrawable drawable) {
 		super(context, levelHandler, drawable);

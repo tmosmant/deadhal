@@ -7,11 +7,25 @@ import fr.upem.android.deadhal.components.Corridor;
 import fr.upem.android.deadhal.components.Level;
 import fr.upem.android.deadhal.components.Room;
 
+/**
+ * This class is in charge of computing the shortest path between two rooms.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class ShortestPathTask extends AsyncTask<Level, Integer, List<UUID>> {
 
 	private UUID m_start;
 	private UUID m_finish;
 
+	/**
+	 * Constructs the task.
+	 * 
+	 * @param start
+	 *            the id of the start room
+	 * @param finish
+	 *            the id of the end room
+	 */
 	public ShortestPathTask(UUID start, UUID finish) {
 		m_start = start;
 		m_finish = finish;

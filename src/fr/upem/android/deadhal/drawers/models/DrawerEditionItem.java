@@ -6,7 +6,7 @@ import fr.upem.android.deadhal.components.Room;
 /**
  * This class represents an item for the edition drawer.
  * 
- * @author Thomas
+ * @author fbousry mremy tmosmant vfricotteau
  * 
  */
 public class DrawerEditionItem {

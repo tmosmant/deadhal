@@ -17,6 +17,13 @@ import fr.upem.android.deadhal.components.Corridor;
 import fr.upem.android.deadhal.components.Level;
 import fr.upem.android.deadhal.components.Room;
 
+/**
+ * This class is in charge of the construction of a level by reading it in a
+ * file.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class OpenTask extends AsyncTask<File, Integer, Level> {
 
 	private Level m_level = new Level();

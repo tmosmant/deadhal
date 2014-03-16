@@ -9,6 +9,12 @@ import fr.upem.android.deadhal.components.Room;
 import fr.upem.android.deadhal.components.handlers.NavigationLevelHandler;
 import fr.upem.android.deadhal.graphics.Paints;
 
+/**
+ * This class represents the pawn.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class Pawn extends Drawable {
 	private final int m_radiusExtern = 25;
 	private final int m_radiusMiddle = 20;
@@ -20,6 +26,12 @@ public class Pawn extends Drawable {
 	private int m_alpha = 255;
 	private NavigationLevelHandler m_levelHandler;
 
+	/**
+	 * Constructs the pawn with a level handler.
+	 * 
+	 * @param levelHandler
+	 *            the level handler
+	 */
 	public Pawn(NavigationLevelHandler levelHandler) {
 		m_levelHandler = levelHandler;
 	}
@@ -54,6 +66,14 @@ public class Pawn extends Drawable {
 		return m_alpha;
 	}
 
+	/**
+	 * Handle a move of the pawn.
+	 * 
+	 * @param x
+	 *            the x coordinate to move on
+	 * @param y
+	 *            the y coordinate to move on
+	 */
 	public void handleMove(float x, float y) {
 		RectF rect = m_levelHandler.getSelectedRoom().getRect();
 		if (x - 39 < rect.left) {
@@ -74,6 +94,14 @@ public class Pawn extends Drawable {
 		m_levelHandler.refreshView();
 	}
 
+	/**
+	 * Allows the paws to slide smoothly on the edges of his room.
+	 * 
+	 * @param x
+	 *            the x coordinate to slide on
+	 * @param y
+	 *            the y coordinate to slide on
+	 */
 	public void slide(float x, float y) {
 		Room selectedRoom = m_levelHandler.getSelectedRoom();
 		if (selectedRoom != null) {
@@ -118,6 +146,11 @@ public class Pawn extends Drawable {
 		}
 	}
 
+	/**
+	 * Returns the position of the pawn.
+	 * 
+	 * @return the position of the pawn
+	 */
 	public PointF getPosition() {
 		return m_position;
 	}

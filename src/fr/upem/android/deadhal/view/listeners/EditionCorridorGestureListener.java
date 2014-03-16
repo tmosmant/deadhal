@@ -8,12 +8,26 @@ import fr.upem.android.deadhal.components.handlers.EditionCorridorLevelHandler;
 import fr.upem.android.deadhal.view.AbstractView;
 import fr.upem.android.deadhal.view.TouchEvent;
 
+/**
+ * This class handles motion event on the edition corridor part.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class EditionCorridorGestureListener extends
 		GestureDetector.SimpleOnGestureListener {
 
 	private AbstractView m_view;
 	private EditionCorridorLevelHandler m_levelHander;
 
+	/**
+	 * Constructs the listener.
+	 * 
+	 * @param view
+	 *            the view
+	 * @param levelHandler
+	 *            the level handler
+	 */
 	public EditionCorridorGestureListener(AbstractView view,
 			EditionCorridorLevelHandler levelHandler) {
 		m_view = view;

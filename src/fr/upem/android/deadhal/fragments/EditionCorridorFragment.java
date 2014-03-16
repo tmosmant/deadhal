@@ -19,6 +19,13 @@ import fr.upem.android.deadhal.view.EditionCorridorView;
 import fr.upem.android.deadhal.view.listeners.EditionCorridorGestureListener;
 import fr.upem.deadhal.R;
 
+/**
+ * This class is the edition corridor fragment. Used to handle the addition of
+ * corridors.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class EditionCorridorFragment extends AbstractFragment {
 
 	private DrawerMainListener m_callback;

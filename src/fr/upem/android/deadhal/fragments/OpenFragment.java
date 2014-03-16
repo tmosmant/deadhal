@@ -28,6 +28,12 @@ import fr.upem.android.deadhal.tasks.OpenTask;
 import fr.upem.android.deadhal.utils.Storage;
 import fr.upem.deadhal.R;
 
+/**
+ * This class is the open fragment. Used to open deadhal files.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class OpenFragment extends AbstractFragment implements
 		AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 

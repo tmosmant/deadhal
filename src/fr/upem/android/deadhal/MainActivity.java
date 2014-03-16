@@ -37,6 +37,12 @@ import fr.upem.android.deadhal.tasks.OpenTask;
 import fr.upem.android.deadhal.utils.Storage;
 import fr.upem.deadhal.R;
 
+/**
+ * Main activity of the deadhal project.
+ * 
+ * @author fbousry mremy tmosmant vfricotteau
+ * 
+ */
 public class MainActivity extends Activity implements DrawerMainListener {
 
 	private Level m_level = null;
@@ -186,6 +192,12 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		return true;
 	}
 
+	/**
+	 * Displays the view for a fragment type.
+	 * 
+	 * @param fragmentType
+	 *            the type containing the view to display
+	 */
 	public void displayView(FragmentType fragmentType) {
 		FragmentManager fragmentManager = getFragmentManager();
 		m_fragment = null;
@@ -304,6 +316,10 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		}
 	}
 
+	/**
+	 * This method is used in a resource layout.
+	 * 
+	 */
 	public void toggleDrawerEdition(MenuItem v) {
 		DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_edit_layout);
 		boolean drawerOpen = drawerLayout.isDrawerOpen(Gravity.END);

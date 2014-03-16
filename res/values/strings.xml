@@ -93,25 +93,30 @@
     <string name="name_for_the_copy_of_">"Name for the copy of "</string>
 
     <string name="how_to_navigate_title">Go to Navigation mode</string>
-    <string name="how_to_navigate_message">"In order to use the navigation mode, you can click on the lock in the action bar.\n"</string>
+    <string name="how_to_navigate_message">"In order to use the navigation mode, you can click on the lock in the action
+        bar.\n"
+    </string>
     <string name="how_to_add_room_title">Add a room</string>
     <string name="how_to_add_room_message">
         "To add a room you need to be in edition mode. Once done, follow these steps :\n
-        1. Open the edition panel (available on the right edge of the screen). You can open the edition panel by swiping the screen from right to left or by clicking the list icon on the top right of the action bar.\n
+        1. Open the edition panel (available on the right edge of the screen). You can open the edition panel by swiping
+        the screen from right to left or by clicking the list icon on the top right of the action bar.\n
         2. Click on “Add a room…”.\n
         3. Give a name for your new room.\n"
     </string>
     <string name="how_to_delete_room_title">Delete a room</string>
     <string name="how_to_delete_room_message">
         "To delete a room, you have to be in the edition mode. Once done, follow these steps :\n
-        1. Open the edition panel (available on the right edge of the screen). You can open the edition panel by swiping the screen from right to left or by clicking the list icon on the top right of the action bar.\n
+        1. Open the edition panel (available on the right edge of the screen). You can open the edition panel by swiping
+        the screen from right to left or by clicking the list icon on the top right of the action bar.\n
         2. Click on the expend arrow.\n
         3. Select “Delete”.\n"
     </string>
     <string name="how_to_rename_room_title">Rename a room</string>
     <string name="how_to_rename_room_message">
         "To rename a room, you have to be in edition mode. Once done, follow these steps :\n
-        1. Open the edition panel (available on the right edge of the screen). You can open the edition panel by swiping the screen from right to left or by clicking the list icon on the top right of the action bar.\n
+        1. Open the edition panel (available on the right edge of the screen). You can open the edition panel by swiping
+        the screen from right to left or by clicking the list icon on the top right of the action bar.\n
         2. Click on the expend arrow.\n
         3. Select “Rename”.\n
         4. Give a new name for your room.\n"
@@ -119,58 +124,100 @@
     <string name="how_to_select_room_title">Select a room</string>
     <string name="how_to_select_room_message">
         "To select a room, you have to be in edition mode. There are two ways for selecting a room :\n
-        1. Open the edition panel (available on the right edge of the screen). You can open the edition panel by swiping the screen from right to left or by clicking the list icon on the top right of the action bar, then select a room in the list.\n
+        1. Open the edition panel (available on the right edge of the screen). You can open the edition panel by swiping
+        the screen from right to left or by clicking the list icon on the top right of the action bar, then select a
+        room in the list.\n
         2. Do a long press on a room.\n"
     </string>
     <string name="how_to_unselect_room_title">Unselect a room</string>
     <string name="how_to_unselect_room_message">
-        "To unselect a room, you have to be in edition mode and have already selected a room. There are three ways for unselecting a room :\n
-        1. Open the edition panel (available on the right edge of the screen). You can open the edition panel by swiping the screen from right to left or by clicking the list icon on the top right of the action bar, then unselect the room in the list and close the edition panel.\n
+        "To unselect a room, you have to be in edition mode and have already selected a room. There are three ways for
+        unselecting a room :\n
+        1. Open the edition panel (available on the right edge of the screen). You can open the edition panel by swiping
+        the screen from right to left or by clicking the list icon on the top right of the action bar, then unselect the
+        room in the list and close the edition panel.\n
         2. Do a long press on a room.\n"
     </string>
     <string name="how_to_move_room_title">Move a room</string>
     <string name="how_to_move_room_message">
-        "To move a room, you have to be in edition mode and have already selected a room. Once the room is selected, you can now move it.\n"
+        "To move a room, you have to be in edition mode and have already selected a room. Once the room is selected, you
+        can now move it.\n"
     </string>
     <string name="how_to_resize_room_title">Resize a room</string>
     <string name="how_to_resize_room_message">
-        "To resize a room you need to be in edition mode and have already selected a room. Then you can resize the selected room by holding one of the room’s edge.\n"
+        "To resize a room you need to be in edition mode and have already selected a room. Then you can resize the
+        selected room by holding one of the room’s edge.\n"
     </string>
     <string name="how_to_add_corridor_title">Add a corridor</string>
     <string name="how_to_add_corridor_message">
         "To add a corridor you need to be in edition mode and have at least two rooms, then follow these steps :\n
-        1. Open the edition panel (on the right of the screen). You can open the edition panel by swipe the screen from right to left or by click the list icon on the right of the action bar.\n
+        1. Open the edition panel (on the right of the screen). You can open the edition panel by swipe the screen from
+        right to left or by click the list icon on the right of the action bar.\n
         2. Click on “Add a corridor…”.\n
         3. Select the two rooms you need link by do a long press on each one.\n
         4. Validate.\n\nNote:
-        • By default the corridor are bidirectional, if you want a unidirectional corridor you need to press on the two arrow.\n
+        • By default the corridor are bidirectional, if you want a unidirectional corridor you need to press on the two
+        arrow.\n
         • To switch from unidirectional to bidirectional hit the simple arrow.\n"
     </string>
     <string name="how_to_delete_corridor_title">Delete a corridor</string>
     <string name="how_to_delete_corridor_message">
         "To delete a corridor you need to be in edition mode, then follow these steps :\n
-        1. Open the edition panel (on the right of the screen). You can open the edition panel by swipe the screen from right to left or by click the list icon on the right of the action bar.\n
+        1. Open the edition panel (on the right of the screen). You can open the edition panel by swipe the screen from
+        right to left or by click the list icon on the right of the action bar.\n
         2. Click on the cross on the right of the corridor you want to delete.\n"
     </string>
     <string name="how_to_edit_level_title">Go to edition mode</string>
-    <string name="how_to_edit_level_message">"In order to edit the level you need to go in edition mode by hitting the lock in the action bar.\n"</string>
+    <string name="how_to_edit_level_message">"In order to edit the level you need to go in edition mode by hitting the
+        lock in the action bar.\n"
+    </string>
     <string name="how_to_navigate_monotouch_title">Mono-Touch</string>
-    <string name="how_to_navigate_monotouch_message">"To navigate in mono-touch, you have to be in the navigation mode and have set the initial position by a long press on a room. Then you can move the pawn with one finger by sliding on the screen or by clicking.\n"</string>
+    <string name="how_to_navigate_monotouch_message">"To navigate in mono-touch, you have to be in the navigation mode
+        and have set the initial position by a long press on a room. Then you can move the pawn with one finger by
+        sliding on the screen or by clicking.\n"
+    </string>
     <string name="how_to_navigate_accelerometer_title">Accelerometer</string>
-    <string name="how_to_navigate_accelerometer_message">"To use the accelerometer of your phone, you have to be in navigation mode and have check the option “Accelerometer”, accessible by the menu button of your phone. Then you can move the pawn by orientating your phone.\n"</string>
+    <string name="how_to_navigate_accelerometer_message">"To use the accelerometer of your phone, you have to be in
+        navigation mode and have check the option “Accelerometer”, accessible by the menu button of your phone. Then you
+        can move the pawn by orientating your phone.\n"
+    </string>
     <string name="how_to_get_route_title">Route</string>
-    <string name="how_to_get_route_message">"To calculate an itinerary for a route, you have to click on the road sign near the lock in the action bar, then you can select where you want to start your itinerary and where you want to stop it.\n"</string>
+    <string name="how_to_get_route_message">"To calculate an itinerary for a route, you have to click on the road sign
+        near the lock in the action bar, then you can select where you want to start your itinerary and where you want
+        to stop it.\n"
+    </string>
     <string name="how_to_save_title">Save</string>
-    <string name="how_to_save_message">"You can save the current level on the “save” screen. For access the “save” screen you have to open the left panel and click on “Save…”. In this screen you have to name your file and click on yes.\n"</string>
+    <string name="how_to_save_message">"You can save the current level on the “save” screen. For access the “save”
+        screen you have to open the left panel and click on “Save…”. In this screen you have to name your file and click
+        on yes.\n"
+    </string>
     <string name="how_to_open_title">Open</string>
     <string name="how_to_open_message">
-        "You can open a level you have previously saved on the “open” screen. For access the “open” screen you have to open the left panel and click on “Open…”. In this screen you have the list of all your level and you can :\n
+        "You can open a level you have previously saved on the “open” screen. For access the “open” screen you have to
+        open the left panel and click on “Open…”. In this screen you have the list of all your level and you can :\n
         • Open: click on a level to open it.\n
         • Rename: do a long press on the level, then select “Rename” option and enter the new name.\n
-        • Share: do a long press on the level, then select “Share” option then select with which app you want to share it.\n
+        • Share: do a long press on the level, then select “Share” option then select with which app you want to share
+        it.\n
         • Delete: do a long press on the level, then select “Delete” option.\n"
     </string>
     <string name="how_to_extra_title">Extra</string>
-    <string name="how_to_extra_message">"You can open a level from another app by opening all file with .dh extension. This level will be load and save in the deadhal directory.\n"</string>
-    <string name="thomas">thomas</string><string name="version">DeadHal v1.0</string><string name="name_thomas">Mosmant Thomas</string><string name="mail_thomas">thomas.mosmant@gmail.com</string><string name="name_michael">Remy Michael</string><string name="mail_michael">remy.mick@gmail.com</string><string name="name_vincent">Fricotteau Vincent</string><string name="mail_vincent">vfricotteau@gmail.com</string><string name="name_fazal">Bousry Fazal</string><string name="mail_fazal">f.bousry@gmail.com</string><string name="mail_univ_michael">mremy@etudiant.univ-mlv.fr</string><string name="mail_univ_thomas">tmosmant@etudiant.univ-mlv.fr</string><string name="mail_univ_vincent">vfricott@etudiant.univ-mlv.fr</string><string name="mail_univ_fazal">fbousry@etudiant.univ-mlv.fr</string>
+    <string name="how_to_extra_message">"You can open a level from another app by opening all file with .dh extension.
+        This level will be load and save in the deadhal directory.\n"
+    </string>
+    <string name="thomas">thomas</string>
+    <string name="version">DeadHal v1.0</string>
+    <string name="name_thomas">Mosmant Thomas</string>
+    <string name="mail_thomas">thomas.mosmant@gmail.com</string>
+    <string name="name_michael">Remy Michael</string>
+    <string name="mail_michael">remy.mick@gmail.com</string>
+    <string name="name_vincent">Fricotteau Vincent</string>
+    <string name="mail_vincent">vfricotteau@gmail.com</string>
+    <string name="name_fazal">Bousry Fazal</string>
+    <string name="mail_fazal">f.bousry@gmail.com</string>
+    <string name="mail_univ_michael">mremy@etudiant.univ-mlv.fr</string>
+    <string name="mail_univ_thomas">tmosmant@etudiant.univ-mlv.fr</string>
+    <string name="mail_univ_vincent">vfricott@etudiant.univ-mlv.fr</string>
+    <string name="mail_univ_fazal">fbousry@etudiant.univ-mlv.fr</string>
+    <string name="ok">OK</string>
 </resources>

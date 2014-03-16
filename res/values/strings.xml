@@ -5,6 +5,7 @@
     <string name="file">File</string>
     <string name="edition">Edition</string>
     <string name="navigation">Navigation</string>
+    <string name="navigation_trunc">Navig</string>
     <string name="corridors">Add corridors</string>
     <string name="open">Open</string>
     <string name="save">Save</string>

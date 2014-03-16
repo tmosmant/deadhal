@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -241,7 +242,8 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			m_menu = R.menu.edition_corridor;
 			break;
 		case HELP:
-			m_fragment = new HelpFragment();
+			startActivity(new Intent(this, HelpFragment.class));
+			m_fragment = null;
 			m_menu = R.menu.help;
 			break;
 		case ABOUT:

@@ -9,6 +9,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -186,15 +187,18 @@ public class EditionFragment extends AbstractFragment {
 				m_levelHandler.unselectCorridor();
 				m_view.getVibrator().vibrate(100);
 				for (int i = 0; i < m_drawerList.getAdapter().getCount(); i++) {
+					Log.v("deadhal", "test");
 					DrawerEditionItem item = (DrawerEditionItem) m_drawerList
 							.getAdapter().getItem(i);
 					Room room2 = item.getRoom();
 					if (room2 != null && room.getId().equals(room2.getId())) {
+						Log.v("deadhal", "check");
 						m_drawerList.setItemChecked(i, true);
 					}
 				}
 			}
 		});
+		m_drawerList.clearChoices();
 		return m_rootView;
 	}
 
@@ -312,10 +316,19 @@ public class EditionFragment extends AbstractFragment {
 		case ADD_NEW_ROOM:
 			if (resultCode == Activity.RESULT_OK) {
 				String name = data.getStringExtra("inputText");
-				Room room = new Room(UUID.randomUUID(), name, new RectF(0, 0,
-						150, 150));
+				int xCenterRoom = m_view.getWidth() - 150;
+				int yCenterRoom = m_view.getHeight() - 150;
+				float[] pts = { xCenterRoom / 2, yCenterRoom / 2 };
+				Matrix inverse = new Matrix();
+				m_view.getMatrix().invert(inverse);
+				inverse.mapPoints(pts);
+
+				Room room = new Room(UUID.randomUUID(), name, new RectF(pts[0],
+						pts[1], pts[0] + 150, pts[1] + 150));
 				m_levelHandler.addRoom(room);
+				updateDrawer();
 				m_levelHandler.selectRoom(room);
+				return;
 			}
 			break;
 		case OPTION_DIALOG:
@@ -340,8 +353,8 @@ public class EditionFragment extends AbstractFragment {
 
 					break;
 				case 1:
-					m_levelHandler.removeRoom(m_level.getRooms().get(id));
 					m_levelHandler.unselectRoom();
+					m_levelHandler.removeRoom(m_level.getRooms().get(id));
 					break;
 				default:
 					break;
@@ -392,6 +405,7 @@ public class EditionFragment extends AbstractFragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		m_drawerList.clearChoices();
 		outState.putParcelable("level", m_level);
 		m_view.saveMatrix(outState);
 		super.onSaveInstanceState(outState);

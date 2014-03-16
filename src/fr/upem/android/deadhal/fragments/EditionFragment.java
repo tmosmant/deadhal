@@ -316,8 +316,8 @@ public class EditionFragment extends AbstractFragment {
 		case ADD_NEW_ROOM:
 			if (resultCode == Activity.RESULT_OK) {
 				String name = data.getStringExtra("inputText");
-				int xCenterRoom = m_view.getWidth() - 150;
-				int yCenterRoom = m_view.getHeight() - 150;
+				float xCenterRoom = m_view.getWidth() - 150;
+				float yCenterRoom = m_view.getHeight() - 150;
 				float[] pts = { xCenterRoom / 2, yCenterRoom / 2 };
 				Matrix inverse = new Matrix();
 				m_view.getMatrix().invert(inverse);
@@ -337,7 +337,7 @@ public class EditionFragment extends AbstractFragment {
 				String strId = data.getStringExtra("id");
 				UUID id = UUID.fromString(strId);
 				switch (option) {
-				case 0:
+				case 0: {
 					Room room = m_level.getRooms().get(id);
 					String title = getActivity().getString(
 							R.string.new_name_for_);
@@ -352,7 +352,30 @@ public class EditionFragment extends AbstractFragment {
 							"roomRenameDialog");
 
 					break;
-				case 1:
+				}
+				case 1: {
+					Room room = m_level.getRooms().get(id);
+					float xCenterRoom = m_view.getWidth() - 150;
+					float yCenterRoom = m_view.getHeight() - 150;
+					float[] pts = { xCenterRoom / 2, yCenterRoom / 2 };
+					Matrix inverse = new Matrix();
+					m_view.getMatrix().invert(inverse);
+					inverse.mapPoints(pts);
+					RectF rect = room.getRect();
+					float width = rect.width();
+					float height = rect.height();
+
+					RectF copyRect = new RectF(pts[0], pts[1], pts[0] + width,
+							pts[1] + height);
+					Room CopyRoom = new Room(UUID.randomUUID(), room.getName()
+							+ getActivity().getString(R.string._copy),
+							copyRect);
+					m_levelHandler.addRoom(CopyRoom);
+					updateDrawer();
+					m_levelHandler.selectRoom(CopyRoom);
+					return;
+				}
+				case 2:
 					m_levelHandler.unselectRoom();
 					m_levelHandler.removeRoom(m_level.getRooms().get(id));
 					break;

@@ -46,8 +46,6 @@ public class OpenFragment extends AbstractFragment implements
 	private DrawerMainListener m_callback;
 	private FileAdapter m_filesAdapter;
 
-	// private ActionMode m_actionMode;
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -167,9 +165,12 @@ public class OpenFragment extends AbstractFragment implements
 
 	private void showRenameDialog() {
 		String title = getActivity().getString(R.string.action_rename);
-
+		String previousText = null;
+		if (m_selectedFile != null) {
+			previousText = Storage.getFileNameWithoutExtension(m_selectedFile);
+		}
 		DialogFragment dialogFragment = InputDialogFragment.newInstance(title,
-				null, null);
+				null, previousText);
 		dialogFragment.setTargetFragment(this, RENAME_DIALOG);
 		dialogFragment.show(getFragmentManager().beginTransaction(),
 				"renameDialog");

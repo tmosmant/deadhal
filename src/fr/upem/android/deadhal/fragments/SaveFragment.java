@@ -1,6 +1,7 @@
 package fr.upem.android.deadhal.fragments;
 
 import java.io.File;
+import java.text.Normalizer;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -67,6 +68,13 @@ public class SaveFragment extends AbstractFragment {
 		m_textViewFileName = (EditText) rootView
 				.findViewById(R.id.entryFileName);
 		m_textViewFileName.setOnEditorActionListener(editorActionListener());
+
+		if (m_level != null) {
+			String normalizedString = Normalizer.normalize(m_level.getTitle(),
+					Normalizer.Form.NFD);
+			normalizedString = normalizedString.replaceAll("[^\\p{ASCII}]", "");
+			m_textViewFileName.setText(m_level.getTitle());
+		}
 
 		Button button = (Button) rootView.findViewById(R.id.buttonSave);
 		button.setOnClickListener(saveOnClickListener());

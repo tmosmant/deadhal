@@ -23,8 +23,8 @@
     <string name="action_accept">Accept</string>
     <string name="action_navigate">Navigate</string>
     <string name="action_edition">Edition</string>
-    <string name="action_rename">Rename</string>
-    <string name="yes">Yes</string>
+    <string name="action_rename">New name :</string>
+    <string name="save_button">Save</string>
     <string name="hint_file_name">File name</string>
     <string name="hint_level_name">Level name</string>
     <string name="save_warning">Overwrite ?</string>
@@ -68,10 +68,10 @@
     </string-array>
 
     <string name="desc_list_item_icon">Item Icon</string>
-    <string name="deleted_file">File deleted</string>
-    <string name="saved_file">File has been saved</string>
-    <string name="deleted_file_error">Cannot delete file</string>
-    <string name="invalid_save_entry">Please enter a name for the file and a name for the level</string>
+    <string name="deleted_file">File deleted.</string>
+    <string name="saved_file">File has been saved.</string>
+    <string name="deleted_file_error">Can not delete file.</string>
+    <string name="invalid_save_entry">Can not save without a file name.</string>
     <string name="start_navigation">Start navigation</string>
     <string name="no_path_found">No path found.</string>
     <string name="follow_the_green_path">Follow the green path.</string>
@@ -79,7 +79,7 @@
     <string name="need_at_least_2_rooms">Need at least 2 rooms !</string>
     <string name="this_move_isn_t_possible">This move isn\'t possible !</string>
     <string name="an_error_occured">"An error occurred : "</string>
-    <string name="error_memory">Unable to access memory</string>
+    <string name="error_memory">Unable to access memory.</string>
     <string name="accelerometer">Accelerometer</string>
     <string name="screen_lock">Screen rotation deactivated.</string>
     <string name="screen_unlock">Screen rotation activated.</string>

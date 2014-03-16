@@ -33,7 +33,7 @@ public class InputDialogFragment extends DialogFragment {
 	 * @param title
 	 *            the dialog title
 	 * @param strId
-	 *            the room id
+	 *            the room id to transport : can be null
 	 * @param previousText
 	 *            the previous text to display in the dialog, if any : can be
 	 *            null

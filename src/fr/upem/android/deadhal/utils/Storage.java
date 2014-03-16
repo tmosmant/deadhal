@@ -189,7 +189,14 @@ public class Storage {
 		return true;
 	}
 
-	private static String getFileNameWithoutExtension(File file) {
+	/**
+	 * 
+	 * Returns the file name without extension.
+	 * @param file
+	 *            the file to extract name
+	 * @return the file name without extension
+	 */
+	public static String getFileNameWithoutExtension(File file) {
 		String name = file.getName();
 		int pos = name.lastIndexOf(".");
 		if (pos > 0) {

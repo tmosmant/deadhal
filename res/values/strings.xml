@@ -144,4 +144,24 @@
         1.	Open the edition panel (on the right of the screen). You can open the edition panel by swipe the screen from right to left or by click the list icon on the right of the action bar\n
         2.	Click on the cross on the right of the corridor you want to delete\n"
     </string>
+    <string name="how_to_edit_level_title">How-To edit the level</string>
+    <string name="how_to_edit_level_message">"In order to edit the level you need to go in edition mode by hitting the lock in the action bar\n"</string>
+    <string name="how_to_navigate_monotouch_title">Mono-Touch</string>
+    <string name="how_to_navigate_monotouch_message">"In order to navigate on a mono-touch way, you need to be in navigation mode and you have to set the initial position by a long press on a room. Then you can move you point with on finger\n"</string>
+    <string name="how_to_navigate_accelerometer_title">Accelerometer</string>
+    <string name="how_to_navigate_accelerometer_message">"In order to navigate with the accelerometer of your phone you need to be in navigation mode and you have to check the option “Accelerometer”. Then you can move your point by moving your phone\n"</string>
+    <string name="how_to_get_route_title">Route</string>
+    <string name="how_to_get_route_message">"In order to get a route you have to it the road sign near the lock in the action bar, then you have to select which room you want on start and on end of the route\n"</string>
+    <string name="how_to_save_title">Save</string>
+    <string name="how_to_save_message">"You can save the current level on the “save” screen. For access the “save” screen you have to open the left panel and click on “Save…”. In this screen you have to name your file and click on yes\n"</string>
+    <string name="how_to_open_title">Open</string>
+    <string name="how_to_open_message">
+        "You can open a level you have previously saved on the “open” screen. For access the “open” screen you have to open the left panel and click on “Open…”. In this screen you have the list of all your level and you can:\n
+        •	Open: click on a level to open it\n
+        •	Rename: do a long press on the level then select “Rename” option and put the new name\n
+        •	Share: do a long press on the level then select “Share” option then select with which app you want to share it\n
+        •	Delete: do a long press on the level then select “Delete” option\n"
+    </string>
+    <string name="how_to_extra_title">Extra</string>
+    <string name="how_to_extra_message">"You can open a level from another app by opening all file with .dh extension. This level will be load and save in you directory.\n"</string>
 </resources>

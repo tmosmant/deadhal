@@ -1,67 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
 
-<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
-         android:id="@android:id/tabhost"
-         android:layout_width="fill_parent"
-         android:layout_height="fill_parent">
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-        <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+    <TabHost
+            android:id="@+id/tabHost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-            <TextView
-                    android:tag="tab0"
-                    android:text="@string/edition"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    />
-            <TextView
-                    android:tag="tab1"
-                    android:text="@string/navigation_trunc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    />
-            <TextView
-                    android:tag="tab2"
-                    android:text="@string/save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    />
-            <TextView
-                    android:tag="tab3"
-                    android:text="@string/open"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        </TabWidget>
+            <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </TabWidget>
 
-        <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+            <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:layout_marginLeft="8dp" android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp">
 
-            <TextView
-                    android:text="Hallo1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"/>
-            <TextView
-                    android:text="Hallo2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"/>
-            <TextView
-                    android:text="Hallo3"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"/>
-            <TextView
-                    android:text="Hallo4"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"/>
+                <LinearLayout
+                        android:id="@+id/tabEdition"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-        </FrameLayout>
-    </LinearLayout>
-</TabHost>
+                    <ScrollView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/scrollView">
+                        <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent">
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="@string/how_to_navigate_title"
+                                    android:id="@+id/textView"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="@string/how_to_navigate_message"
+                                    android:id="@+id/textView5"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="@string/how_to_add_room_title"
+                                    android:id="@+id/textView6"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="@string/how_to_add_room_message"
+                                    android:id="@+id/textView7"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="@string/how_to_delete_room_title"
+                                    android:id="@+id/textView8"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="@string/how_to_delete_room_message"
+                                    android:id="@+id/textView9"/>
+
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="@string/how_to_rename_room_title"
+                                    android:id="@+id/textView10"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="@string/how_to_rename_room_message"
+                                    android:id="@+id/textView11"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="@string/how_to_move_room_title"
+                                    android:id="@+id/textView12"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="@string/how_to_move_room_message"
+                                    android:id="@+id/textView13"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="@string/how_to_resize_room_title"
+                                    android:id="@+id/textView14"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="@string/how_to_resize_room_message"
+                                    android:id="@+id/textView15"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="@string/how_to_add_corridor_title"
+                                    android:id="@+id/textView16"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="@string/how_to_add_corridor_message"
+                                    android:id="@+id/textView17"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:text="@string/how_to_delete_corridor_title"
+                                    android:id="@+id/textView18"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:text="@string/how_to_delete_corridor_message"
+                                    android:id="@+id/textView19"/>
+                        </LinearLayout>
+                    </ScrollView>
+                </LinearLayout>
+
+
+                <LinearLayout
+                        android:id="@+id/tabNavigation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="204dp"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="10dp"
+                            android:text="TAB 2"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:id="@+id/tabSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="204dp"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="10dp"
+                            android:text="TAB 3"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:id="@+id/tabOpen"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    <TextView
+                            android:id="@+id/textView4"
+                            android:layout_width="204dp"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="10dp"
+                            android:text="TAB 4"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+</LinearLayout>

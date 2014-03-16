@@ -5,7 +5,7 @@
     <string name="file">File</string>
     <string name="edition">Edition</string>
     <string name="navigation">Navigation</string>
-    <string name="navigation_trunc">Navig</string>
+    <string name="navigation_trunc">Navig.</string>
     <string name="corridors">Add corridors</string>
     <string name="open">Open</string>
     <string name="save">Save</string>
@@ -92,4 +92,56 @@
     <string name="_copy">" copy"</string>
     <string name="name_for_the_copy_of_">"Name for the copy of "</string>
 
+    <string name="how_to_navigate_title">How-To navigate on the level</string>
+    <string name="how_to_navigate_message">"In order to navigate on the level you need to go in navigation mode by hitting the lock in the action bar.\n"</string>
+    <string name="how_to_add_room_title">How-To add a room</string>
+    <string name="how_to_add_room_message">
+        "To add a room you need to be in edition mode, then follow these steps:\n
+        1.	Open the edition panel (on the right of the screen). You can open the edition panel by swipe the screen from right to left or by click the list icon on the right of the action bar\n
+        2.	Click on “Add a room…”\n
+        3.	Name your new room\n"
+    </string>
+    <string name="how_to_delete_room_title">How-To delete a room</string>
+    <string name="how_to_delete_room_message">
+        "To delete a room you need to be in edition mode, then follow these steps:\n
+        1.	Open the edition panel (on the right of the screen). You can open the edition panel by swipe the screen from right to left or by click the list icon on the right of the action bar\n
+        2.	Click on the downwardly directed arrow\n
+        3.	Select “Delete”\n"
+    </string>
+    <string name="how_to_rename_room_title">How-To rename a room</string>
+    <string name="how_to_rename_room_message">
+        "To rename a room you need to be in edition mode, then follow these steps:\n
+        1.	Open the edition panel (on the right of the screen). You can open the edition panel by swipe the screen from right to left or by click the list icon on the right of the action bar\n
+        2.	Click on the downwardly directed arrow\n
+        3.	Select “Rename”\n
+        4.	Rename your room\n"
+    </string>
+    <string name="how_to_move_room_title">How-To move a room</string>
+    <string name="how_to_move_room_message">
+        "To move a room you need to be in edition mode and select a room. There are two ways to select a room:\n
+        1.	Open the edition panel and select a room in the room list and close the edition panel\n
+        2.	Do a long press on a room\n\nThen you can move the selected room\n"
+    </string>
+    <string name="how_to_resize_room_title">How-To resize a room</string>
+    <string name="how_to_resize_room_message">
+        "To resize a room you need to be in edition mode and select a room. There are two ways to select a room:\n
+        1.	Open the edition panel and select a room in the room list and close the edition panel\n
+        2.	Do a long press on a room\n\nThen you can resize the selected room by holding one of the dot on the room (there 4 dots on each selected room).\n"
+    </string>
+    <string name="how_to_add_corridor_title">How-To add a corridor</string>
+    <string name="how_to_add_corridor_message">
+        "To add a corridor you need to be in edition mode and have at least two rooms, then follow these steps:\n
+        1.	Open the edition panel (on the right of the screen). You can open the edition panel by swipe the screen from right to left or by click the list icon on the right of the action bar\n
+        2.	Click on “Add a corridor…”\n
+        3.	Select the two rooms you need link by do a long press on each one\n
+        4.	Validate\n\nNote:
+        •	By default the corridor are bidirectional, if you want a unidirectional corridor you need to press on the two arrow\n
+        •	To switch from unidirectional to bidirectional hit the simple arrow\n"
+    </string>
+    <string name="how_to_delete_corridor_title">How-To delete a corridor</string>
+    <string name="how_to_delete_corridor_message">
+        "To delete a room you need to be in edition mode, then follow these steps:\n
+        1.	Open the edition panel (on the right of the screen). You can open the edition panel by swipe the screen from right to left or by click the list icon on the right of the action bar\n
+        2.	Click on the cross on the right of the corridor you want to delete\n"
+    </string>
 </resources>

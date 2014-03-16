@@ -37,9 +37,6 @@
                 <data android:scheme="file"/>
             </intent-filter>
         </activity>
-
-        <activity
-                android:name="fr.upem.android.deadhal.fragments.HelpFragment"/>
     </application>
 
 </manifest>

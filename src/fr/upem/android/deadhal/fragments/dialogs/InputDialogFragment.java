@@ -34,13 +34,21 @@ public class InputDialogFragment extends DialogFragment {
 	 *            the dialog title
 	 * @param strId
 	 *            the room id
+	 * @param previousText
+	 *            the previous text to display in the dialog, if any : can be
+	 *            null
 	 * @return the dialog
 	 */
-	public static InputDialogFragment newInstance(String title, String strId) {
+	public static InputDialogFragment newInstance(String title, String strId,
+			String previousText) {
 		InputDialogFragment renameDialogFragment = new InputDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putString("title", title);
 		bundle.putString("id", strId);
+		if (previousText == null) {
+			previousText = new String();
+		}
+		bundle.putString("previousText", previousText);
 		renameDialogFragment.setArguments(bundle);
 		return renameDialogFragment;
 	}
@@ -64,6 +72,8 @@ public class InputDialogFragment extends DialogFragment {
 		String title = getArguments().getString("title");
 		final String strId = getArguments().getString("id");
 		m_strId = strId;
+		final String previousText = getArguments().getString("previousText");
+		m_editText.setText(previousText);
 		return new AlertDialog.Builder(getActivity())
 				.setTitle(title)
 				.setView(m_editText)

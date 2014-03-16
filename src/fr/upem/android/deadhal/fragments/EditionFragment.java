@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -85,6 +86,7 @@ public class EditionFragment extends AbstractFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		Log.v("deadhal", "onCreate");
 	}
 
 	@Override
@@ -127,6 +129,8 @@ public class EditionFragment extends AbstractFragment {
 		m_view.build(gestureDetector, savedInstanceState, m_prefs);
 
 		relativeLayout.addView(m_view);
+
+		Log.v("deadhal", "drawerlayout set");
 
 		m_drawerLayout = (DrawerLayout) m_rootView
 				.findViewById(R.id.drawer_edit_layout);
@@ -243,7 +247,7 @@ public class EditionFragment extends AbstractFragment {
 							R.string.name_for_this_room);
 
 					DialogFragment dialogFragment = InputDialogFragment
-							.newInstance(title, null);
+							.newInstance(title, null, null);
 					dialogFragment.setTargetFragment(EditionFragment.this,
 							ADD_NEW_ROOM);
 					dialogFragment.show(
@@ -326,7 +330,8 @@ public class EditionFragment extends AbstractFragment {
 							R.string.new_name_for_);
 
 					DialogFragment dialogFragment = InputDialogFragment
-							.newInstance(title + room.getName() + " :", strId);
+							.newInstance(title + room.getName() + " :", strId,
+									room.getName());
 					dialogFragment.setTargetFragment(this,
 							EditionFragment.RENAME_ROOM);
 					dialogFragment.show(
@@ -394,14 +399,16 @@ public class EditionFragment extends AbstractFragment {
 
 	@Override
 	public boolean onBackPressed() {
-		if (m_drawerLayout.isDrawerOpen(Gravity.END)) {
-			m_drawerLayout.closeDrawer(Gravity.END);
-			return true;
+		if (m_drawerLayout != null) {
+			if (m_drawerLayout.isDrawerOpen(Gravity.END)) {
+				m_drawerLayout.closeDrawer(Gravity.END);
+				return true;
+			}
+			m_levelHandler.unselectRoom();
+			m_levelHandler.unselectCorridor();
+			updateDrawer();
+			m_view.refresh();
 		}
-		m_levelHandler.unselectRoom();
-		m_levelHandler.unselectCorridor();
-		updateDrawer();
-		m_view.refresh();
 		return true;
 	}
 }

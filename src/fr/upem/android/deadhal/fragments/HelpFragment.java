@@ -70,6 +70,6 @@ public class HelpFragment extends AbstractFragment {
 
 	@Override
 	public boolean onBackPressed() {
-		return false;
+		return true;
 	}
 }

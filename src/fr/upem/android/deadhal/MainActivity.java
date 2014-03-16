@@ -282,6 +282,7 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		super.onSaveInstanceState(outState);
 		outState.putParcelable("level", m_level);
 		outState.putInt("menu", m_menu);
+		outState.putInt("fragmentId", m_fragment.getId());
 	}
 
 	@Override
@@ -289,6 +290,9 @@ public class MainActivity extends Activity implements DrawerMainListener {
 		super.onRestoreInstanceState(savedInstanceState);
 		m_level = savedInstanceState.getParcelable("level");
 		m_menu = savedInstanceState.getInt("menu");
+		int fragmentId = savedInstanceState.getInt("fragmentId");
+		m_fragment = (AbstractFragment) getFragmentManager().findFragmentById(
+				fragmentId);
 		invalidateOptionsMenu();
 	}
 
@@ -328,8 +332,11 @@ public class MainActivity extends Activity implements DrawerMainListener {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		return keyCode == KeyEvent.KEYCODE_BACK && m_fragment.onBackPressed()
-				|| super.onKeyDown(keyCode, event);
+		if (keyCode == KeyEvent.KEYCODE_BACK && m_fragment != null
+				&& m_fragment.onBackPressed()) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	/**

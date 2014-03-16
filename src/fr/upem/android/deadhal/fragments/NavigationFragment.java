@@ -262,8 +262,10 @@ public class NavigationFragment extends AbstractFragment {
 
 	@Override
 	public boolean onBackPressed() {
-		m_levelHandler.clearShortestPath();
-		m_view.refresh();
+		if (m_levelHandler != null) {
+			m_levelHandler.clearShortestPath();
+			m_view.refresh();
+		}
 		return true;
 	}
 }

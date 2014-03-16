@@ -17,10 +17,7 @@
             android:ems="10"
             android:hint="@string/hint_file_name"
             android:imeOptions="actionDone"
-            android:singleLine="true" >
-
-            <requestFocus />
-        </EditText>
+            android:singleLine="true" />
 
         <Button
             android:id="@+id/buttonSave"

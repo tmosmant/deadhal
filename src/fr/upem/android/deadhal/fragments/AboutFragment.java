@@ -15,15 +15,15 @@ public class AboutFragment extends AbstractFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
+			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_about, container,
-		                                 false);
+				false);
 		getActivity().setTitle(R.string.about);
 		return rootView;
 	}
 
 	@Override
 	public boolean onBackPressed() {
-		return false;
+		return true;
 	}
 }

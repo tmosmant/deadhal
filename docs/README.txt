@@ -29,6 +29,12 @@ Il y a 2 méthodes pour lancer l'application sur son appareil Android :
 	2) Importer le projet Android sur un IDE avec le SDK. Activer le 
 	mode debogage USB de son appareil, le connecter à son ordinateur
 	et lancer le projet en tant qu'application Android.
+
+Enfin, vous pouvez copier les exemples de plans fournis dans le
+répertoire maps du projet sur votre appareil. Soit dans le dossier
+"deadhal" de votre mémoire interne pour qu'ils soient automatiquement
+reconnus, soit n'importe où sur votre appareil pour ensuite les ouvrir
+à partir d'un navigateur de fichier.
 	
 	
 Utilisation
@@ -37,10 +43,10 @@ Utilisation
 Le menu "Edition" permet de modifier le labyrinthe, il faut que le
 cadenas en haut à droite soit dévérouillé.
 Dans ce menu on peut : 
-	-séléctionner un salle en faisant une pression longue sur
+	-séléctionner une salle en faisant une pression longue sur
 	celle-ci, de manière à la déplacer ou à modifier sa taille.
-	-ajouter ou supprimer des salles et des couloirs via le menu de 
-	droite
+	-ajouter, modifier, sélectionner des salles et des couloirs via le
+	menu de droite
 	-sélectionner le sens des couloirs lors de l'ajout de ceux-ci.
 	
 Le menu "Navigation" permet de visualiser et de parcourir le 
@@ -68,3 +74,8 @@ Le menu "Help" permet à l'utilisateur d'avoir un guide d'utilisation
 intégré dans l'application.
 
 Le menu "About" donne les informations au sujet de l'application.
+
+Enfin, à partir d'un explorateur de fichier, il est possible d'ouvrir
+les fichier .dh avec l'application deadhal, ce qui a pour effet de les
+afficher dans l'application et de les importer dans le répertoire de
+l'application.

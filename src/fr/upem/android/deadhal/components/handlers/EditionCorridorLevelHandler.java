@@ -26,6 +26,10 @@ public class EditionCorridorLevelHandler extends AbstractLevelHandler {
 	public Room getStart() {
 		return m_start;
 	}
+	
+	public void setStart(Room m_start) {
+		this.m_start = m_start;
+	}
 
 	public Room getEnd() {
 		return m_end;

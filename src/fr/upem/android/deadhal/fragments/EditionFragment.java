@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -45,7 +45,7 @@ import fr.upem.android.deadhal.view.EditionView;
 import fr.upem.android.deadhal.view.listeners.EditionGestureListener;
 import fr.upem.deadhal.R;
 
-public class EditionFragment extends Fragment {
+public class EditionFragment extends AbstractFragment {
 
 	private static final int ADD_NEW_ROOM = 0;
 	public static final int OPTION_DIALOG = 1;
@@ -172,6 +172,7 @@ public class EditionFragment extends Fragment {
 
 			@Override
 			public void onSelectRoom(Room room) {
+				m_drawerLayout.closeDrawer(Gravity.END);
 				m_levelHandler.unselectCorridor();
 				m_view.getVibrator().vibrate(100);
 				for (int i = 0; i < m_drawerList.getAdapter().getCount(); i++) {
@@ -254,6 +255,9 @@ public class EditionFragment extends Fragment {
 						boolean selectCorridor = m_levelHandler
 								.selectCorridor(corridor);
 						m_drawerList.setItemChecked(position, selectCorridor);
+						if (selectCorridor) {
+							m_drawerLayout.closeDrawer(Gravity.END);
+						}
 					}
 					break;
 				case ROOM:
@@ -377,5 +381,18 @@ public class EditionFragment extends Fragment {
 		outState.putParcelable("level", m_level);
 		m_view.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		if (m_drawerLayout.isDrawerOpen(Gravity.END)) {
+			m_drawerLayout.closeDrawer(Gravity.END);
+			return true;
+		}
+		m_levelHandler.unselectRoom();
+		m_levelHandler.unselectCorridor();
+		updateDrawer();
+		m_view.refresh();
+		return true;
 	}
 }

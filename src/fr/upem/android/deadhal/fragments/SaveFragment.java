@@ -4,7 +4,6 @@ import java.io.File;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -26,7 +25,7 @@ import fr.upem.android.deadhal.utils.Input;
 import fr.upem.android.deadhal.utils.Storage;
 import fr.upem.deadhal.R;
 
-public class SaveFragment extends Fragment {
+public class SaveFragment extends AbstractFragment {
 
 	public static final int OVERRIDE_DIALOG = 1;
 	private EditText m_textViewFileName;
@@ -156,6 +155,11 @@ public class SaveFragment extends Fragment {
 		saveTask.execute(m_level);
 		m_textViewFileName.setText("");
 		m_callback.onFileNumberChange();
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		return true;
 	}
 
 }

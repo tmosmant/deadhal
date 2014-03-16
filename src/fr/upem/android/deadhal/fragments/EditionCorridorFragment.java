@@ -1,7 +1,6 @@
 package fr.upem.android.deadhal.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import fr.upem.android.deadhal.view.EditionCorridorView;
 import fr.upem.android.deadhal.view.listeners.EditionCorridorGestureListener;
 import fr.upem.deadhal.R;
 
-public class EditionCorridorFragment extends Fragment {
+public class EditionCorridorFragment extends AbstractFragment {
 
 	private DrawerMainListener m_callback;
 
@@ -125,5 +124,16 @@ public class EditionCorridorFragment extends Fragment {
 		outState.putParcelable("level", m_level);
 		m_view.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		if (m_levelHandler.getStart() != null) {
+			m_levelHandler.setStart(null);
+			m_view.refresh();
+		} else {
+			m_callback.onFragmentChange(FragmentType.EDITION);
+		}
+		return true;
 	}
 }

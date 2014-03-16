@@ -10,7 +10,6 @@ import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,7 +36,7 @@ import fr.upem.android.deadhal.view.NavigationView;
 import fr.upem.android.deadhal.view.listeners.NavigationGestureListener;
 import fr.upem.deadhal.R;
 
-public class NavigationFragment extends Fragment {
+public class NavigationFragment extends AbstractFragment {
 
 	private static final int NAV_DIALOG = 1;
 
@@ -252,5 +251,12 @@ public class NavigationFragment extends Fragment {
 		outState.putParcelable("level", m_level);
 		m_view.saveMatrix(outState);
 		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		m_levelHandler.clearShortestPath();
+		m_view.refresh();
+		return true;
 	}
 }

@@ -60,7 +60,13 @@ public class NavigationLevelHandler extends AbstractLevelHandler {
 	}
 
 	public void setShortestPath(List<UUID> m_path) {
-		this.m_shortestPath = m_path;
+		m_shortestPath = m_path;
+	}
+
+	public void clearShortestPath() {
+		m_shortestPath = new ArrayList<UUID>();
+		m_roomStart = null;
+		m_roomEnd = null;
 	}
 
 	public Room getSelectedRoom() {

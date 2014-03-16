@@ -1,10 +1,11 @@
 package fr.upem.android.deadhal;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -14,6 +15,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,13 +26,16 @@ import fr.upem.android.deadhal.components.Level;
 import fr.upem.android.deadhal.drawers.adapters.DrawerMainListAdapter;
 import fr.upem.android.deadhal.drawers.listeners.DrawerMainListener;
 import fr.upem.android.deadhal.drawers.models.DrawerMainItem;
-import fr.upem.android.deadhal.fragments.*;
+import fr.upem.android.deadhal.fragments.AbstractFragment;
+import fr.upem.android.deadhal.fragments.EditionCorridorFragment;
+import fr.upem.android.deadhal.fragments.EditionFragment;
+import fr.upem.android.deadhal.fragments.FragmentType;
+import fr.upem.android.deadhal.fragments.NavigationFragment;
+import fr.upem.android.deadhal.fragments.OpenFragment;
+import fr.upem.android.deadhal.fragments.SaveFragment;
 import fr.upem.android.deadhal.tasks.OpenTask;
 import fr.upem.android.deadhal.utils.Storage;
 import fr.upem.deadhal.R;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public class MainActivity extends Activity implements DrawerMainListener {
 
@@ -45,6 +50,12 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	private DrawerMainListAdapter m_adapter;
 
 	private int m_menu = R.menu.edition;
+	private NavigationFragment m_navigationFragment;
+	private EditionFragment m_editionFragment;
+	private OpenFragment m_openFragment;
+	private SaveFragment saveFragment;
+	private EditionCorridorFragment editionCorridorFragment;
+	private AbstractFragment m_fragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +76,14 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			try {
 				m_level = openTask.get();
 				if (m_level != null) {
-//					if (Storage.fileExists(file.getName())) {
-//						Log.e("create", "already exist");
-//					} else {
-//						file.createNewFile();
-//						SaveTask saveTask = new SaveTask(this, file);
-//						saveTask.execute(m_level);
-//						onFileNumberChange();
-//					}
+					// if (Storage.fileExists(file.getName())) {
+					// Log.e("create", "already exist");
+					// } else {
+					// file.createNewFile();
+					// SaveTask saveTask = new SaveTask(this, file);
+					// saveTask.execute(m_level);
+					// onFileNumberChange();
+					// }
 					Storage.copyFile(file);
 				}
 
@@ -211,22 +222,25 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	public void displayView(FragmentType fragmentType) {
 		// update the main content by switching fragments
 		FragmentManager fragmentManager = getFragmentManager();
-		Fragment fragment = null;
+		m_fragment = null;
 
 		switch (fragmentType) {
 		case NAVIGATION:
-			fragment = new NavigationFragment();
+			m_navigationFragment = new NavigationFragment();
+			m_fragment = m_navigationFragment;
 			m_menu = R.menu.navigation;
 			break;
 		case EDITION:
-			fragment = new EditionFragment();
+			m_editionFragment = new EditionFragment();
+			m_fragment = m_editionFragment;
 			m_menu = R.menu.edition;
 			break;
 		case OPEN:
 			if (Storage.isExternalStorageReadable()) {
-				fragment = new OpenFragment();
+				m_openFragment = new OpenFragment();
+				m_fragment = m_openFragment;
 			} else {
-				fragment = null;
+				m_fragment = null;
 				Toast.makeText(getApplicationContext(), R.string.error_memory,
 						Toast.LENGTH_LONG).show();
 			}
@@ -234,28 +248,30 @@ public class MainActivity extends Activity implements DrawerMainListener {
 			break;
 		case SAVE:
 			if (Storage.isExternalStorageWritable()) {
-				fragment = new SaveFragment();
+				saveFragment = new SaveFragment();
+				m_fragment = saveFragment;
 			} else {
-				fragment = null;
+				m_fragment = null;
 				Toast.makeText(getApplicationContext(), R.string.error_memory,
 						Toast.LENGTH_LONG).show();
 			}
 			m_menu = R.menu.save;
 			break;
 		case EDITION_CORRIDOR:
-			fragment = new EditionCorridorFragment();
+			editionCorridorFragment = new EditionCorridorFragment();
+			m_fragment = editionCorridorFragment;
 			m_menu = R.menu.edition_corridor;
 			break;
 		default:
 			break;
 		}
-		if (fragment != null) {
+		if (m_fragment != null) {
 			Bundle bundle = new Bundle();
 			bundle.putParcelable("level", m_level);
-			fragment.setArguments(bundle);
+			m_fragment.setArguments(bundle);
 
 			fragmentManager.beginTransaction()
-					.replace(R.id.frame_container, fragment).commit();
+					.replace(R.id.frame_container, m_fragment).commit();
 			int index = fragmentType.getIndex();
 
 			m_drawerList.setItemChecked(index, true);
@@ -335,12 +351,21 @@ public class MainActivity extends Activity implements DrawerMainListener {
 	}
 
 	@Override
-	public void onBackPressed() {
-		Intent setIntent = new Intent(Intent.ACTION_MAIN);
-		setIntent.addCategory(Intent.CATEGORY_HOME);
-		setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(setIntent);
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && m_fragment.onBackPressed()) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
+
+	// @Override
+	// public void onBackPressed() {
+	// Toast.makeText(this, "HEHEHE", Toast.LENGTH_LONG).show();
+	// Intent setIntent = new Intent(Intent.ACTION_MAIN);
+	// setIntent.addCategory(Intent.CATEGORY_HOME);
+	// setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	// startActivity(setIntent);
+	// }
 
 	/**
 	 * Slide menu item click listener

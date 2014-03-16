@@ -1,8 +1,12 @@
 package fr.upem.android.deadhal.fragments;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.concurrent.ExecutionException;
+
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,12 +28,7 @@ import fr.upem.android.deadhal.tasks.OpenTask;
 import fr.upem.android.deadhal.utils.Storage;
 import fr.upem.deadhal.R;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.concurrent.ExecutionException;
-
-public class OpenFragment extends Fragment implements
+public class OpenFragment extends AbstractFragment implements
 		AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
 	private static final int OPTIONS_DIALOG = 1;
@@ -214,6 +213,11 @@ public class OpenFragment extends Fragment implements
 		intent.putExtra(Intent.EXTRA_SUBJECT,
 				"Share " + m_selectedFile.getName());
 		startActivity(intent);
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		return true;
 	}
 
 }

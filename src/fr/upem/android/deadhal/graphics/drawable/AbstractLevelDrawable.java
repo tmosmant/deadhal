@@ -77,7 +77,30 @@ public abstract class AbstractLevelDrawable extends Drawable {
 	}
 
 	/**
-	 * Draw a room.
+	 * Draw a room on a canvas with paints.
+	 * 
+	 * @param canvas
+	 *            the canvas to draw on
+	 * @param room
+	 *            the room to draw
+	 * @param background
+	 *            the background paint
+	 * @param border
+	 *            the border paint
+	 */
+	protected void drawRoom(Canvas canvas, Room room, Paint background,
+			Paint border) {
+		float borderSize = (float) 1.5;
+		RectF rect = room.getRect();
+		RectF rectB = new RectF(rect.left + borderSize, rect.top + borderSize,
+				rect.right - borderSize, rect.bottom - borderSize);
+		canvas.drawRect(rect, background);
+		canvas.drawRect(rectB, border);
+		drawTitle(canvas, room);
+	}
+
+	/**
+	 * Draw a room on a canvas with default paints.
 	 * 
 	 * @param canvas
 	 *            the canvas to draw on

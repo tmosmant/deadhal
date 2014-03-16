@@ -3,8 +3,6 @@ package fr.upem.android.deadhal.graphics.drawable;
 import java.util.Collection;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import fr.upem.android.deadhal.components.Corridor;
 import fr.upem.android.deadhal.components.Level;
 import fr.upem.android.deadhal.components.Room;
@@ -42,10 +40,12 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 		Room roomStart = m_levelHandler.getRoomStart();
 		Room roomEnd = m_levelHandler.getRoomEnd();
 		if (roomStart != null) {
-			drawSelectedRoom(canvas, roomStart, Paints.ROOM_START_BACKGROUND);
+			drawRoom(canvas, roomStart, Paints.ROOM_START_BACKGROUND,
+					Paints.ROOM_BORDER);
 		}
 		if (roomEnd != null) {
-			drawSelectedRoom(canvas, roomEnd, Paints.ROOM_END_BACKGROUND);
+			drawRoom(canvas, roomEnd, Paints.ROOM_END_BACKGROUND,
+					Paints.ROOM_BORDER);
 		}
 		for (Corridor corridor : level.getCorridors().values()) {
 			if (m_levelHandler.getShortestPath().contains(corridor.getId())) {
@@ -55,26 +55,5 @@ public class NavigationLevelDrawable extends AbstractLevelDrawable {
 			}
 		}
 		m_levelHandler.getPawn().draw(canvas);
-	}
-
-	/**
-	 * Draw a room on a canvas with a paint.
-	 * 
-	 * @param canvas
-	 *            the canvas to draw on
-	 * @param room
-	 *            the room to draw
-	 * @param paint
-	 *            the paint to use
-	 */
-	private void drawSelectedRoom(Canvas canvas, Room room, Paint paint) {
-		float borderSize = (float) 1.5;
-
-		RectF rect = room.getRect();
-		RectF rectB = new RectF(rect.left + borderSize, rect.top + borderSize,
-				rect.right - borderSize, rect.bottom - borderSize);
-		canvas.drawRect(rect, paint);
-		canvas.drawRect(rectB, Paints.ROOM_BORDER);
-		drawTitle(canvas, room);
 	}
 }

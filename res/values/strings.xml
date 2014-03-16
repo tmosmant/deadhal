@@ -172,4 +172,5 @@
     </string>
     <string name="how_to_extra_title">Extra</string>
     <string name="how_to_extra_message">"You can open a level from another app by opening all file with .dh extension. This level will be load and save in the deadhal directory.\n"</string>
+    <string name="ok">OK</string>
 </resources>

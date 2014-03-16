@@ -103,7 +103,7 @@ public class NavigationDialogFragment extends DialogFragment {
 				.setTitle(R.string.select_route)
 				.setView(linearLayout)
 				.setIcon(R.drawable.ic_action_directions)
-				.setPositiveButton(android.R.string.ok,
+				.setPositiveButton(R.string.ok,
 						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog,

@@ -43,7 +43,7 @@ public class ConfirmDialogFragment extends DialogFragment {
 				.setTitle(title)
 				.setMessage(message)
 				.setIcon(R.drawable.ic_action_warning)
-				.setPositiveButton(android.R.string.ok,
+				.setPositiveButton(R.string.ok,
 						new DialogInterface.OnClickListener() {
 
 							public void onClick(DialogInterface dialog,
@@ -54,7 +54,7 @@ public class ConfirmDialogFragment extends DialogFragment {
 										getActivity().getIntent());
 							}
 						})
-				.setNegativeButton(android.R.string.cancel,
+				.setNegativeButton(R.string.cancel,
 						new DialogInterface.OnClickListener() {
 
 							public void onClick(DialogInterface dialog,

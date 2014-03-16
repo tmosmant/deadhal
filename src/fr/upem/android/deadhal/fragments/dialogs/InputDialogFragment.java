@@ -1,5 +1,6 @@
 package fr.upem.android.deadhal.fragments.dialogs;
 
+import fr.upem.deadhal.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -77,7 +78,7 @@ public class InputDialogFragment extends DialogFragment {
 		return new AlertDialog.Builder(getActivity())
 				.setTitle(title)
 				.setView(m_editText)
-				.setPositiveButton(android.R.string.ok,
+				.setPositiveButton(R.string.ok,
 						new DialogInterface.OnClickListener() {
 
 							public void onClick(DialogInterface dialog,
@@ -86,7 +87,7 @@ public class InputDialogFragment extends DialogFragment {
 								passNewName(value.toString(), strId);
 							}
 						})
-				.setNegativeButton(android.R.string.cancel,
+				.setNegativeButton(R.string.cancel,
 						new DialogInterface.OnClickListener() {
 
 							public void onClick(DialogInterface dialog,

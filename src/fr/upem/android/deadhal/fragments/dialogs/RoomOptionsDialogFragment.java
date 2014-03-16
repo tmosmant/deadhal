@@ -50,7 +50,7 @@ public class RoomOptionsDialogFragment extends DialogFragment {
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(
 				getActivity());
 		builderSingle.setTitle(title);
-		builderSingle.setNegativeButton(android.R.string.cancel,
+		builderSingle.setNegativeButton(R.string.cancel,
 				new DialogInterface.OnClickListener() {
 
 					@Override

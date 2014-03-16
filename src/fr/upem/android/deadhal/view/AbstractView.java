@@ -92,15 +92,11 @@ public abstract class AbstractView extends View {
 		} else {
 			restoreMatrix(preferences);
 		}
-		if (AbstractView.isTablet(getContext())) {
-			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-			View rootView = getRootView();
-			rootView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-		} else {
-			setLayerType(View.LAYER_TYPE_HARDWARE, null);
-			View rootView = getRootView();
-			rootView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-		}
+//		if (AbstractView.isTablet(getContext())) {
+//			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//			View rootView = getRootView();
+//			rootView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//		}
 		refresh();
 	}
 
@@ -110,10 +106,10 @@ public abstract class AbstractView extends View {
 	public void refresh() {
 		bringToFront();
 		View rootView = getRootView();
-		if (rootView.getLayerType() != View.LAYER_TYPE_SOFTWARE
-				&& AbstractView.isTablet(getContext())) {
-			rootView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-		}
+//		if (rootView.getLayerType() != View.LAYER_TYPE_SOFTWARE
+//				&& AbstractView.isTablet(getContext())) {
+//			rootView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//		}
 		rootView.requestLayout();
 		rootView.invalidate();
 		invalidate();

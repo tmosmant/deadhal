@@ -100,7 +100,6 @@ public class Paints {
 	 *            true to activate, false to deactivate
 	 */
 	public static void setAntiAlias(boolean aa) {
-//		aa = false;
 		ROOM_BACKGROUND.setAntiAlias(aa);
 		ROOM_BORDER.setAntiAlias(aa);
 		ROOM_SELECTED_BORDER.setAntiAlias(aa);

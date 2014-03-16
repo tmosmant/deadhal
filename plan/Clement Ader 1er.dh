@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<level title="1er Clément Ader">
+  <room id="8131b77d-8007-4598-8ec3-3d21a125ae30" name="SR-1S" left="120.32118" right="220.3349" top="571.48535" bottom="671.80835" />
+  <room id="6f742ad9-50cc-4b0b-837a-425010a3a14e" name="118 CA" left="655.53125" right="806.5613" top="368.66095" bottom="674.33075" />
+  <room id="6f1013ca-1125-4140-b585-ed34e84d12c0" name="Escaliers" left="34.27044" right="221.593" top="369.45132" bottom="519.4513" />
+  <room id="0e598671-f499-46c1-8c12-9efa182ff87a" name="Ascenseur" left="1227.4756" right="1337.6675" top="863.4314" bottom="964.50757" />
+  <room id="3974531e-3618-494e-aa5e-8ceb2c380945" name="SR-1S 2" left="3471.009" right="3571.5881" top="570.0389" bottom="670.6669" />
+  <room id="3c9912f4-8a9b-477c-96f8-a7d586e1946f" name="102 CA" left="3099.8079" right="3443.2727" top="364.4134" bottom="668.7889" />
+  <room id="cd4bfeab-d7d4-4780-830b-559886c0278c" name="110 CA" left="1715.1249" right="2039.168" top="363.64572" bottom="668.02136" />
+  <room id="550a25a2-57ad-4d47-ae7e-c01d556acaa5" name="Escaliers 2" left="3468.2964" right="3655.619" top="365.66284" bottom="515.6627" />
+  <room id="516e8d84-148b-4160-8d58-2495d232e3af" name="Couloir principal" left="32.95813" right="3657.8638" top="724.4874" bottom="825.0419" />
+  <room id="216273d3-dab6-4649-a4c9-209a99349bd3" name="116 CA" left="836.3763" right="1030.3881" top="366.77957" bottom="671.16974" />
+  <room id="f94b3721-1067-4613-ab60-93a4c43280a9" name="106 CA" left="2401.0527" right="2724.7542" top="364.52362" bottom="668.899" />
+  <room id="a0193c11-2324-4860-aeaf-120af306592a" name="114 CA" left="1054.5033" right="1351.3076" top="365.02878" bottom="669.4045" />
+  <room id="792dd662-f846-4f4f-91d9-94a8372a2745" name="120 CA ext." left="260.86612" right="378.96252" top="369.92172" bottom="610.19904" />
+  <room id="c8d426bc-5fe4-491a-be13-51224ae12b91" name="120 CA" left="415.02118" right="628.7404" top="368.20883" bottom="674.10913" />
+  <room id="8025658f-6712-432d-9474-d3cc70628d3d" name="112 CA" left="1380.7463" right="1695.2656" top="364.6809" bottom="669.05646" />
+  <room id="d3f50343-df42-4108-b345-41a0f332712d" name="104 CA" left="2748.3416" right="3076.0276" top="364.2979" bottom="668.6735" />
+  <room id="0bf11b7e-df52-4c12-8a4f-ea85a817f493" name="108 CA" left="2059.495" right="2380.1772" top="363.90366" bottom="668.4453" />
+  <corridor id="d30dfc45-7246-47f4-b998-752d0dfd0b67" src="0e598671-f499-46c1-8c12-9efa182ff87a" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="50.683594,37.41339" dstPoint="1260.2772,94.35443" />
+  <corridor id="79733c91-65d6-41c8-8a25-0b3c6e69a32c" src="d3f50343-df42-4108-b345-41a0f332712d" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="291.60156,289.39233" dstPoint="3003.787,13.918091" />
+  <corridor id="b8986796-83f7-4bb2-b475-6bd32f5a3938" src="3974531e-3618-494e-aa5e-8ceb2c380945" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="83.01294,23.711304" dstPoint="3613.0063,25.906128" />
+  <corridor id="f0e5d5dd-8fd4-4427-a3ec-78391d09e31d" src="6f742ad9-50cc-4b0b-837a-425010a3a14e" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="119.98401,291.4229" dstPoint="732.96313,32.299683" />
+  <corridor id="13c1e4ea-5c8f-4f84-8fbd-413fb896ee66" src="550a25a2-57ad-4d47-ae7e-c01d556acaa5" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="167.27466,136.97845" dstPoint="3611.4072,20.311707" />
+  <corridor id="75781ce4-3f0e-436b-a283-0890c2ed2006" src="3c9912f4-8a9b-477c-96f8-a7d586e1946f" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="296.71265,296.46967" dstPoint="3380.352,21.1109" />
+  <corridor id="31cd6fc4-b465-4588-acba-ea0eb33919ea" src="a0193c11-2324-4860-aeaf-120af306592a" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="267.07068,281.46866" dstPoint="1291.8138,17.114868" />
+  <corridor id="bc1da36e-37e6-4d29-9dcd-a6d9d988f20a" src="216273d3-dab6-4649-a4c9-209a99349bd3" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="162.19952,298.09946" dstPoint="956.82324,10.721313" />
+  <corridor id="79d1c60c-1161-437e-aded-7b7f9bca7512" src="f94b3721-1067-4613-ab60-93a4c43280a9" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="43.262695,293.96185" dstPoint="2416.9536,14.717285" />
+  <corridor id="e36f2f3a-fcb1-4250-9655-99431adba050" src="792dd662-f846-4f4f-91d9-94a8372a2745" dst="c8d426bc-5fe4-491a-be13-51224ae12b91" directed="false" srcPoint="96.5105,218.23404" dstPoint="4.716461,213.55338" />
+  <corridor id="9d970e7e-1f6a-4e8b-a0df-8aab8917a887" src="a0193c11-2324-4860-aeaf-120af306592a" dst="216273d3-dab6-4649-a4c9-209a99349bd3" directed="true" srcPoint="9.710571,60.889282" dstPoint="176.6695,55.94168" />
+  <corridor id="85e2aa87-95ef-4d97-ab60-232c10d753ff" src="6f1013ca-1125-4140-b585-ed34e84d12c0" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="23.29358,125.19803" dstPoint="24.605888,17.914185" />
+  <corridor id="327e4f58-5162-413a-af2b-a4ffca20c1af" src="0bf11b7e-df52-4c12-8a4f-ea85a817f493" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="47.431152,291.38498" dstPoint="2070.77,2.729248" />
+  <corridor id="84661e59-c93b-4b75-87d9-2680e74897b4" src="8025658f-6712-432d-9474-d3cc70628d3d" dst="a0193c11-2324-4860-aeaf-120af306592a" directed="true" srcPoint="17.658691,48.44992" dstPoint="260.75366,48.901276" />
+  <corridor id="5266da8a-1088-4e68-8042-60c3fbb85657" src="cd4bfeab-d7d4-4780-830b-559886c0278c" dst="8025658f-6712-432d-9474-d3cc70628d3d" directed="true" srcPoint="33.46118,63.870697" dstPoint="270.30066,65.23312" />
+  <corridor id="4d48736f-f0af-45de-8e7d-0fa5a8f5d26d" src="c8d426bc-5fe4-491a-be13-51224ae12b91" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="35.097473,292.67422" dstPoint="416.36102,15.5164795" />
+  <corridor id="468e129d-1116-42ee-8a4b-93b7120c78cc" src="8131b77d-8007-4598-8ec3-3d21a125ae30" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="21.190369,19.86731" dstPoint="28.603394,22.70935" />
+  <corridor id="4f38665e-cb21-41da-be53-42b090bbb831" src="8025658f-6712-432d-9474-d3cc70628d3d" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="271.26428,287.4109" dstPoint="1621.4509,18.713257" />
+  <corridor id="fba0fc76-01c8-4705-a865-31859e2e28f5" src="3c9912f4-8a9b-477c-96f8-a7d586e1946f" dst="d3f50343-df42-4108-b345-41a0f332712d" directed="true" srcPoint="13.689453,51.11502" dstPoint="301.19556,56.025696" />
+  <corridor id="c69d595c-7cb9-44b5-9faa-60a9a8bd02a9" src="cd4bfeab-d7d4-4780-830b-559886c0278c" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="179.13428,291.6429" dstPoint="1841.3136,22.70929" />
+  <corridor id="e5e60e33-c68a-48d0-a343-b3d27730e129" src="f94b3721-1067-4613-ab60-93a4c43280a9" dst="0bf11b7e-df52-4c12-8a4f-ea85a817f493" directed="true" srcPoint="21.67627,45.4104" dstPoint="296.07593,45.23117" />
+</level>

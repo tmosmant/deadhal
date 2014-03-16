@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<level title="RC Clément Ader">
+  <room id="ddb4f2fb-9b3b-4591-9774-634e81d49861" name="010 CA" left="244.26636" right="653.79565" top="369.6902" bottom="675.1195" />
+  <room id="50524788-719f-4273-8399-b264197fca4b" name="WC Hommes 2" left="1057.0139" right="1207.0138" top="368.15546" bottom="674.523" />
+  <room id="09b0bd47-873d-4fb7-8af2-f58e79b58840" name="San. 1" left="3466.0505" right="3566.0642" top="572.72485" bottom="673.0478" />
+  <room id="6f1013ca-1125-4140-b585-ed34e84d12c0" name="Escaliers" left="34.27044" right="221.593" top="369.45132" bottom="519.4513" />
+  <room id="0e598671-f499-46c1-8c12-9efa182ff87a" name="Ascenseur" left="1227.4756" right="1337.6675" top="863.4314" bottom="964.50757" />
+  <room id="b4303810-5aa5-4396-a44b-27a4b9861395" name="Rampe d'accès au parking" left="2840.2239" right="3441.4487" top="366.21014" bottom="516.21027" />
+  <room id="3974531e-3618-494e-aa5e-8ceb2c380945" name="Sécurité" left="2851.8687" right="2952.4478" top="899.9865" bottom="1000.6145" />
+  <room id="cdbbdcb5-85ca-48ca-8bcd-07a458527a8f" name="002 CA" left="2344.7078" right="2814.2908" top="367.83353" bottom="673.263" />
+  <room id="516e8d84-148b-4160-8d58-2495d232e3af" name="Couloir principal" left="32.95813" right="3657.8638" top="724.4874" bottom="825.0419" />
+  <room id="550a25a2-57ad-4d47-ae7e-c01d556acaa5" name="Escaliers 2" left="3468.2964" right="3655.619" top="365.66284" bottom="515.6627" />
+  <room id="49b3b5ab-4b7b-433d-ae43-9ced542b222b" name="006 CA" left="1230.2007" right="1832.8904" top="368.40085" bottom="673.83026" />
+  <room id="b35bf35b-416b-4a9a-aa7d-1788e4008d37" name="004 CA" left="1853.9329" right="2323.5156" top="369.81558" bottom="675.245" />
+  <room id="41c03bd2-7160-4ab9-8cd7-a9938adf672e" name="WC Femmes 1" left="3088.1484" right="3303.1855" top="573.2403" bottom="673.9168" />
+  <room id="bc667df7-2f20-42ed-a368-ad702c944862" name="San. 2" left="3333.2185" right="3433.8616" top="572.3832" bottom="672.82367" />
+  <room id="6e2b2a9d-e655-4585-846d-5b72df9cea56" name="WC Hommes 1" left="2841.18" right="3056.7803" top="574.23315" bottom="676.11005" />
+  <room id="755a9413-7602-4970-aea7-73958562aba1" name="Sécurité" left="118.81149" right="222.30801" top="574.2381" bottom="675.46674" />
+  <room id="62896d0f-bcf8-47a1-a597-2528eb3a7aba" name="WC Femmes 2" left="886.2688" right="1036.269" top="367.50092" bottom="673.8684" />
+  <room id="da2f7e7b-0be9-40c2-9063-34e80027bdff" name="008 CA" left="674.01825" right="868.5812" top="367.12573" bottom="675.54486" />
+  <corridor id="6ed6ae64-8822-43fe-b0bf-1023e1f9f3ea" src="550a25a2-57ad-4d47-ae7e-c01d556acaa5" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="169.35864,129.42749" dstPoint="3603.0981,15.158325" />
+  <corridor id="16e6d49c-d6f7-4b2c-a84f-08d3f8f8007e" src="ddb4f2fb-9b3b-4591-9774-634e81d49861" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="373.67603,290.43512" dstPoint="584.1848,15.557983" />
+  <corridor id="14d13eda-fd59-44da-bcba-9c5a293713eb" src="50524788-719f-4273-8399-b264197fca4b" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="33.033447,291.9698" dstPoint="1056.2898,14.758728" />
+  <corridor id="f37fa0af-9909-4af7-8666-0e8b2399bd3d" src="6e2b2a9d-e655-4585-846d-5b72df9cea56" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="201.64697,91.88611" dstPoint="3011.4678,10.363159" />
+  <corridor id="337065e6-039b-457e-9d5d-3500a0bb32b8" src="bc667df7-2f20-42ed-a368-ad702c944862" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="80.576416,92.137695" dstPoint="3386.4336,9.563965" />
+  <corridor id="b900d588-1510-4435-b349-3780ac9bfc7b" src="b35bf35b-416b-4a9a-aa7d-1788e4008d37" dst="49b3b5ab-4b7b-433d-ae43-9ced542b222b" directed="true" srcPoint="14.827759,46.553497" dstPoint="554.6124,47.96823" />
+  <corridor id="f4ea9ac5-4447-4b4f-b459-cefc711b474c" src="cdbbdcb5-85ca-48ca-8bcd-07a458527a8f" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="111.28589,283.90012" dstPoint="2420.6372,29.543945" />
+  <corridor id="8d33ebea-a2ca-4982-a927-22dabd4793fc" src="41c03bd2-7160-4ab9-8cd7-a9938adf672e" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="12.242432,96.075745" dstPoint="3070.6309,31.142334" />
+  <corridor id="18b006e0-f0f1-4080-bd31-9b50a39b8294" src="b35bf35b-416b-4a9a-aa7d-1788e4008d37" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="74.390625,284.31564" dstPoint="1893.7665,23.15033" />
+  <corridor id="75b1b370-ed89-49b1-a000-8c22d2ec2703" src="755a9413-7602-4970-aea7-73958562aba1" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="true" srcPoint="16.632553,19.553528" dstPoint="33.728897,14.758728" />
+  <corridor id="aec7d589-aa2b-4c9b-abb6-ac09d12b51db" src="da2f7e7b-0be9-40c2-9063-34e80027bdff" dst="ddb4f2fb-9b3b-4591-9774-634e81d49861" directed="true" srcPoint="17.078552,45.247314" dstPoint="386.86792,46.678894" />
+  <corridor id="3383c332-7375-461b-9255-eef894141ea8" src="0e598671-f499-46c1-8c12-9efa182ff87a" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="58.44934,17.273315" dstPoint="1239.3754,85.88757" />
+  <corridor id="c9a86f9d-33e9-4326-b0ac-c96bfc56bb64" src="49b3b5ab-4b7b-433d-ae43-9ced542b222b" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="66.91724,293.32285" dstPoint="1268.1573,17.955566" />
+  <corridor id="1387ec6e-5d4b-4983-8652-0117eeff6f5b" src="62896d0f-bcf8-47a1-a597-2528eb3a7aba" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="121.43005,298.2188" dstPoint="975.54016,13.160339" />
+  <corridor id="e43c377d-0731-4abd-b687-f61a6653a8b6" src="cdbbdcb5-85ca-48ca-8bcd-07a458527a8f" dst="b35bf35b-416b-4a9a-aa7d-1788e4008d37" directed="true" srcPoint="15.745605,39.744324" dstPoint="452.15454,36.963074" />
+  <corridor id="0c1bd84c-67ff-49f8-a398-4d97e020bc76" src="da2f7e7b-0be9-40c2-9063-34e80027bdff" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="70.24518,296.9956" dstPoint="701.7113,13.959534" />
+  <corridor id="08d33c13-2206-4f5a-80db-08098cda5bd1" src="09b0bd47-873d-4fb7-8af2-f58e79b58840" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="89.2561,76.611206" dstPoint="3585.5088,10.363159" />
+  <corridor id="81ca4562-59bb-4955-8aed-d90e6cbdcfbd" src="6f1013ca-1125-4140-b585-ed34e84d12c0" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="16.826286,144.42026" dstPoint="18.938095,13.959534" />
+</level>

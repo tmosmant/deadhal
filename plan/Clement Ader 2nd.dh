@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<level title="2nd Clément Ader">
+  <room id="1b1e394c-acc9-4997-995d-cea6dfcf61a3" name="Divers" left="1378.96" right="1479.2834" top="370.49063" bottom="673.1069" />
+  <room id="c1317d80-de00-44f9-b7fa-937a3661c858" name="202 CA" left="3185.0952" right="3445.592" top="367.84338" bottom="672.2431" />
+  <room id="0a258afd-fbb3-4443-a36d-797fd4c47ab0" name="216 CA" left="895.50977" right="1354.9644" top="371.285" bottom="676.19543" />
+  <room id="5e4f0faf-9663-45bc-ae23-ce977b94bb0f" name="Prépa. 1" left="739.8214" right="853.13464" top="372.09695" bottom="674.7131" />
+  <room id="6f1013ca-1125-4140-b585-ed34e84d12c0" name="Escaliers" left="34.27044" right="221.593" top="369.45132" bottom="519.4513" />
+  <room id="90400b46-6572-4672-9bb4-7062e6c96fb8" name="Prépa. 2" left="1984.8765" right="2098.1902" top="369.09537" bottom="671.7112" />
+  <room id="00ee67ca-b22e-4aea-8e7b-a8dedd281e73" name="220 CA" left="245.21597" right="698.84717" top="369.48257" bottom="675.6593" />
+  <room id="00edd7af-db65-4641-bd37-cc033ece3e19" name="LT" left="103.17778" right="214.45421" top="572.6815" bottom="674.6829" />
+  <room id="0e598671-f499-46c1-8c12-9efa182ff87a" name="Ascenseur" left="1227.4756" right="1337.6675" top="863.4314" bottom="964.50757" />
+  <room id="bd32756a-a91d-4f9b-a136-f74baf2afc20" name="Magasin" left="2592.044" right="2694.3533" top="370.15903" bottom="670.5575" />
+  <room id="550a25a2-57ad-4d47-ae7e-c01d556acaa5" name="Escaliers 2" left="3468.2964" right="3655.619" top="365.66284" bottom="515.6627" />
+  <room id="516e8d84-148b-4160-8d58-2495d232e3af" name="Couloir principal" left="32.95813" right="3657.8638" top="724.4874" bottom="825.0419" />
+  <room id="2a3ea8d1-d091-45f0-8755-faf634b89889" name="208 CA (produits chimiques)" left="2115.0198" right="2574.4736" top="369.289" bottom="674.19934" />
+  <room id="43277041-8276-48e5-9aea-4f0ca479ca9b" name="204 CA" left="2706.157" right="3165.6108" top="368.83932" bottom="673.7497" />
+  <room id="576222d3-302d-4e9a-bed6-66f69a1bde02" name="212 CA" left="1506.655" right="1966.1095" top="373.70032" bottom="678.61066" />
+  <corridor id="56938110-b58c-4c59-a348-44c2d3350cc0" src="6f1013ca-1125-4140-b585-ed34e84d12c0" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="18.49662,129.194" dstPoint="14.212425,17.914124" />
+  <corridor id="aba7a1c3-6c41-4d9a-b635-9a0a46f4a976" src="0e598671-f499-46c1-8c12-9efa182ff87a" dst="516e8d84-148b-4160-8d58-2495d232e3af" directed="false" srcPoint="64.516846,22.0271" dstPoint="1251.8389,99.43262" />
+  <corridor id="cfaae842-4e81-425e-a85c-87268e78e734" src="516e8d84-148b-4160-8d58-2495d232e3af" dst="43277041-8276-48e5-9aea-4f0ca479ca9b" directed="false" srcPoint="3089.4902,24.30774" dstPoint="422.6875,285.65012" />
+  <corridor id="b123f707-a32c-4c2e-a64a-8ad4a7922d23" src="43277041-8276-48e5-9aea-4f0ca479ca9b" dst="bd32756a-a91d-4f9b-a136-f74baf2afc20" directed="true" srcPoint="11.441162,271.26443" dstPoint="79.98291,256.3583" />
+  <corridor id="97eea81d-9093-4bff-91a4-91226004db8d" src="576222d3-302d-4e9a-bed6-66f69a1bde02" dst="1b1e394c-acc9-4997-995d-cea6dfcf61a3" directed="true" srcPoint="30.88086,46.62323" dstPoint="65.833984,49.832916" />
+  <corridor id="2f998e40-cb6a-4c65-b450-0bd062557f89" src="1b1e394c-acc9-4997-995d-cea6dfcf61a3" dst="0a258afd-fbb3-4443-a36d-797fd4c47ab0" directed="true" srcPoint="35.45288,47.435333" dstPoint="428.55957,50.636963" />
+  <corridor id="f16aeab0-bb6c-4a1b-a12a-ef33f64d8542" src="2a3ea8d1-d091-45f0-8755-faf634b89889" dst="90400b46-6572-4672-9bb4-7062e6c96fb8" directed="true" srcPoint="22.940918,49.436157" dstPoint="93.12158,52.82663" />
+  <corridor id="0ffa1933-c417-4d6b-919d-0e23cd180d90" src="516e8d84-148b-4160-8d58-2495d232e3af" dst="c1317d80-de00-44f9-b7fa-937a3661c858" directed="false" srcPoint="3592.376,20.311707" dstPoint="245.16089,237.89484" />
+  <corridor id="d129d841-0b6d-45d9-a99f-17bf67d3337b" src="2a3ea8d1-d091-45f0-8755-faf634b89889" dst="bd32756a-a91d-4f9b-a136-f74baf2afc20" directed="true" srcPoint="440.28003,42.243347" dstPoint="12.025391,44.57016" />
+  <corridor id="6a86279c-8fe7-49b2-9eac-f9c29eb3a2cb" src="bd32756a-a91d-4f9b-a136-f74baf2afc20" dst="2a3ea8d1-d091-45f0-8755-faf634b89889" directed="true" srcPoint="27.21582,265.14957" dstPoint="445.0769,272.41315" />
+  <corridor id="78baadfa-1a6f-4ba8-845f-47b08e6b3de4" src="516e8d84-148b-4160-8d58-2495d232e3af" dst="00ee67ca-b22e-4aea-8e7b-a8dedd281e73" directed="false" srcPoint="627.4292,17.11493" dstPoint="420.7678,292.99893" />
+  <corridor id="e00cd3ac-27c5-4797-a38d-e49ceba447fe" src="5e4f0faf-9663-45bc-ae23-ce977b94bb0f" dst="00ee67ca-b22e-4aea-8e7b-a8dedd281e73" directed="true" srcPoint="44.585266,41.833008" dstPoint="421.66415,45.246582" />
+  <corridor id="119aeaa3-28c3-4bf3-8534-fe4af1fff1d7" src="516e8d84-148b-4160-8d58-2495d232e3af" dst="550a25a2-57ad-4d47-ae7e-c01d556acaa5" directed="false" srcPoint="3593.975,17.914124" dstPoint="143.44629,133.78168" />
+  <corridor id="bf4d82f8-7e58-4c5c-9f74-ff1512d453ac" src="516e8d84-148b-4160-8d58-2495d232e3af" dst="00edd7af-db65-4641-bd37-cc033ece3e19" directed="false" srcPoint="17.41043,17.11493" dstPoint="15.1483,27.46228" />
+  <corridor id="f09fa42e-1697-41f1-83d4-70d2cf7f8da8" src="516e8d84-148b-4160-8d58-2495d232e3af" dst="2a3ea8d1-d091-45f0-8755-faf634b89889" directed="false" srcPoint="2491.0645,11.520508" dstPoint="407.40356,284.40125" />
+  <corridor id="650990d0-2b3c-4b6f-a74c-9eb6d5a6c425" src="c1317d80-de00-44f9-b7fa-937a3661c858" dst="43277041-8276-48e5-9aea-4f0ca479ca9b" directed="true" srcPoint="24.995117,28.50418" dstPoint="447.9685,33.10263" />
+  <corridor id="0360547a-a976-4702-928f-d9ce65cc6a14" src="90400b46-6572-4672-9bb4-7062e6c96fb8" dst="576222d3-302d-4e9a-bed6-66f69a1bde02" directed="true" srcPoint="24.364624,53.625824" dstPoint="443.4231,50.619263" />
+  <corridor id="ddb90e78-f00d-42e4-9929-aed90e4baf92" src="516e8d84-148b-4160-8d58-2495d232e3af" dst="0a258afd-fbb3-4443-a36d-797fd4c47ab0" directed="false" srcPoint="1287.0168,29.102966" dstPoint="425.26465,293.5941" />
+  <corridor id="e47187a0-7e6f-491b-b4be-8e958b096a16" src="0a258afd-fbb3-4443-a36d-797fd4c47ab0" dst="5e4f0faf-9663-45bc-ae23-ce977b94bb0f" directed="true" srcPoint="40.802002,41.04654" dstPoint="44.585266,45.029816" />
+  <corridor id="fd0f5ea8-4acf-4dab-88c2-90e76f819ba1" src="516e8d84-148b-4160-8d58-2495d232e3af" dst="576222d3-302d-4e9a-bed6-66f69a1bde02" directed="false" srcPoint="1911.4266,24.30774" dstPoint="407.34863,297.5724" />
+</level>

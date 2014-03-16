@@ -75,23 +75,25 @@ public class Pawn extends Drawable {
 	 *            the y coordinate to move on
 	 */
 	public void handleMove(float x, float y) {
-		RectF rect = m_levelHandler.getSelectedRoom().getRect();
-		if (x - 39 < rect.left) {
-			x = rect.left + 39;
-		}
-		if (x + 15 > rect.right) {
-			x = rect.right - 15;
-		}
-		if (y - 39 < rect.top) {
-			y = rect.top + 39;
-		}
-		if (y + 15 > rect.bottom) {
-			y = rect.bottom - 15;
-		}
+		if (m_levelHandler.getSelectedRoom() != null) {
+			RectF rect = m_levelHandler.getSelectedRoom().getRect();
+			if (x - 39 < rect.left) {
+				x = rect.left + 39;
+			}
+			if (x + 15 > rect.right) {
+				x = rect.right - 15;
+			}
+			if (y - 39 < rect.top) {
+				y = rect.top + 39;
+			}
+			if (y + 15 > rect.bottom) {
+				y = rect.bottom - 15;
+			}
 
-		m_lastPosition.set(x, y);
-		m_position.set(x, y);
-		m_levelHandler.refreshView();
+			m_lastPosition.set(x, y);
+			m_position.set(x, y);
+			m_levelHandler.refreshView();
+		}
 	}
 
 	/**

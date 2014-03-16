@@ -92,10 +92,24 @@ public abstract class AbstractView extends View {
 			restoreMatrix(preferences);
 		}
 
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-		}
+		setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		View rootView = getRootView();
+		rootView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
+		refresh();
+	}
+
+	/**
+	 * Refresh the view.
+	 */
+	public void refresh() {
+		bringToFront();
+		View rootView = getRootView();
+		if (rootView.getLayerType() != View.LAYER_TYPE_SOFTWARE) {
+			rootView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
+		rootView.requestLayout();
+		rootView.invalidate();
 		invalidate();
 	}
 
@@ -229,17 +243,6 @@ public abstract class AbstractView extends View {
 	 */
 	public void setMode(TouchEvent mode) {
 		m_mode = mode;
-	}
-
-	/**
-	 * Refresh the view.
-	 */
-	public void refresh() {
-		bringToFront();
-		View rootView = getRootView();
-		rootView.requestLayout();
-		rootView.invalidate();
-		invalidate();
 	}
 
 	/**

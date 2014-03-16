@@ -45,7 +45,7 @@ public class EditionGestureListener extends
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
 		m_view.reset();
-		m_view.invalidate();
+		m_view.refresh();
 		return true;
 	}
 

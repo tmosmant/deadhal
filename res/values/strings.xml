@@ -8,6 +8,8 @@
     <string name="corridors">Add corridors</string>
     <string name="open">Open</string>
     <string name="save">Save</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
     <string name="not_yet_implemented">Not yet implemented.</string>
     <string name="action_new">New</string>
     <string name="action_remove">Delete ?</string>
@@ -38,6 +40,8 @@
         <item>Map</item>
         <item>Open&#8230;</item>
         <item>Save&#8230;</item>
+        <item>Help</item>
+        <item>About</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
@@ -47,6 +51,8 @@
         <item>@drawable/ic_action_map</item>
         <item>@drawable/ic_action_collection_dark</item>
         <item>@drawable/ic_action_save_dark</item>
+        <item>@drawable/ic_action_help</item>
+        <item>@drawable/ic_action_about</item>
     </array>
 
     <string-array name="open_options">

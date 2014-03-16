@@ -7,7 +7,7 @@ package fr.upem.android.deadhal.fragments;
  * 
  */
 public enum FragmentType {
-	NAVIGATION(1), OPEN(2), SAVE(3), EDITION(1), EDITION_CORRIDOR(1);
+	NAVIGATION(1), OPEN(2), SAVE(3), EDITION(1), EDITION_CORRIDOR(1), HELP(4), ABOUT(5);
 
 	private int m_index;
 

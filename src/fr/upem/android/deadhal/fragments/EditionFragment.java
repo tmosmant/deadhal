@@ -368,9 +368,22 @@ public class EditionFragment extends AbstractFragment {
 					RectF copyRect = new RectF(pts[0], pts[1], pts[0] + width,
 							pts[1] + height);
 					Room CopyRoom = new Room(UUID.randomUUID(), room.getName()
-							+ getActivity().getString(R.string._copy),
-							copyRect);
+							+ getActivity().getString(R.string._copy), copyRect);
 					m_levelHandler.addRoom(CopyRoom);
+
+					DialogFragment dialogFragment = InputDialogFragment
+							.newInstance(
+									getActivity().getString(
+											R.string.name_for_the_copy_of_)
+											+ room.getName() + " :", CopyRoom
+											.getId().toString(), CopyRoom
+											.getName());
+					dialogFragment.setTargetFragment(this,
+							EditionFragment.RENAME_ROOM);
+					dialogFragment.show(
+							getFragmentManager().beginTransaction(),
+							"roomRenameDialog");
+
 					updateDrawer();
 					m_levelHandler.selectRoom(CopyRoom);
 					return;
@@ -391,7 +404,10 @@ public class EditionFragment extends AbstractFragment {
 				String strId = data.getStringExtra("id");
 				Room room = m_level.getRooms().get(UUID.fromString(strId));
 				room.setName(name);
+				updateDrawer();
 				m_levelHandler.unselectRoom();
+				m_levelHandler.selectRoom(room);
+				return;
 			}
 			break;
 		}

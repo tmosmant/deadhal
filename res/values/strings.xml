@@ -90,5 +90,6 @@
     <string name="cancel">Cancel</string>
     <string name="new_name_for_">"New name for "</string>
     <string name="_copy">" copy"</string>
+    <string name="name_for_the_copy_of_">"Name for the copy of "</string>
 
 </resources>
